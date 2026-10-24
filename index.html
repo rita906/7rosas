@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Terços coloridos, feitos à mão por sete irmãs. Benzidos, com pagela. Ad Iesum per Mariam.">
+<meta name="description" content="Terços coloridos, feitos à mão por sete irmãs. Benzidos, com a pagela de como rezar o terço. Ad Iesum per Mariam.">
 <meta property="og:title" content="Sete Rosas">
 <meta property="og:description" content="Um terço de cada vez, até à paz no mundo.">
 <meta property="og:image" content="https://7rosas.pt/img/logo.jpg">
@@ -107,7 +107,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .stock.enc{background:var(--blush);color:var(--rose)}
 .fim-num{font-family:var(--display);font-size:24px;color:var(--gold)}
 .steps .prazo{background:var(--sage);border-radius:12px;padding:8px 10px;color:var(--ink);font-size:14px}
-#pagela{max-width:320px}
+.flutuante{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--gold);color:#fffdf9;font-weight:700;text-decoration:none;border-radius:999px;padding:14px 22px;box-shadow:0 6px 18px rgba(75,64,56,.25)}
+.flutuante:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.pok{color:#5b7a4e;font-weight:700}
 
 .card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:28px 22px;display:grid;gap:26px;width:100%;box-sizing:border-box}
 .group{display:grid;gap:12px;justify-items:center}
@@ -162,14 +164,15 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 
 </head>
 <body>
-<nav class="topbar" aria-label="Navegação"><div class="topbar-in"><a class="casa" href="#topo" aria-label="Voltar ao início"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a><a class="lnk" href="#t-rezar">Como rezar</a><a class="btn" href="#t-escolher">Encomendar</a></div></nav>
+<nav class="topbar" aria-label="Navegação"><div class="topbar-in"><a class="casa" href="#topo" aria-label="Voltar ao início"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a><a class="lnk" href="#t-rezar">Como rezar</a><a class="lnk" href="#t-pedidos">Pedidos personalizados</a></div></nav>
+<a class="flutuante" href="#t-escolher">Quero encomendar</a>
 <div class="wrap">
   <header id="topo">
     <img class="hero" src="img/logo.jpg" alt="Sete meninas de joelhos, com o terço na mão, diante de Nossa Senhora de Fátima, numa coroa de rosas">
     <h1 class="sr">Sete Rosas</h1>
     <p class="motto">Ad Iesum per Mariam</p>
     <p class="missao">Queremos que todas as famílias rezem o terço, pelas mãos das crianças.</p>
-    <p class="lead">As sete rosas são sete irmãs: <b>Sofia, Inês, Helena, Maria do Mar, Luzinha, Benedita e Assunção</b>, a mais nova. Fazem à mão terços coloridos, com contas resistentes e cordel forte, para aguentar as mãos mais pequenas. Cada terço vai benzido e leva uma pagela.</p>
+    <p class="lead">As sete rosas são sete irmãs: <b>Sofia, Inês, Helena, Maria do Mar, Luzinha, Benedita e Assunção</b>, a mais nova. Fazem à mão terços coloridos, com contas resistentes e cordel forte, para aguentar as mãos mais pequenas. Cada terço vai benzido e leva a pagela de como rezar o terço.</p>
   </header>
 
   <section aria-labelledby="t-fatima">
@@ -250,7 +253,7 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <p class="kicker">E porquê rosas</p>
       <h2 id="t-rosas">Uma coroa de rosas para Nossa Senhora</h2>
     </div>
-    <p class="prose">Rosário quer dizer coroa de rosas: cada Ave-Maria é uma rosa oferecida a Nossa Senhora. E Santa Teresinha do Menino Jesus prometeu deixar cair do Céu uma chuva de rosas. A pagela dela é uma das que podes escolher para acompanhar o teu terço.</p>
+    <p class="prose">Rosário quer dizer coroa de rosas: cada Ave-Maria é uma rosa oferecida a Nossa Senhora. E Santa Teresinha do Menino Jesus prometeu deixar cair do Céu uma chuva de rosas.</p>
   </section>
 
   <section aria-labelledby="t-como">
@@ -260,8 +263,8 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
     </div>
     <ol class="steps">
       <li><span class="n">1</span><b>Escolhes</b><p>A dezena ou o terço, num dos nossos quatro modelos.</p></li>
-      <li><span class="n">2</span><b>Encomendas</b><p>Encomendas aqui e recebes a confirmação por email, com a pagela de como rezar o terço. Pagas por MB WAY, com portes incluídos.</p><p class="prazo"><b>Em stock:</b> chega em 5 a 8 dias úteis.<br><b>Esgotado:</b> fazes um pedido especial e combinamos o prazo contigo.</p></li>
-      <li><span class="n">3</span><b>Rezam juntos</b><p>Chega benzido, com a pagela que escolheste, pronto para a primeira dezena em família.</p></li>
+      <li><span class="n">2</span><b>Encomendas</b><p>Encomendas aqui e recebes a confirmação por email, com a pagela de como rezar o terço. Pagas por MB WAY, com portes incluídos.</p><p class="prazo"><b>Em stock:</b> chega em 5 a 8 dias úteis.</p></li>
+      <li><span class="n">3</span><b>Rezam juntos</b><p>Chega benzido, com a pagela de como rezar o terço, pronto para a primeira dezena em família.</p></li>
     </ol>
   </section>
 
@@ -287,16 +290,6 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
         <span class="legend">Modelo de cores</span>
         <div class="choice" id="optCores"></div>
       </div>
-      <div class="group">
-        <label class="legend" for="pagela">Pagela</label>
-        <select id="pagela">
-          <option>Santa Teresinha</option>
-          <option>Nossa Senhora de Fátima</option>
-          <option>Sagrado Coração de Jesus</option>
-          <option>São José</option>
-          <option>Anjo da Guarda</option>
-        </select>
-      </div>
 
       <div class="preview"><div class="beads big" id="preview" aria-label="Como fica uma dezena"></div></div>
 
@@ -320,6 +313,25 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
         <button type="button" class="btn" id="add">Juntar à encomenda</button>
       </div>
     </div>
+  </section>
+
+  <section id="pedidos" aria-labelledby="t-pedidos">
+    <div class="head">
+      <p class="kicker">Pedidos personalizados</p>
+      <h2 id="t-pedidos">Precisas de algo diferente?</h2>
+    </div>
+    <p class="prose">Terços em quantidade para um casamento, um batizado, uma primeira comunhão ou um grupo da catequese. Cores à tua medida. Um modelo que está esgotado. Envia-nos a tua mensagem e dizemos-te se é possível e quais são os prazos.</p>
+    <form class="card" id="pform" novalidate>
+      <div class="row">
+        <div class="field"><label for="pnome">Nome</label><input id="pnome" autocomplete="name"></div>
+        <div class="field"><label for="pemail">Email</label><input id="pemail" type="email" autocomplete="email"></div>
+      </div>
+      <div class="field"><label for="ptel">Telemóvel <span class="hint">(opcional)</span></label><input id="ptel" type="tel" autocomplete="tel"></div>
+      <div class="field"><label for="pmsg">A tua mensagem</label><textarea id="pmsg" rows="4" placeholder="Ex.: queria 100 dezenas em branco e azul para o casamento da minha filha, em junho."></textarea></div>
+      <p class="hint" id="perro" role="alert" hidden></p>
+      <p class="pok" id="pok" hidden>Recebemos a tua mensagem. Respondemos-te por email com o que é possível e os prazos.</p>
+      <div class="actions"><button class="btn" type="submit">Enviar a mensagem</button></div>
+    </form>
   </section>
 
   <section aria-labelledby="t-encomenda">
@@ -403,7 +415,7 @@ function escolhas(el,opts,get,set){
   el.innerHTML="";
   opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt"+(o.wide?" wide":"");
     b.setAttribute("aria-pressed",get()===o.id);
-    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.ave&&restam?(restam[o.nome]>0?`<span class="stock em">Em stock · ${restam[o.nome]} ${restam[o.nome]===1?"disponível":"disponíveis"}</span>`:'<span class="stock enc">Esgotado · pedido especial</span>'):""}${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span>`:""}`;
+    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.ave&&restam?(restam[o.nome]>0?`<span class="stock em">Em stock · ${restam[o.nome]} ${restam[o.nome]===1?"disponível":"disponíveis"}</span>`:'<span class="stock enc">Esgotado · pede-nos por mensagem</span>'):""}${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span>`:""}`;
     if(o.soon){b.disabled=true;b.setAttribute("aria-disabled","true");}
     if(o.ave)dezena(b.querySelector(".beads"),o.ave,o.pater,"#e6d9c3");
     b.onclick=()=>{set(o.id);render()};el.appendChild(b)});
@@ -416,9 +428,9 @@ function swatches(el,lista,get,set){
 }
 function render(){
   const sel=COLECAO.find(x=>x.id===cores);
-  $("add").textContent=sel&&restam&&!(restam[sel.nome]>0)?"Fazer pedido especial":"Juntar à encomenda";
+  $("add").textContent=sel&&restam&&!(restam[sel.nome]>0)?"Esgotado: pedir por mensagem":"Juntar à encomenda";
   escolhas($("optModelo"),[{id:"dezena",nome:"Dezena de bolso",desc:"Uma dezena, para começar"},{id:"terco",nome:"Terço",desc:"As cinco dezenas"}],()=>modelo,v=>modelo=v);
-  escolhas($("optCores"),[...COLECAO.map(c=>({...c,preco:PRECOS[modelo].modelo})),{id:"custom",nome:"Personalizado",desc:"Escolhes tu a cor das contas e a do cordel",wide:true,soon:true}],()=>cores,v=>cores=v);
+  escolhas($("optCores"),[...COLECAO.map(c=>({...c,preco:PRECOS[modelo].modelo}))],()=>cores,v=>cores=v);
   $("custom").hidden=cores!=="custom";
   $("preview").parentElement.hidden=cores!=="custom";
   swatches($("sw-contas"),CONTAS,()=>contas,c=>contas=c);
@@ -441,7 +453,8 @@ $("mais").onclick=()=>{qtd=Math.min(20,qtd+1);$("qtd").textContent=qtd};
 $("add").onclick=()=>{
   const c=COLECAO.find(x=>x.id===cores);
   const esg=c&&restam&&!(restam[c.nome]>0);
-  cesto.push(c?{modelo:c.nome,nome:MODELOS[modelo],det:c.nome+", pagela de "+$("pagela").value+(esg?" (pedido especial)":""),preco:PRECOS[modelo].modelo,q:qtd}
+  if(esg){$("pmsg").value="Gostava de encomendar "+qtd+" × "+MODELOS[modelo].toLowerCase()+" "+c.nome+", que está esgotado.";$("pedidos").scrollIntoView({behavior:"smooth"});return}
+  cesto.push(c?{modelo:c.nome,nome:MODELOS[modelo],det:c.nome,preco:PRECOS[modelo].modelo,q:qtd}
     :{modelo:"Personalizado",nome:MODELOS[modelo],det:`Personalizado: contas ${contas[0].toLowerCase()}, cordel ${cordel[0].toLowerCase()}`,preco:PRECOS[modelo].custom,q:qtd});
   qtd=1;$("qtd").textContent=1;cestoRender();
 };
@@ -482,6 +495,19 @@ $("form").addEventListener("submit",async e=>{
   }catch(x){
     err.textContent="Não conseguimos registar a encomenda. Tenta outra vez daqui a um minuto.";err.hidden=false;
   }finally{bt.disabled=false;bt.textContent="Fazer a encomenda";}
+});
+$("pform").addEventListener("submit",async e=>{
+  e.preventDefault();const err=$("perro"),bt=e.target.querySelector('button[type="submit"]');
+  const nome=$("pnome").value.trim(),email=$("pemail").value.trim(),mensagem=$("pmsg").value.trim();
+  const falta=[];if(!nome)falta.push("o nome");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))falta.push("um email válido");if(!mensagem)falta.push("a mensagem");
+  if(falta.length){err.textContent="Falta: "+falta.join(", ")+".";err.hidden=false;return}
+  err.hidden=true;bt.disabled=true;bt.textContent="A enviar…";
+  try{
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:"pedido",nome,email,tel:$("ptel").value.trim(),mensagem})});
+    const j=await r.json();if(!j.ok)throw new Error("erro");
+    e.target.reset();$("pok").hidden=false;
+  }catch(x){err.textContent="Não conseguimos enviar. Tenta outra vez daqui a um minuto.";err.hidden=false}
+  finally{bt.disabled=false;bt.textContent="Enviar a mensagem";}
 });
 fetch(API).then(r=>r.json()).then(j=>{if(j.ok){restam=j.restam;render();opinioes(j.opinioes||[]);}}).catch(()=>{});
 function opinioes(lista){

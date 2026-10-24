@@ -49,6 +49,12 @@ function preparar() {
   op.setFrozenRows(1);
   op.getRange('F2:F1000').insertCheckboxes();
 
+  const ped = ss.getSheetByName('Pedidos') || ss.insertSheet('Pedidos');
+  ped.clear();
+  ped.getRange(1, 1, 1, 6).setValues([['Data', 'Nome', 'Email', 'Telemóvel', 'Mensagem', 'Respondido']]).setFontWeight('bold');
+  ped.setFrozenRows(1);
+  ped.getRange('F2:F1000').insertCheckboxes();
+
   // O painel junta tudo: dinheiro, encomendas por tratar e stock
   const painel = ss.getSheetByName('Painel') || ss.insertSheet('Painel', 0);
   painel.clear();
@@ -318,7 +324,7 @@ function avisarEnvio_(r) {
     subject: `Sete Rosas: a tua encomenda n.º ${numero} já seguiu`,
     htmlBody: emailHtml_([
       `Olá ${escapar_(primeiroNome_(r[C.nome - 1]))},`,
-      `A tua encomenda n.º ${numero} já seguiu. Foi benzida e vai com a pagela que escolheste.`,
+      `A tua encomenda n.º ${numero} já seguiu. Vai benzida e com a pagela de como rezar o terço.`,
       registo ? `O registo dos CTT é <b>${escapar_(registo)}</b>.` : '',
       'Quando o terço chegar e o rezarem a primeira vez, conta-nos como foi. Ajuda outras famílias a decidir.',
       `<a href="${link}" style="display:inline-block;background:#9a7843;color:#fffdf9;text-decoration:none;font-family:Arial,sans-serif;font-weight:bold;padding:12px 22px;border-radius:999px">Deixar a minha opinião</a>`
@@ -326,13 +332,43 @@ function avisarEnvio_(r) {
   });
 }
 
+// Pedido personalizado (quantidades, casamentos, cores à medida): guarda, avisa a Rita e confirma ao cliente
+function pedidoPersonalizado_(p) {
+  if (!p.nome || !p.email || !p.mensagem) return json_({ ok: false, erro: 'dados' });
+  const ped = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Pedidos');
+  const linha = primeiraVazia_(ped, 1);
+  ped.getRange(linha, 1, 1, 6).setValues([[new Date(), p.nome, p.email, p.tel ? "'" + p.tel : '',
+    String(p.mensagem).slice(0, 3000), false]]);
+  MailApp.sendEmail({
+    to: Session.getEffectiveUser().getEmail(), replyTo: p.email,
+    subject: `Sete Rosas: pedido personalizado de ${p.nome}`,
+    body: `${p.nome} · ${p.email}${p.tel ? ' · ' + p.tel : ''}\n\n${p.mensagem}\n\nPara responder, basta responder a este email.`
+  });
+  try {
+    MailApp.sendEmail({
+      to: p.email, name: 'Sete Rosas',
+      subject: 'Sete Rosas: recebemos o teu pedido',
+      htmlBody: emailHtml_([
+        `Olá ${escapar_(primeiroNome_(p.nome))},`,
+        'Recebemos o teu pedido personalizado. Obrigada por pensares em nós!',
+        `<i>${escapar_(p.mensagem).replace(/\n/g, '<br>')}</i>`,
+        'Vamos ver com calma e respondemos-te por email a dizer se é possível e quais são os prazos.'
+      ])
+    });
+  } catch (err) { console.error(err); }
+  return json_({ ok: true });
+}
+
 // Corpo esperado: {nome, email, tel, entrega, morada, nif, nomeFiscal, obs, itens:[{modelo, formato, det, q, preco}]}
+// ou {tipo: 'pedido', nome, email, tel, mensagem} para um pedido personalizado
 function doPost(e) {
+  const corpo = JSON.parse(e.postData.contents);
+  if (corpo.tipo === 'pedido') return pedidoPersonalizado_(corpo);
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   let p, numero, texto, total, especiais;
   try {
-    p = JSON.parse(e.postData.contents);
+    p = corpo;
     const itens = (p.itens || []).filter(it => MODELOS.includes(it.modelo) && it.q > 0);
     if (!itens.length || !p.nome || !p.tel) return json_({ ok: false, erro: 'dados' });
 
