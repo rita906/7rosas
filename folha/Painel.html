@@ -77,6 +77,13 @@ input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--
 .buys{display:grid;gap:8px}
 .buy{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:8px}
 .buy small{display:block;color:var(--muted)}
+.buy .dir{text-align:right;display:grid;gap:4px;justify-items:end}
+.mini{display:flex;gap:12px}
+.lnk{font:inherit;font-size:14px;background:none;border:0;padding:0;color:var(--gold);cursor:pointer;text-decoration:underline}
+.lnk.apagar{color:var(--rose)}
+.buyedit{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.buyedit .actions{grid-column:1/-1}
+@media(max-width:600px){.buyedit{grid-template-columns:1fr}}
 .note{font-size:13px;color:var(--muted);text-align:center}
 .loading{text-align:center;color:var(--muted);font-style:italic}
 footer{text-align:center;font-family:var(--display);font-style:italic;color:var(--gold);font-size:20px}
@@ -256,12 +263,41 @@ function desenhar(){
   if (!dados.compras.length) buys.innerHTML = '<p class="empty">Ainda não há compras registadas.</p>';
   dados.compras.slice().reverse().forEach(b => {
     const r = document.createElement('div'); r.className = 'buy';
-    r.innerHTML = '<div><span class="q"></span><small></small></div><b></b>';
+    r.innerHTML = '<div><span class="q"></span><small></small></div><div class="dir"><b></b><div class="mini"></div></div>';
     r.querySelector('.q').textContent = b.oque;
     r.querySelector('small').textContent = [b.data, b.loja].filter(Boolean).join(' · ');
     r.querySelector('b').textContent = eur(b.valor);
+    const mini = r.querySelector('.mini');
+    const ed = document.createElement('button'); ed.type = 'button'; ed.className = 'lnk'; ed.textContent = 'Editar';
+    const ap = document.createElement('button'); ap.type = 'button'; ap.className = 'lnk apagar'; ap.textContent = 'Apagar';
+    ap.onclick = async () => {
+      if (ap.dataset.ok !== '1') { ap.dataset.ok = '1'; ap.textContent = 'Sim, apagar'; return; }
+      ap.disabled = true; ap.textContent = 'A apagar…';
+      try { await servidor('apagarCompra', b.linha); await carregar(); } catch(e){ ap.disabled = false; ap.textContent = 'Não apagou. Tenta outra vez'; }
+    };
+    ed.onclick = () => editarCompra(r, b);
+    mini.append(ed, ap);
     buys.appendChild(r);
   });
+}
+// Troca a linha da compra por um pequeno formulário para a corrigir
+function editarCompra(r, b){
+  r.innerHTML = '';
+  const f = document.createElement('form'); f.className = 'buyedit';
+  f.innerHTML = '<input class="eQue" placeholder="O quê"><input class="eLoja" placeholder="Onde"><input class="eValor" inputmode="decimal" placeholder="Valor (€)"><input class="eData" type="date"><div class="actions"><button class="btn" type="submit">Guardar</button><button class="btn soft" type="button">Cancelar</button></div>';
+  f.querySelector('.eQue').value = b.oque; f.querySelector('.eLoja').value = b.loja || '';
+  f.querySelector('.eValor').value = String(b.valor).replace('.', ','); f.querySelector('.eData').value = b.dataIso || '';
+  f.querySelector('.btn.soft').onclick = () => desenhar();
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const valor = parseFloat(f.querySelector('.eValor').value.replace(',', '.'));
+    const oque = f.querySelector('.eQue').value.trim();
+    if (!oque || !(valor >= 0)) return;
+    const bt = f.querySelector('button[type="submit"]'); bt.disabled = true; bt.textContent = 'A guardar…';
+    try { await servidor('editarCompra', b.linha, { oque, loja: f.querySelector('.eLoja').value.trim(), valor, data: f.querySelector('.eData').value }); await carregar(); }
+    catch(x){ bt.disabled = false; bt.textContent = 'Não guardou. Tenta outra vez'; }
+  });
+  r.appendChild(f);
 }
 function botao(txt, fn){ const b = document.createElement('button'); b.className = 'btn'; b.type = 'button'; b.textContent = txt; b.onclick = fn; return b; }
 async function marcar(o, campo, valor, b, registo){
@@ -283,9 +319,15 @@ $('buyform').addEventListener('submit', async e => {
   e.preventDefault();
   const valor = parseFloat($('bValor').value.replace(',', '.'));
   if (!$('bQue').value.trim() || !(valor > 0)) return;
-  await servidor('novaCompra', { data: $('bData').value, loja: $('bLoja').value.trim(), oque: $('bQue').value.trim(), valor });
-  $('bQue').value = ''; $('bLoja').value = ''; $('bValor').value = '';
-  carregar();
+  const bt = e.target.querySelector('button[type="submit"]');
+  if (bt.disabled) return;
+  bt.disabled = true; bt.textContent = 'A guardar…';
+  try {
+    await servidor('novaCompra', { data: $('bData').value, loja: $('bLoja').value.trim(), oque: $('bQue').value.trim(), valor });
+    $('bQue').value = ''; $('bLoja').value = ''; $('bValor').value = '';
+    await carregar();
+  } catch(x) { bt.textContent = 'Não guardou. Tenta outra vez'; await new Promise(r => setTimeout(r, 1500)); }
+  finally { bt.disabled = false; bt.textContent = 'Juntar a compra'; }
 });
 carregar();
 </script>

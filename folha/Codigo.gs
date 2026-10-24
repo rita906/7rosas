@@ -186,10 +186,12 @@ function painelDados(chave) {
 
   const comp = ss.getSheetByName('Compras');
   const m = primeiraVazia_(comp, 3) - 2;
-  const compras = m > 0 ? comp.getRange(2, 1, m, 5).getValues().filter(r => r[2] !== '').map(r => ({
+  const compras = m > 0 ? comp.getRange(2, 1, m, 5).getValues().map((r, i) => ({
+    linha: i + 2,
     data: r[0] instanceof Date ? Utilities.formatDate(r[0], 'Europe/Lisbon', 'dd-MM-yyyy') : String(r[0]),
+    dataIso: r[0] instanceof Date ? Utilities.formatDate(r[0], 'Europe/Lisbon', 'yyyy-MM-dd') : '',
     loja: r[1], oque: r[2], valor: Number(r[4]) || 0
-  })) : [];
+  })).filter(c => c.oque !== '') : [];
 
   const op = ss.getSheetByName('Opiniões');
   const k = primeiraVazia_(op, 1) - 2;
@@ -226,6 +228,25 @@ function novaCompra(chave, c) {
   const comp = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Compras');
   comp.getRange(primeiraVazia_(comp, 3), 1, 1, 7)
     .setValues([[c.data ? new Date(c.data) : new Date(), c.loja || '', c.oque, '', Number(c.valor) || 0, '', false]]);
+}
+
+// Corrige uma compra (o quê, onde, valor, data) na linha indicada
+function editarCompra(chave, linha, c) {
+  confirmar_(chave);
+  const comp = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Compras');
+  if (linha < 2 || comp.getRange(linha, 3).getValue() === '') throw new Error('Compra não encontrada');
+  comp.getRange(linha, 1, 1, 3).setValues([[c.data ? new Date(c.data) : comp.getRange(linha, 1).getValue(), c.loja || '', c.oque]]);
+  comp.getRange(linha, 5).setValue(Number(c.valor) || 0);
+}
+
+// Apaga uma compra: tira a linha e acrescenta uma vazia no fim, com a caixa de verificação, para a folha não encolher
+function apagarCompra(chave, linha) {
+  confirmar_(chave);
+  const comp = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Compras');
+  if (linha < 2 || comp.getRange(linha, 3).getValue() === '') throw new Error('Compra não encontrada');
+  comp.deleteRow(linha);
+  comp.insertRowAfter(comp.getMaxRows());
+  comp.getRange(comp.getMaxRows(), 7).insertCheckboxes();
 }
 
 function mostrarOpiniao(chave, linha, valor) {
