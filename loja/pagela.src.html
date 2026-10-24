@@ -7,7 +7,7 @@
 <style>
 /* Pagela A6, frente e verso, com o ar da loja: creme, dourado, as rosas da aguarela e uma moldura dupla.
    A frente tem os mistérios e os dias; o verso, como se reza, pela ordem da família. */
-@page{size:105mm 148mm;margin:0}
+@page{size:148.5mm 210mm;margin:0}
 :root{--ink:#4b4038;--muted:#85786b;--gold:#9a7843;--gold-soft:#d9c39b;--rose:#b56f7f;--cream:#fdf9f3;--paper:#fffdf9}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Karla",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -94,13 +94,17 @@ h1.pequeno{font-size:15pt}
 .oracao{text-align:center !important;hyphens:manual !important}
 .passos li > span:last-child{display:block}
 .seq{display:block !important;width:fit-content;margin:1.4mm auto 0 !important}
-.como-rezar{width:86mm;height:auto;display:block;margin:auto 0;border-radius:2mm}
+.como-rezar{width:94mm;max-width:none;height:auto;display:block;margin:auto -2mm;-webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 98%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 98%,transparent);mask-composite:intersect}
+.oracoes{gap:1.4mm !important}
+.oracao{line-height:1.32 !important}
+.folha{width:148.5mm;height:210mm;overflow:hidden;page-break-after:always;break-after:page}
+.folha .page{transform:scale(1.41421);transform-origin:0 0;page-break-after:auto;break-after:auto}
+@media screen{.folha{box-shadow:0 8px 28px rgba(75,64,56,.18);border-radius:6mm}.folha .page{box-shadow:none}}
 </style>
 </head>
 <body>
 
-<section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
-  <img class="rosas" src="img/rosas.jpg" alt="">
+<div class="folha"><section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
   <h1>Os mistérios do terço</h1>
   <p class="motto">Ad Iesum per Mariam</p>
   <div class="grupos">
@@ -118,18 +122,17 @@ h1.pequeno{font-size:15pt}
     </div>
   </div>
   <p class="citacao">"Rezem o terço todos os dias."<br>Nossa Senhora em Fátima, 13 de maio de 1917</p>
-</section>
+</section></div>
 
-<section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+<div class="folha"><section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
   <img class="como-rezar" src="img/como-rezar.jpg" alt="Como rezar o terço, passo a passo">
   <div class="rodape">
-    <img class="rosas" src="img/rosas.jpg" alt="">
     <p>Um terço de cada vez, até à paz no mundo.</p>
     <small>seterosas.pt</small>
   </div>
-</section>
+</section></div>
 
-<section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+<div class="folha"><section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
   <h1 class="pequeno">As orações em português</h1>
   <p class="motto">Ad Iesum per Mariam</p>
   <div class="oracoes">
@@ -143,9 +146,9 @@ h1.pequeno{font-size:15pt}
     <p class="oracao" lang="pt-PT"><b>Meu Deus, eu creio</b>Meu Deus, eu creio, adoro, espero e amo-Vos. Peço-Vos perdão para os que não creem, não adoram, não esperam e não Vos amam.</p>
     <p class="oracao" lang="pt-PT"><b>Salve-Rainha</b>Salve, Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salve! A vós bradamos, os degredados filhos de Eva. A vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei. E depois deste desterro mostrai-nos Jesus, bendito fruto do vosso ventre. Ó clemente, ó piedosa, ó doce sempre Virgem Maria. Rogai por nós, Santa Mãe de Deus, para que sejamos dignos das promessas de Cristo. Ámen.</p>
   </div>
-</section>
+</section></div>
 
-<section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+<div class="folha"><section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
   <h1 class="pequeno">As orações em latim</h1>
   <p class="motto">Ad Iesum per Mariam</p>
   <div class="oracoes">
@@ -159,7 +162,7 @@ h1.pequeno{font-size:15pt}
     <p class="oracao" lang="la"><b>Deus meus, ego credo</b>Deus meus, ego credo, adoro, spero et amo te. Peto veniam pro eis qui non credunt, non adorant, non sperant et non amant te.</p>
     <p class="oracao" lang="la"><b>Salve Regina</b>Salve, Regina, Mater misericordiae, vita, dulcedo, et spes nostra, salve. Ad te clamamus, exsules filii Hevae. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, o pia, o dulcis Virgo Maria. Ora pro nobis, sancta Dei Genetrix, ut digni efficiamur promissionibus Christi. Amen.</p>
   </div>
-</section>
+</section></div>
 
 </body>
 </html>
