@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<title>Como rezar o terço · Sete Rosas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Karla:wght@400;500;700&display=swap">
+<style>
+/* Pagela A6, frente e verso, com o ar da loja: creme, dourado, as rosas da aguarela e uma moldura dupla.
+   A frente tem os mistérios e os dias; o verso, como se reza, pela ordem da família. */
+@page{size:105mm 148mm;margin:0}
+:root{--ink:#4b4038;--muted:#85786b;--gold:#9a7843;--gold-soft:#d9c39b;--rose:#b56f7f;--cream:#fdf9f3;--paper:#fffdf9}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Karla",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:105mm;height:148mm;position:relative;overflow:hidden;page-break-after:always;background:var(--cream);
+  padding:8.5mm 9.5mm 8mm;display:flex;flex-direction:column;align-items:center}
+.page::before{content:"";position:absolute;inset:3.2mm;border:0.45mm solid var(--gold-soft);border-radius:4mm;pointer-events:none}
+.page::after{content:"";position:absolute;inset:4.4mm;border:0.15mm solid var(--gold-soft);border-radius:3.2mm;pointer-events:none}
+.rosas{width:72mm;height:auto;display:block;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent),linear-gradient(to bottom,#000 70%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent),linear-gradient(to bottom,#000 70%,transparent);mask-composite:intersect}
+.kicker{font-size:6.2pt;letter-spacing:.22em;text-transform:uppercase;color:var(--rose);font-weight:700;margin:1.4mm 0 0}
+h1{font-family:"IM Fell English",Georgia,serif;font-weight:400;color:var(--gold);margin:0.6mm 0 0;text-align:center;line-height:1.05;font-size:18pt}
+.motto{font-family:"IM Fell English",Georgia,serif;font-style:italic;color:var(--rose);font-size:9pt;margin:0.6mm 0 0}
+
+/* frente: os três grupos de mistérios */
+.grupos{width:100%;display:grid;gap:2.2mm;margin-top:3mm}
+.grupo{display:grid;grid-template-columns:23mm 1fr;gap:2.4mm;align-items:start;border-top:0.2mm solid var(--gold-soft);padding-top:2mm}
+.grupo .nome{font-family:"IM Fell English",Georgia,serif;color:var(--rose);font-size:11pt;line-height:1.05}
+.grupo .dias{display:block;font-family:"Karla",Arial,sans-serif;font-size:6.2pt;color:var(--muted);font-style:italic;margin-top:0.6mm;line-height:1.25}
+.grupo ol{margin:0;padding:0;list-style:none;display:grid;gap:0.5mm;font-size:7.2pt;line-height:1.28}
+.grupo li{display:grid;grid-template-columns:4.5mm 1fr}
+.grupo li span{font-family:"IM Fell English",Georgia,serif;color:var(--gold)}
+
+/* verso: os passos, com as orações curtas por extenso */
+.passos{width:100%;margin:4mm 0 0;padding:0;list-style:none;display:grid;gap:3.2mm}
+.passos li{display:grid;grid-template-columns:5.6mm 1fr;gap:2mm;align-items:start;font-size:8.6pt;line-height:1.36}
+.passos .n{width:5.6mm;height:5.6mm;border-radius:50%;border:0.2mm solid var(--gold);display:grid;place-items:center;
+  font-family:"IM Fell English",Georgia,serif;color:var(--gold);font-size:8pt;line-height:1;background:var(--paper)}
+.passos b{color:var(--ink)}
+.ora{display:block;margin-top:0.8mm;padding:1.2mm 1.8mm;background:var(--paper);border-left:0.5mm solid var(--gold-soft);border-radius:0 1.5mm 1.5mm 0;
+  font-family:"IM Fell English",Georgia,serif;font-style:italic;font-size:8.8pt;line-height:1.32;color:var(--ink)}
+
+.citacao{margin-top:auto;font-family:"IM Fell English",Georgia,serif;font-style:italic;color:var(--gold);font-size:7.8pt;text-align:center;line-height:1.3}
+.rodape{margin-top:auto;text-align:center;display:grid;justify-items:center;gap:0.4mm}
+.rodape .rosas{width:50mm}
+.rodape p{margin:0;font-family:"IM Fell English",Georgia,serif;font-style:italic;color:var(--gold);font-size:7.8pt}
+.rodape small{font-size:6pt;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);font-weight:700}
+</style>
+</head>
+<body>
+
+<section class="page">
+  <img class="rosas" src="img/rosas.jpg" alt="">
+  <p class="kicker">Sete Rosas</p>
+  <h1>Os mistérios do terço</h1>
+  <p class="motto">Ad Iesum per Mariam</p>
+  <div class="grupos">
+    <div class="grupo">
+      <div class="nome">Gozosos<span class="dias">segunda e quinta</span></div>
+      <ol><li><span>1.º</span>A Anunciação do Anjo a Nossa Senhora</li><li><span>2.º</span>A Visitação de Nossa Senhora a Santa Isabel</li><li><span>3.º</span>O Nascimento de Jesus em Belém</li><li><span>4.º</span>A Apresentação do Menino Jesus no Templo</li><li><span>5.º</span>O Encontro do Menino Jesus no Templo</li></ol>
+    </div>
+    <div class="grupo">
+      <div class="nome">Dolorosos<span class="dias">terça e sexta</span></div>
+      <ol><li><span>1.º</span>A Agonia de Jesus no Horto</li><li><span>2.º</span>A Flagelação de Jesus</li><li><span>3.º</span>A Coroação de espinhos</li><li><span>4.º</span>Jesus a caminho do Calvário com a cruz às costas</li><li><span>5.º</span>A Crucifixão e morte de Jesus</li></ol>
+    </div>
+    <div class="grupo">
+      <div class="nome">Gloriosos<span class="dias">quarta, sábado e domingo</span></div>
+      <ol><li><span>1.º</span>A Ressurreição de Jesus</li><li><span>2.º</span>A Ascensão de Jesus ao Céu</li><li><span>3.º</span>A Vinda do Espírito Santo</li><li><span>4.º</span>A Assunção de Nossa Senhora ao Céu</li><li><span>5.º</span>A Coroação de Nossa Senhora</li></ol>
+    </div>
+  </div>
+  <p class="citacao">"Rezem o terço todos os dias."<br>Nossa Senhora em Fátima, 13 de maio de 1917</p>
+</section>
+
+<section class="page">
+  <p class="kicker" style="margin-top:0">Sete Rosas</p>
+  <h1>Como se reza o terço</h1>
+  <p class="motto">Ad Iesum per Mariam</p>
+  <ol class="passos">
+    <li><span class="n">1</span><span><b>Começa-se pelo Credo.</b></span></li>
+    <li><span class="n">2</span><span><b>Em cada um dos cinco mistérios:</b> anuncia-se o mistério e reza-se um Pai-Nosso, dez Ave-Marias e o Glória. Depois:
+      <span class="ora">Ó Maria concebida sem pecado, rogai por nós que recorremos a vós.</span>
+      <span class="ora">Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, principalmente as que mais precisarem.</span></span></li>
+    <li><span class="n">3</span><span><b>No fim dos cinco mistérios, três vezes:</b>
+      <span class="ora">Meu Deus, eu creio, adoro, espero e amo-Vos. Peço-Vos perdão para os que não creem, não adoram, não esperam e não Vos amam.</span></span></li>
+    <li><span class="n">4</span><span><b>Três Ave-Marias</b> pelas nossas intenções.</span></li>
+    <li><span class="n">5</span><span><b>Salve-Rainha.</b></span></li>
+  </ol>
+  <div class="rodape">
+    <img class="rosas" src="img/rosas.jpg" alt="">
+    <p>Um terço de cada vez, até à paz no mundo.</p>
+    <small>7rosas.pt</small>
+  </div>
+</section>
+
+</body>
+</html>
