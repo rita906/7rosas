@@ -68,7 +68,10 @@ section{display:grid;gap:18px}
 .resumo .r{font:inherit;border:0;border-radius:20px;padding:16px 10px;display:grid;gap:4px;justify-items:center;cursor:pointer;color:var(--ink)}
 .resumo .r.pay{background:var(--blush)}.resumo .r.ship{background:var(--honey)}.resumo .r.done{background:var(--sage)}
 .resumo .big{font-family:var(--display);font-size:36px;line-height:1}
-.prontos{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;font-size:15px}
+.prontos{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;font-size:15px}
+.sline{display:grid;gap:6px;padding:8px 0}
+.sline + .sline{border-top:1px dotted var(--line)}
+.lnk{font:inherit;font-size:14px;background:none;border:0;padding:0;color:var(--gold);cursor:pointer;text-decoration:underline}
 .prontos input{width:70px;text-align:center}
 .stab{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px 8px;align-items:center}
 .stab .col{font-family:var(--display);font-size:20px;color:var(--gold);text-align:center}
@@ -151,7 +154,7 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
 
   <section data-v="inicio">
     <div class="head"><p class="kicker">O stock</p><h2>Os terços que ainda temos</h2></div>
-    <p class="lead">Quantos estão prontos para enviar. Quando fizerem mais, carreguem no +; o site desconta sozinho quando alguém encomenda.</p>
+    <p class="lead">Quantos estão prontos para enviar. Quando fizerem mais, escrevam quantos e carreguem em Juntar. O site desconta sozinho quando alguém encomenda.</p>
     <div class="card" id="stock"><p class="loading">A contar as contas…</p></div>
   </section>
 
@@ -228,36 +231,37 @@ function desenhar(){
     $('licao').hidden = false;
   }
 
-  // stock: uma linha por modelo, uma coluna para terços e outra para dezenas, com − e + que guardam logo
+  // stock: um cartão por modelo com as contas desenhadas, uma linha para terços e outra para dezenas;
+  // escreve-se quantos se fizeram e carrega-se em Juntar (ou Corrigir, para pôr o número certo)
   const st = $('stock'); st.innerHTML = '';
-  const tab = document.createElement('div'); tab.className = 'stab';
-  tab.innerHTML = '<span></span><span class="col">Terços</span><span class="col">Dezenas</span>';
   const porModelo = {};
   dados.stock.forEach(x => { const [base, fmt] = x.modelo.split(' · '); (porModelo[base] = porModelo[base] || {})[fmt] = x; });
   Object.keys(porModelo).forEach(base => {
-    const nome = document.createElement('div'); nome.className = 'snome';
+    const m = document.createElement('div'); m.className = 'model';
+    m.innerHTML = '<span class="name"></span>'; m.querySelector('.name').textContent = base;
     const cores = CORES[base] || ['#dcc28f'];
-    nome.innerHTML = '<span class="pontos">' + cores.slice(0, 6).map(c => '<i style="background:' + c + '"></i>').join('') + '</span><span></span>';
-    nome.lastChild.textContent = base;
-    tab.appendChild(nome);
-    ['Terço', 'Dezena de bolso'].forEach(fmt => {
+    [['Terço', 'Terços'], ['Dezena de bolso', 'Dezenas']].forEach(([fmt, rotulo]) => {
       const x = porModelo[base][fmt] || { modelo: base + ' · ' + fmt, restam: 0 };
-      const cel = document.createElement('div'); cel.className = 'scel' + (x.restam > 0 ? '' : ' zero');
-      cel.innerHTML = '<button type="button" aria-label="Menos um">−</button><span class="n"></span><button type="button" aria-label="Mais um">+</button><small></small>';
-      cel.querySelector('.n').textContent = x.restam;
-      cel.querySelector('small').textContent = x.restam > 0 ? 'prontos' : 'acabou';
-      const [menos, mais] = cel.querySelectorAll('button');
-      const mudar = async d => {
-        const novo = Math.max(0, x.restam + d); if (novo === x.restam) return;
-        menos.disabled = mais.disabled = true; cel.querySelector('.n').textContent = novo;
-        try { await servidor('definirProntos', x.modelo, novo); await carregar(); }
-        catch(e){ cel.querySelector('small').textContent = 'não guardou'; menos.disabled = mais.disabled = false; }
+      let contas = '';
+      for (let k = 0; k < Math.max(x.restam, 1) && k < 30; k++) contas += '<span class="bead' + (x.restam ? '' : ' sold') + '" style="background:' + cores[k % cores.length] + '"></span>';
+      const linha = document.createElement('div'); linha.className = 'sline';
+      linha.innerHTML = '<p class="left-n"><b class="fmt"></b>: <b class="qt"></b> prontos' + (x.restam ? '' : ' · acabou') + '</p><div class="beads">' + contas + '</div>' +
+        '<div class="prontos"><label>Acrescentar <input type="number" min="1" step="1" placeholder="0"></label><button type="button" class="btn">Juntar</button><button type="button" class="lnk">Corrigir</button></div>';
+      linha.querySelector('.fmt').textContent = rotulo; linha.querySelector('.qt').textContent = x.restam;
+      const inp = linha.querySelector('input'), [jb, cb] = linha.querySelectorAll('button');
+      const guardar = async (novo, b) => {
+        b.disabled = true; const t = b.textContent; b.textContent = 'A guardar…';
+        try { await servidor('definirProntos', x.modelo, Math.max(0, novo)); await carregar(); } catch(e){ b.disabled = false; b.textContent = t; }
       };
-      menos.onclick = () => mudar(-1); mais.onclick = () => mudar(1);
-      tab.appendChild(cel);
+      jb.onclick = () => { const n = Math.floor(Number(inp.value)); if (n > 0) guardar(x.restam + n, jb); };
+      cb.onclick = () => {
+        if (cb.dataset.ok !== '1') { cb.dataset.ok = '1'; inp.placeholder = String(x.restam); inp.value = x.restam; inp.focus(); jb.textContent = 'Guardar'; jb.onclick = () => guardar(Math.floor(Number(inp.value) || 0), jb); cb.textContent = 'Cancelar'; return; }
+        desenhar();
+      };
+      m.appendChild(linha);
     });
+    st.appendChild(m);
   });
-  st.appendChild(tab);
 
   $('nPagar').textContent = dados.encomendas.filter(o => !o.pago).length;
   $('nEnviar').textContent = dados.encomendas.filter(o => o.pago && !o.enviado).length;
