@@ -213,6 +213,13 @@ function painelDados(chave) {
     linha: i + 2, numero: r[1], nome: String(r[2]), rosas: Number(r[3]) || 0, texto: String(r[4]), mostrar: r[5] === true
   })).reverse() : [];
 
+  const ped = ss.getSheetByName('Pedidos');
+  const q = ped ? primeiraVazia_(ped, 1) - 2 : 0;
+  const pedidos = q > 0 ? ped.getRange(2, 1, q, 6).getValues().map((r, i) => ({
+    linha: i + 2, data: r[0] instanceof Date ? Utilities.formatDate(r[0], 'Europe/Lisbon', 'dd-MM-yyyy') : String(r[0]),
+    nome: String(r[1]), email: String(r[2]), tel: String(r[3]), mensagem: String(r[4]), respondido: r[5] === true
+  })).reverse() : [];
+
   const pagas = encomendas.filter(o => o.pago);
   const entrou = pagas.reduce((s, o) => s + o.total, 0);
   const gastos = compras.reduce((s, c) => s + c.valor, 0);
@@ -220,7 +227,7 @@ function painelDados(chave) {
     dinheiro: { entrou, gastos, sobrou: entrou - gastos, vendido: entrou,
       porReceber: encomendas.filter(o => !o.pago).reduce((s, o) => s + o.total, 0) },
     pecasVendidas: pagas.reduce((s, o) => s + o.pecas, 0),
-    stock, encomendas, compras, opinioes
+    stock, encomendas, compras, opinioes, pedidos
   };
 }
 
@@ -261,6 +268,11 @@ function apagarCompra(chave, linha) {
   comp.deleteRow(linha);
   comp.insertRowAfter(comp.getMaxRows());
   comp.getRange(comp.getMaxRows(), 7).insertCheckboxes();
+}
+
+function marcarPedido(chave, linha, valor) {
+  confirmar_(chave);
+  SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Pedidos').getRange(linha, 6).setValue(valor === true);
 }
 
 function mostrarOpiniao(chave, linha, valor) {
