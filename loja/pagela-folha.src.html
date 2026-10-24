@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<title>Como rezar o terço · Sete Rosas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Karla:wght@400;500;700&display=swap">
+<style>
+/* Pagela numa folha A5, frente e verso: na frente a imagem de como se reza e os mistérios; no verso as orações em português. */
+@page{size:148.5mm 210mm;margin:0}
+:root{--ink:#4b4038;--muted:#85786b;--gold:#9a7843;--gold-soft:#d9c39b;--rose:#b56f7f;--cream:#fdf9f3;--paper:#fffdf9}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Karla",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:148.5mm;height:210mm;page-break-after:always;position:relative;overflow:hidden;background:var(--cream);padding:13mm 14mm 12mm;display:flex;flex-direction:column;align-items:center}
+.page::before{content:"";position:absolute;inset:4.5mm;border:0.5mm solid var(--gold-soft);border-radius:5mm;pointer-events:none}
+.page::after{content:"";position:absolute;inset:6.2mm;border:0.2mm solid var(--gold-soft);border-radius:4mm;pointer-events:none}
+.c{position:absolute;color:var(--gold-soft);font-size:13pt;line-height:1}
+.c.tl{top:7.6mm;left:8mm}.c.tr{top:7.6mm;right:8mm;transform:scaleX(-1)}
+.c.bl{bottom:7.6mm;left:8mm;transform:scaleY(-1)}.c.br{bottom:7.6mm;right:8mm;transform:scale(-1,-1)}
+h1,h2,h3{font-family:"IM Fell English",Georgia,serif;font-weight:400;margin:0;color:var(--gold);text-align:center}
+h1{font-size:24pt;line-height:1}
+h2{font-size:13pt;margin-bottom:2mm}
+
+.topo{display:grid;grid-template-columns:96mm 1fr;gap:6mm;align-items:center;width:100%;margin-top:4mm}
+.como{width:96mm;height:auto;display:block;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 97%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 97%,transparent);mask-composite:intersect}
+.mist{display:grid;gap:3.2mm;text-align:center}
+.grupo h3{color:var(--rose);font-size:12pt;line-height:1}
+.grupo .exp{font-size:7.2pt;margin:0.6mm 0 0}
+.grupo .dias{font-size:6.8pt;color:var(--muted);font-style:italic;margin:0.2mm 0 1mm}
+.grupo ol{margin:0;padding:0;list-style:none;display:inline-grid;gap:0.3mm;text-align:left;font-size:7.4pt;line-height:1.26}
+.grupo li{display:grid;grid-template-columns:5mm 1fr}
+.grupo li span{font-family:"IM Fell English",Georgia,serif;color:var(--gold)}
+.grupo + .grupo::before{content:"✿";display:block;color:var(--gold-soft);font-size:7pt;margin-bottom:1.6mm}
+
+.sep{color:var(--gold-soft);font-family:"IM Fell English",Georgia,serif;letter-spacing:.6em;padding-left:.6em;font-size:9pt;margin:4mm 0 2.4mm}
+.oracoes{width:100%;display:grid;grid-template-columns:1fr 1fr;column-gap:7mm;row-gap:2mm}
+.oracoes .cab{font-family:"IM Fell English",Georgia,serif;color:var(--rose);text-align:center;font-size:10pt;border-bottom:0.2mm solid var(--gold-soft);padding-bottom:0.8mm}
+.or{font-size:7.1pt;line-height:1.3;margin:0;text-align:center}
+.or b{display:block;font-family:"IM Fell English",Georgia,serif;font-weight:400;color:var(--gold);font-size:8.6pt;margin-bottom:0.2mm}
+.or[lang="la"]{font-style:italic}
+.or[lang="la"] b{font-style:normal}
+.fim{margin-top:auto;text-align:center;font-family:"IM Fell English",Georgia,serif;font-style:italic;color:var(--gold);font-size:9pt}
+.fim small{display:block;font-family:"Karla",Arial,sans-serif;font-style:normal;font-size:6.6pt;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);font-weight:700;margin-top:0.6mm}
+@media screen{html,body{background:#efe6d6}body{padding:24px 0;display:flex;justify-content:center}.page{box-shadow:0 8px 28px rgba(75,64,56,.18);border-radius:6mm}}
+.page{padding:11mm 13mm 10mm !important}
+h1{font-size:21pt !important}
+.topo{grid-template-columns:84mm 1fr !important;margin-top:2.4mm !important;gap:5mm !important}
+.como{width:84mm !important}
+.mist{gap:1.8mm !important}
+h2{font-size:12pt !important;margin-bottom:1mm !important}
+.grupo h3{font-size:11pt !important}
+.grupo .exp{font-size:6.8pt !important}
+.grupo .dias{font-size:6.4pt !important;margin:0 0 0.6mm !important}
+.grupo ol{font-size:6.9pt !important;line-height:1.22 !important}
+.grupo + .grupo::before{margin-bottom:1mm !important}
+.sep{margin:2.4mm 0 1.4mm !important}
+.oracoes{row-gap:1.3mm !important}
+.or{font-size:6.55pt !important;line-height:1.26 !important}
+.or b{font-size:8pt !important}
+.page{padding:9mm 9.5mm 8mm !important}
+.page::before{inset:3.4mm !important}.page::after{inset:4.8mm !important}
+.c{font-size:11pt !important}.c.tl,.c.tr{top:5.8mm !important}.c.bl,.c.br{bottom:5.8mm !important}.c.tl,.c.bl{left:6.2mm !important}.c.tr,.c.br{right:6.2mm !important}
+h1{font-size:18pt !important}
+.como{width:116mm !important;margin-top:1.4mm}
+.mist{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3mm;width:100%;margin-top:1.6mm;text-align:center}
+.mist .grupo h3{font-size:10.5pt}
+.mist .grupo .exp{font-size:6pt;margin:0.5mm 0 0}
+.mist .grupo .dias{font-size:5.8pt;margin:0.2mm 0 0.8mm}
+.mist .grupo ol{font-size:6.3pt;line-height:1.22;gap:0.4mm}
+.mist .grupo li{grid-template-columns:4.2mm 1fr}
+.grupo + .grupo::before{content:none !important}
+.mist .grupo + .grupo{border-left:0.2mm solid var(--gold-soft);padding-left:2.4mm}
+.oracoes1{width:100%;display:grid;gap:1.9mm;margin-top:3mm}
+.or{font-size:7.6pt !important;line-height:1.33 !important;text-align:center;margin:0}
+.or b{font-size:9.6pt !important}
+@media screen{body{flex-direction:column;align-items:center;gap:24px}}
+</style>
+</head>
+<body>
+<section class="page">
+  <span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+  <h1>Como rezar o terço</h1>
+  <img class="como" src="img/como-rezar.jpg" alt="">
+  <div class="mist"><div class="grupo"><h3>Gozosos</h3><p class="exp">Mistérios da alegria: o nascimento e a infância de Jesus</p><p class="dias">segunda e quinta</p><ol><li><span>1.º</span>A Anunciação do Anjo a Nossa Senhora</li><li><span>2.º</span>A Visitação de Nossa Senhora a Santa Isabel</li><li><span>3.º</span>O Nascimento de Jesus em Belém</li><li><span>4.º</span>A Apresentação do Menino Jesus no Templo</li><li><span>5.º</span>O Encontro do Menino Jesus no Templo</li></ol></div><div class="grupo"><h3>Dolorosos</h3><p class="exp">Mistérios da dor: a Paixão e a morte de Jesus</p><p class="dias">terça e sexta</p><ol><li><span>1.º</span>A Agonia de Jesus no Horto</li><li><span>2.º</span>A Flagelação de Jesus</li><li><span>3.º</span>A Coroação de espinhos</li><li><span>4.º</span>Jesus a caminho do Calvário com a cruz às costas</li><li><span>5.º</span>A Crucifixão e morte de Jesus</li></ol></div><div class="grupo"><h3>Gloriosos</h3><p class="exp">Mistérios da glória: a Ressurreição de Jesus e Nossa Senhora no Céu</p><p class="dias">quarta, sábado e domingo</p><ol><li><span>1.º</span>A Ressurreição de Jesus</li><li><span>2.º</span>A Ascensão de Jesus ao Céu</li><li><span>3.º</span>A Vinda do Espírito Santo</li><li><span>4.º</span>A Assunção de Nossa Senhora ao Céu</li><li><span>5.º</span>A Coroação de Nossa Senhora</li></ol></div></div>
+  <p class="fim">Um terço de cada vez, até à paz no mundo.<small>seterosas.pt</small></p>
+</section>
+<section class="page">
+  <span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+  <h1>As orações do terço</h1>
+  <div class="oracoes1">
+    <p class="or"><b>Sinal da Cruz</b>Pelo sinal da Santa Cruz, livrai-nos, Deus, Nosso Senhor, dos nossos inimigos. Em nome do Pai, e do Filho, e do Espírito Santo. Ámen.</p>
+    <p class="or"><b>Credo</b>Creio em Deus Pai todo-poderoso, Criador do Céu e da Terra; e em Jesus Cristo, seu único Filho, Nosso Senhor, que foi concebido pelo poder do Espírito Santo; nasceu da Virgem Maria; padeceu sob Pôncio Pilatos, foi crucificado, morto e sepultado; desceu aos infernos; ressuscitou ao terceiro dia; subiu aos Céus, está sentado à direita de Deus Pai todo-poderoso, donde há de vir a julgar os vivos e os mortos. Creio no Espírito Santo, na santa Igreja Católica, na comunhão dos Santos, na remissão dos pecados, na ressurreição da carne e na vida eterna. Ámen.</p>
+    <p class="or"><b>Pai-Nosso</b>Pai Nosso, que estais no Céu, santificado seja o vosso nome, venha a nós o vosso reino, seja feita a vossa vontade, assim na terra como no Céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Ámen.</p>
+    <p class="or"><b>Ave-Maria</b>Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós, pecadores, agora e na hora da nossa morte. Ámen.</p>
+    <p class="or"><b>Glória</b>Glória ao Pai, ao Filho e ao Espírito Santo. Como era no princípio, agora e sempre, e por todos os séculos dos séculos. Ámen.</p>
+    <p class="or"><b>Ó Maria concebida sem pecado</b>Ó Maria concebida sem pecado, rogai por nós que recorremos a vós.</p>
+    <p class="or"><b>Ó meu Jesus</b>Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, principalmente as que mais precisarem.</p>
+    <p class="or"><b>Meu Deus, eu creio</b>Meu Deus, eu creio, adoro, espero e amo-Vos. Peço-Vos perdão para os que não creem, não adoram, não esperam e não Vos amam.</p>
+    <p class="or"><b>Salve-Rainha</b>Salve, Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salve! A vós bradamos, os degredados filhos de Eva. A vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei. E depois deste desterro mostrai-nos Jesus, bendito fruto do vosso ventre. Ó clemente, ó piedosa, ó doce sempre Virgem Maria. Rogai por nós, Santa Mãe de Deus, para que sejamos dignos das promessas de Cristo. Ámen.</p>
+  </div>
+  <p class="fim">"Rezem o terço todos os dias."<small>Nossa Senhora em Fátima, 13 de maio de 1917</small></p>
+</section>
+</body>
+</html>
