@@ -84,6 +84,23 @@ section{display:grid;gap:18px}
 .scel small{grid-column:1/-1;text-align:center;font-size:13px;color:var(--muted)}
 .scel.zero small{color:var(--rose);font-weight:700}
 @media(max-width:520px){.stab{grid-template-columns:1fr 1fr 1fr}.snome{font-size:16px}.scel{grid-template-columns:30px auto 30px}.scel button{width:30px;height:30px}}
+/* stock compacto: modelos em grelha, terços e dezenas lado a lado */
+#stock{display:grid !important;grid-template-columns:1fr 1fr;gap:12px !important;background:none !important;border:0 !important;padding:0 !important}
+@media(max-width:620px){#stock{grid-template-columns:1fr}}
+#stock .model{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 10px;gap:6px}
+#stock .model + .model{border-top:1px solid var(--line);padding-top:12px}
+#stock .model .name{font-size:19px}
+.slines{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#stock .sline{padding:0;gap:4px;justify-items:center}
+#stock .sline + .sline{border-top:0;border-left:1px dotted var(--line)}
+#stock .left-n{font-size:14px}
+#stock .left-n .qt{font-family:var(--display);font-size:20px}
+#stock .beads{gap:3px;max-height:34px;overflow:hidden}
+#stock .bead{width:12px;height:12px}
+#stock .prontos{gap:6px}
+#stock .prontos input{width:52px;padding:6px;text-align:center}
+#stock .prontos .btn{padding:7px 12px;font-size:14px}
+#stock .lnk{font-size:12px}
 .pill{font-size:13px;font-weight:700;border-radius:999px;padding:4px 12px}
 .pill.pay{background:var(--blush);color:var(--rose)}
 .pill.ship{background:var(--honey);color:var(--gold)}
@@ -238,15 +255,15 @@ function desenhar(){
   dados.stock.forEach(x => { const [base, fmt] = x.modelo.split(' · '); (porModelo[base] = porModelo[base] || {})[fmt] = x; });
   Object.keys(porModelo).forEach(base => {
     const m = document.createElement('div'); m.className = 'model';
-    m.innerHTML = '<span class="name"></span>'; m.querySelector('.name').textContent = base;
+    m.innerHTML = '<span class="name"></span><div class="slines"></div>'; m.querySelector('.name').textContent = base;
     const cores = CORES[base] || ['#dcc28f'];
     [['Terço', 'Terços'], ['Dezena de bolso', 'Dezenas']].forEach(([fmt, rotulo]) => {
       const x = porModelo[base][fmt] || { modelo: base + ' · ' + fmt, restam: 0 };
       let contas = '';
       for (let k = 0; k < Math.max(x.restam, 1) && k < 30; k++) contas += '<span class="bead' + (x.restam ? '' : ' sold') + '" style="background:' + cores[k % cores.length] + '"></span>';
       const linha = document.createElement('div'); linha.className = 'sline';
-      linha.innerHTML = '<p class="left-n"><b class="fmt"></b>: <b class="qt"></b> prontos' + (x.restam ? '' : ' · acabou') + '</p><div class="beads">' + contas + '</div>' +
-        '<div class="prontos"><label>Acrescentar <input type="number" min="1" step="1" placeholder="0"></label><button type="button" class="btn">Juntar</button><button type="button" class="lnk">Corrigir</button></div>';
+      linha.innerHTML = '<p class="left-n"><b class="fmt"></b> <b class="qt"></b>' + (x.restam ? '' : ' · acabou') + '</p><div class="beads">' + contas + '</div>' +
+        '<div class="prontos"><input type="number" min="1" step="1" placeholder="+" aria-label="Quantos acrescentar"><button type="button" class="btn">Juntar</button><button type="button" class="lnk">Corrigir</button></div>';
       linha.querySelector('.fmt').textContent = rotulo; linha.querySelector('.qt').textContent = x.restam;
       const inp = linha.querySelector('input'), [jb, cb] = linha.querySelectorAll('button');
       const guardar = async (novo, b) => {
@@ -258,7 +275,7 @@ function desenhar(){
         if (cb.dataset.ok !== '1') { cb.dataset.ok = '1'; inp.placeholder = String(x.restam); inp.value = x.restam; inp.focus(); jb.textContent = 'Guardar'; jb.onclick = () => guardar(Math.floor(Number(inp.value) || 0), jb); cb.textContent = 'Cancelar'; return; }
         desenhar();
       };
-      m.appendChild(linha);
+      m.querySelector('.slines').appendChild(linha);
     });
     st.appendChild(m);
   });
