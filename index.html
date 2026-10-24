@@ -102,6 +102,17 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .op{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:8px}
 .op .r{color:var(--rose);font-size:20px;letter-spacing:2px}
 .op .quem{font-size:14px;color:var(--muted)}
+.menu-bt{background:none;cursor:pointer;padding:0}
+.marca{font-family:var(--display);font-size:22px;color:var(--gold)}
+.veu{position:fixed;inset:0;background:rgba(75,64,56,.35);z-index:40}
+.gaveta{position:fixed;top:0;bottom:0;left:0;width:min(82vw,300px);z-index:41;background:var(--paper);border-right:1px solid var(--line);
+  padding:calc(24px + env(safe-area-inset-top,0px)) 24px calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));
+  display:flex;flex-direction:column;gap:4px;box-shadow:8px 0 30px rgba(75,64,56,.15);overflow-y:auto}
+.gaveta-tit{font-family:var(--display);font-size:28px;color:var(--gold);margin:0 0 12px}
+.gaveta a{color:var(--ink);text-decoration:none;font-size:18px;padding:12px 0;border-bottom:1px solid var(--line)}
+.gaveta a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.gaveta-motto{margin-top:auto;font-family:var(--display);font-style:italic;color:var(--rose);font-size:18px;padding-top:20px}
+@media (prefers-reduced-motion:no-preference){.gaveta{animation:entra .22s ease-out}@keyframes entra{from{transform:translateX(-100%)}to{transform:none}}}
 .stock{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px}
 .stock.em{background:var(--sage);color:#5b7a4e}
 .stock.enc{background:var(--blush);color:var(--rose)}
@@ -164,7 +175,19 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 
 </head>
 <body>
-<nav class="topbar" aria-label="Navegação"><div class="topbar-in"><a class="casa" href="#topo" aria-label="Voltar ao início"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a><a class="lnk" href="#t-rezar">Como rezar</a><a class="lnk" href="#t-pedidos">Pedidos personalizados</a></div></nav>
+<nav class="topbar" aria-label="Navegação"><div class="topbar-in"><button type="button" class="casa menu-bt" id="menuBt" aria-label="Abrir o menu" aria-expanded="false" aria-controls="gaveta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><a class="casa" href="#topo" aria-label="Voltar ao início"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a><span class="marca">Sete Rosas</span></div></nav>
+<div class="veu" id="veu" hidden></div>
+<aside class="gaveta" id="gaveta" aria-label="Menu" hidden>
+  <p class="gaveta-tit">Sete Rosas</p>
+  <a href="#topo">Início</a>
+  <a href="#quem-somos">Quem somos</a>
+  <a href="#t-fatima">Porquê o Santo Terço</a>
+  <a href="#t-rezar">Como rezar o terço</a>
+  <a href="#t-escolher">Encomendar</a>
+  <a href="#t-pedidos">Pedidos personalizados</a>
+  <a href="#opinioes" id="menuOps" hidden>O que dizem as famílias</a>
+  <p class="gaveta-motto">Ad Iesum per Mariam</p>
+</aside>
 <a class="flutuante" href="#t-escolher">Quero encomendar</a>
 <div class="wrap">
   <header id="topo">
@@ -174,6 +197,18 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
     <p class="missao">Queremos que todas as famílias rezem o terço, pelas mãos das crianças.</p>
     <p class="lead">As sete rosas são sete irmãs: <b>Sofia, Inês, Helena, Maria do Mar, Luzinha, Benedita e Assunção</b>, a mais nova. Fazem à mão terços coloridos, com contas resistentes e cordel forte, para aguentar até as mãos mais pequenas. Cada terço leva uma pagela de como rezar o terço.</p>
   </header>
+
+  <section id="quem-somos" aria-labelledby="t-quem">
+    <div class="head">
+      <p class="kicker">Quem somos</p>
+      <h2 id="t-quem">Sete irmãs e um terço por dia</h2>
+    </div>
+    <div class="prose">
+      <p>Somos sete irmãs: a Sofia, a Inês, a Helena, a Maria do Mar, a Luzinha, a Benedita e a Assunção, a mais nova. Em nossa casa reza-se o terço todos os dias, e aos domingos vamos à Missa tradicional, em latim.</p>
+      <p>Os terços que encontrávamos eram de adultos: escuros, compridos e fáceis de partir. Por isso começámos a fazer os nossos, com contas coloridas e cordel forte, à medida das mãos pequenas.</p>
+      <p>Fazemos cada terço à mão, com a nossa mãe, à mesa da cozinha, e cada um leva a pagela de como rezar o terço. Em Fátima, Nossa Senhora pediu a três crianças que rezassem o terço todos os dias. É isso que queremos ajudar todas as famílias a fazer.</p>
+    </div>
+  </section>
 
   <section aria-labelledby="t-fatima">
     <div class="head">
@@ -520,7 +555,7 @@ function opinioes(lista){
     d.querySelector(".r").textContent="✿".repeat(o.rosas);d.querySelector(".r").setAttribute("aria-label",o.rosas+" rosas em 5");
     d.querySelector(".t").textContent=o.texto;d.querySelector(".quem").textContent=o.nome+(o.data?" · "+o.data:"");
     box.appendChild(d)});
-  $("opinioes").hidden=false;
+  $("opinioes").hidden=false;$("menuOps").hidden=false;
 }
 
 // as duas ilustrações da secção "Dezena ou terço"
@@ -530,6 +565,13 @@ for(let i=0;i<5;i++){dezena(t,ARCO,PEROLA,"#e6d9c3",false);if(i<4){const g=docum
 
 render();
 cestoRender();
+
+// menu lateral
+function menu(abrir){$("gaveta").hidden=!abrir;$("veu").hidden=!abrir;$("menuBt").setAttribute("aria-expanded",abrir);if(abrir)$("gaveta").querySelector("a").focus();}
+$("menuBt").onclick=()=>menu($("gaveta").hidden);
+$("veu").onclick=()=>menu(false);
+$("gaveta").querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>menu(false)));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("gaveta").hidden){menu(false);$("menuBt").focus();}});
 </script>
 
 </body>
