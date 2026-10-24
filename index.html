@@ -113,6 +113,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .gaveta a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
 .gaveta-motto{margin-top:auto;font-family:var(--display);font-style:italic;color:var(--rose);font-size:18px;padding-top:20px}
 @media (prefers-reduced-motion:no-preference){.gaveta{animation:entra .22s ease-out}@keyframes entra{from{transform:translateX(-100%)}to{transform:none}}}
+.misterios{grid-template-columns:1fr !important}
+.misterios div{text-align:left}
+.misterios .exp{color:var(--ink);font-size:16px}
+.misterios ol{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:4px;font-size:16px}
+.misterios li{display:grid;grid-template-columns:32px 1fr}
+.misterios li span{font-family:var(--display);color:var(--gold)}
 .stock{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px}
 .stock.em{background:var(--sage);color:#5b7a4e}
 .stock.enc{background:var(--blush);color:var(--rose)}
@@ -266,9 +272,9 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <li><span class="n">5</span><p><b>Salve-Rainha.</b></p></li>
     </ol>
     <div class="misterios">
-      <div><b>Gozosos</b><i>segunda e quinta</i><p>A Anunciação · A Visitação · O Nascimento de Jesus · A Apresentação no Templo · O Encontro no Templo</p></div>
-      <div><b>Dolorosos</b><i>terça e sexta</i><p>A Agonia no Horto · A Flagelação · A Coroação de espinhos · Jesus com a cruz às costas · A Crucifixão e morte</p></div>
-      <div><b>Gloriosos</b><i>quarta, sábado e domingo</i><p>A Ressurreição · A Ascensão · A Vinda do Espírito Santo · A Assunção · A Coroação de Nossa Senhora</p></div>
+      <div><b>Gozosos</b><p class="exp">Os mistérios da alegria: o nascimento e a infância de Jesus.</p><i>segunda e quinta</i><ol><li><span>1.º</span>A Anunciação do Anjo a Nossa Senhora</li><li><span>2.º</span>A Visitação de Nossa Senhora a Santa Isabel</li><li><span>3.º</span>O Nascimento de Jesus em Belém</li><li><span>4.º</span>A Apresentação do Menino Jesus no Templo</li><li><span>5.º</span>O Encontro do Menino Jesus no Templo</li></ol></div>
+      <div><b>Dolorosos</b><p class="exp">Os mistérios da dor: a Paixão e a morte de Jesus.</p><i>terça e sexta</i><ol><li><span>1.º</span>A Agonia de Jesus no Horto</li><li><span>2.º</span>A Flagelação de Jesus</li><li><span>3.º</span>A Coroação de espinhos</li><li><span>4.º</span>Jesus a caminho do Calvário com a cruz às costas</li><li><span>5.º</span>A Crucifixão e morte de Jesus</li></ol></div>
+      <div><b>Gloriosos</b><p class="exp">Os mistérios da glória: a Ressurreição de Jesus e Nossa Senhora no Céu.</p><i>quarta, sábado e domingo</i><ol><li><span>1.º</span>A Ressurreição de Jesus</li><li><span>2.º</span>A Ascensão de Jesus ao Céu</li><li><span>3.º</span>A Vinda do Espírito Santo</li><li><span>4.º</span>A Assunção de Nossa Senhora ao Céu</li><li><span>5.º</span>A Coroação de Nossa Senhora</li></ol></div>
     </div>
     <div class="oracoes">
       <details><summary>Sinal da Cruz</summary><p>Pelo sinal da Santa Cruz, livrai-nos, Deus, Nosso Senhor, dos nossos inimigos. Em nome do Pai, e do Filho, e do Espírito Santo. Ámen.</p></details>
