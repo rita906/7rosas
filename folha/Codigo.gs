@@ -324,7 +324,7 @@ function avisarEnvio_(r) {
     subject: `Sete Rosas: a tua encomenda n.º ${numero} já seguiu`,
     htmlBody: emailHtml_([
       `Olá ${escapar_(primeiroNome_(r[C.nome - 1]))},`,
-      `A tua encomenda n.º ${numero} já seguiu. Vai benzida e com a pagela de como rezar o terço.`,
+      `A tua encomenda n.º ${numero} já seguiu, com a pagela de como rezar o terço.`,
       registo ? `O registo dos CTT é <b>${escapar_(registo)}</b>.` : '',
       'Quando o terço chegar e o rezarem a primeira vez, conta-nos como foi. Ajuda outras famílias a decidir.',
       `<a href="${link}" style="display:inline-block;background:#9a7843;color:#fffdf9;text-decoration:none;font-family:Arial,sans-serif;font-weight:bold;padding:12px 22px;border-radius:999px">Deixar a minha opinião</a>`
