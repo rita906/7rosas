@@ -1,12 +1,12 @@
 // Sete Rosas: encomendas, stock e opiniões numa Google Sheet.
-// A loja (7rosas.pt) lê o stock e as opiniões com GET e envia encomendas com POST.
+// A loja (seterosas.pt) lê o stock e as opiniões com GET e envia encomendas com POST.
 // Cada encomenda entra no separador Encomendas, desconta o stock, avisa a Rita e confirma ao cliente por email.
 
 const MODELOS = ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris', 'Personalizado'];
 const STOCK_INICIAL = 10;
 // O endereço público da app (o de /a/macros/ pede sessão a quem é de fora)
 const APP_URL = 'https://script.google.com/macros/s/AKfycbzDHMQaDLvuKFeFQKKcO9V5Hv6wFDiDo6OFAEM8Lc2cZCOvasNbtkcBbx-hNLXzr__Peg/exec';
-const LOJA_URL = 'https://7rosas.pt';
+const LOJA_URL = 'https://seterosas.pt';
 
 // Colunas do separador Encomendas (1 = A)
 const C = { numero: 1, data: 2, nome: 3, tel: 4, entrega: 5, morada: 6, nif: 7, nomeFiscal: 8, tercos: 9, pecas: 10,
