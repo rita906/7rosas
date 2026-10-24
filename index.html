@@ -429,7 +429,7 @@ function swatches(el,lista,get,set){
 function render(){
   const sel=COLECAO.find(x=>x.id===cores);
   $("add").textContent=sel&&restam&&!(restam[sel.nome]>0)?"Esgotado: pedir por mensagem":"Juntar à encomenda";
-  escolhas($("optModelo"),[{id:"dezena",nome:"Dezena de bolso",desc:"Uma dezena, para começar"},{id:"terco",nome:"Terço",desc:"As cinco dezenas"}],()=>modelo,v=>modelo=v);
+  escolhas($("optModelo"),[{id:"dezena",nome:"Dezena de bolso",desc:"Uma dezena sempre à mão"},{id:"terco",nome:"Terço",desc:"Para rezar o terço em família"}],()=>modelo,v=>modelo=v);
   escolhas($("optCores"),[...COLECAO.map(c=>({...c,preco:PRECOS[modelo].modelo}))],()=>cores,v=>cores=v);
   $("custom").hidden=cores!=="custom";
   $("preview").parentElement.hidden=cores!=="custom";
