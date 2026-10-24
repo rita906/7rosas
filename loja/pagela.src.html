@@ -54,22 +54,14 @@ h1.pequeno{font-size:15pt}
 .oracao b{display:block;text-align:center;font-family:"IM Fell English",Georgia,serif;font-weight:400;color:var(--gold);font-size:8pt;margin-bottom:0.1mm}
 .oracao[lang="la"]{font-style:italic}
 .oracao[lang="la"] b{font-style:normal}
-.caminho{display:grid;grid-template-columns:31mm 1fr;gap:3mm;align-items:center;width:100%;margin-top:2.4mm}
-.caminho .passos{margin:0;gap:2.2mm}
-.caminho .passos li{font-size:7.6pt !important;line-height:1.32}
-.ic{display:block;width:6mm;height:6mm;margin-bottom:0.8mm;fill:none;stroke:var(--gold);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
 .oracoes{gap:0.9mm !important}
 .oracao{font-size:5.85pt !important;line-height:1.24 !important}
 .oracao b{font-size:7.6pt !important}
-.caminho{margin:auto 0 !important;grid-template-columns:36mm 1fr !important}
-.caminho .passos li{font-size:8pt !important}
-.nota{margin:0 0 3mm !important}
 @media screen{
   html,body{background:#efe6d6}
   body{padding:24px 0;display:flex;flex-direction:column;align-items:center;gap:24px}
   .page{box-shadow:0 8px 28px rgba(75,64,56,.18);border-radius:4mm}
 }
-.grupo .exp{display:block;font-family:"Karla",Arial,sans-serif;font-size:6.2pt;color:var(--ink);margin-top:0.8mm;line-height:1.25}
 </style>
 </head>
 <body>
@@ -81,15 +73,15 @@ h1.pequeno{font-size:15pt}
   <p class="motto">Ad Iesum per Mariam</p>
   <div class="grupos">
     <div class="grupo">
-      <div class="nome"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.1 6.4 6.7.1-5.4 4 2 6.5L12 15.6l-5.4 3.9 2-6.5-5.4-4 6.7-.1z"/></svg>Gozosos<span class="exp">Mistérios da alegria: o nascimento e a infância de Jesus.</span><span class="dias">segunda e quinta</span></div>
+      <div class="nome">Gozosos<span class="dias">segunda e quinta</span></div>
       <ol><li><span>1.º</span>A Anunciação do Anjo a Nossa Senhora</li><li><span>2.º</span>A Visitação de Nossa Senhora a Santa Isabel</li><li><span>3.º</span>O Nascimento de Jesus em Belém</li><li><span>4.º</span>A Apresentação do Menino Jesus no Templo</li><li><span>5.º</span>O Encontro do Menino Jesus no Templo</li></ol>
     </div>
     <div class="grupo">
-      <div class="nome"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5v19M6.5 8h11"/></svg>Dolorosos<span class="exp">Mistérios da dor: a Paixão e a morte de Jesus.</span><span class="dias">terça e sexta</span></div>
+      <div class="nome">Dolorosos<span class="dias">terça e sexta</span></div>
       <ol><li><span>1.º</span>A Agonia de Jesus no Horto</li><li><span>2.º</span>A Flagelação de Jesus</li><li><span>3.º</span>A Coroação de espinhos</li><li><span>4.º</span>Jesus a caminho do Calvário com a cruz às costas</li><li><span>5.º</span>A Crucifixão e morte de Jesus</li></ol>
     </div>
     <div class="grupo">
-      <div class="nome"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 18h17l-1.6-9.5-4.4 4L12 5.5l-2.5 7-4.4-4zM3.5 20.5h17"/></svg>Gloriosos<span class="exp">Mistérios da glória: a Ressurreição de Jesus e Nossa Senhora no Céu.</span><span class="dias">quarta, sábado e domingo</span></div>
+      <div class="nome">Gloriosos<span class="dias">quarta, sábado e domingo</span></div>
       <ol><li><span>1.º</span>A Ressurreição de Jesus</li><li><span>2.º</span>A Ascensão de Jesus ao Céu</li><li><span>3.º</span>A Vinda do Espírito Santo</li><li><span>4.º</span>A Assunção de Nossa Senhora ao Céu</li><li><span>5.º</span>A Coroação de Nossa Senhora</li></ol>
     </div>
   </div>
@@ -100,16 +92,14 @@ h1.pequeno{font-size:15pt}
   <p class="kicker" style="margin-top:0">Sete Rosas</p>
   <h1>Como se reza o terço</h1>
   <p class="motto">Ad Iesum per Mariam</p>
-  <div class="caminho">
-    __TERCO__
-    <ol class="passos">
-      <li><span class="n">1</span><span><b>Na cruz:</b> o Credo.</span></li>
-      <li><span class="n">2</span><span><b>Em cada dezena:</b> anuncia-se o mistério. Na conta grande, um Pai-Nosso; nas dez contas, dez Ave-Marias. Depois, o Glória, "Ó Maria concebida sem pecado" e "Ó meu Jesus".</span></li>
-      <li><span class="n">3</span><span><b>Na medalha:</b> três vezes "Meu Deus, eu creio".</span></li>
-      <li><span class="n">4</span><span><b>Nas três contas:</b> três Ave-Marias pelas nossas intenções.</span></li>
-      <li><span class="n">5</span><span><b>Na conta grande:</b> a Salve-Rainha.</span></li>
-    </ol>
-  </div>
+  <ol class="passos">
+    <li><span class="n">1</span><span><b>Começa-se pelo Credo.</b></span></li>
+    <li><span class="n">2</span><span><b>Em cada um dos cinco mistérios:</b> anuncia-se o mistério e reza-se
+      <span class="seq">um Pai-Nosso<br>dez Ave-Marias<br>o Glória<br>Ó Maria concebida sem pecado<br>Ó meu Jesus</span></span></li>
+    <li><span class="n">3</span><span><b>No fim dos cinco mistérios,</b> três vezes "Meu Deus, eu creio".</span></li>
+    <li><span class="n">4</span><span><b>Três Ave-Marias</b> pelas nossas intenções.</span></li>
+    <li><span class="n">5</span><span><b>Salve-Rainha.</b></span></li>
+  </ol>
   <p class="nota">As orações estão por extenso nas páginas seguintes, em português e em latim.</p>
   <div class="rodape">
     <img class="rosas" src="img/rosas.jpg" alt="">
