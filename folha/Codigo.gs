@@ -12,8 +12,16 @@ const LOJA_URL = 'https://seterosas.pt';
 const C = { numero: 1, data: 2, nome: 3, tel: 4, entrega: 5, morada: 6, nif: 7, nomeFiscal: 8, tercos: 9, pecas: 10,
   total: 11, nota: 12, pago: 13, enviado: 14, registo: 15, fatura: 16, email: 17, token: 18 };
 
+// As funções sem chave só podem correr no editor, pela dona da folha. Qualquer página servida por este
+// script (a da opinião é pública) consegue chamar funções pelo google.script.run, e assim ficam fechadas.
+function soNoEditor_() {
+  const ativo = Session.getActiveUser().getEmail();
+  if (!ativo || ativo !== Session.getEffectiveUser().getEmail()) throw new Error('Só no editor');
+}
+
 // Corre uma vez, à mão, no editor: cria os separadores com cabeçalhos, fórmulas e caixas. Apaga o que lá estiver.
 function preparar() {
+  soNoEditor_();
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   ss.setSpreadsheetLocale('pt_PT');
 
@@ -83,6 +91,11 @@ function preparar() {
 
 // Nova fornada: repõe os vendidos a zero. As encomendas antigas ficam na folha.
 function novaFornada() {
+  soNoEditor_();
+  novaFornada_();
+}
+
+function novaFornada_() {
   const stock = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stock');
   stock.getRange(2, 3, MODELOS.length, 1).setValue(0);
 }
@@ -148,6 +161,7 @@ function confirmar_(chave) {
 
 // Corre no editor para saber o endereço do painel (aparece no registo de execução)
 function enderecoDoPainel() {
+  soNoEditor_();
   Logger.log(APP_URL + '?painel=' + chave_());
 }
 
@@ -271,7 +285,24 @@ function guardarOpiniao(numero, codigo, rosas, texto, nomeMostrar) {
 
 function fornadaNova(chave) {
   confirmar_(chave);
-  novaFornada();
+  novaFornada_();
+}
+
+// Quantos terços de um modelo estão prontos para enviar: acerta o stock da fornada para que restem esses
+function definirProntos(chave, modelo, prontos) {
+  confirmar_(chave);
+  const i = MODELOS.indexOf(modelo);
+  if (i < 0) throw new Error('Modelo desconhecido');
+  const stock = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stock');
+  const vendidos = Number(stock.getRange(i + 2, 3).getValue()) || 0;
+  stock.getRange(i + 2, 2).setValue(vendidos + Math.max(0, Math.floor(Number(prontos) || 0)));
+}
+
+// Põe o stock de todos os modelos a zero (sem terços prontos). Só no editor.
+function zerarStock() {
+  soNoEditor_();
+  const stock = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stock');
+  MODELOS.forEach((m, i) => stock.getRange(i + 2, 2).setValue(Number(stock.getRange(i + 2, 3).getValue()) || 0));
 }
 
 // Primeira linha sem nada na coluna indicada (as caixas de verificação enchem as outras colunas)

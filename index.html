@@ -120,6 +120,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .misterios li{display:grid;grid-template-columns:32px 1fr}
 .misterios li span{font-family:var(--display);color:var(--gold)}
 .como-rezar{width:100%;max-width:560px;height:auto;border-radius:18px;border:1px solid var(--line)}
+.aviso{background:var(--blush);color:var(--ink);text-align:center;font-size:15px;line-height:1.4;margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px))) 0 calc(-1*max(16px,env(safe-area-inset-right,0px)));padding:10px max(16px,env(safe-area-inset-left,0px))}
+.aviso a{color:var(--rose);font-weight:700}
+.btn:disabled{opacity:.55;cursor:default}
 .stock{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px}
 .stock.em{background:var(--sage);color:#5b7a4e}
 .stock.enc{background:var(--blush);color:var(--rose)}
@@ -183,6 +186,7 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 </head>
 <body>
 <nav class="topbar" aria-label="Navegação"><div class="topbar-in"><button type="button" class="casa menu-bt" id="menuBt" aria-label="Abrir o menu" aria-expanded="false" aria-controls="gaveta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><a class="casa" href="#topo" aria-label="Voltar ao início"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a><span class="marca">Sete Rosas</span></div></nav>
+<div class="aviso" id="aviso"><b>Encomendas disponíveis em breve.</b> Segue-nos no Instagram, <a href="https://www.instagram.com/seterosas.pt/" target="_blank" rel="noopener">Sete Rosas</a>, para saberes quando abrem.</div>
 <div class="veu" id="veu" hidden></div>
 <aside class="gaveta" id="gaveta" aria-label="Menu" hidden>
   <p class="gaveta-tit">Sete Rosas</p>
@@ -425,6 +429,8 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 </div>
 
 <script>
+// Enquanto for false, a loja mostra "em breve" e não aceita encomendas (os pedidos personalizados continuam abertos)
+const ABERTAS=false;
 const API="https://script.google.com/macros/s/AKfycbzDHMQaDLvuKFeFQKKcO9V5Hv6wFDiDo6OFAEM8Lc2cZCOvasNbtkcBbx-hNLXzr__Peg/exec";
 const MODELOS={dezena:"Dezena de bolso",terco:"Terço"};
 const PRECOS={terco:{modelo:12,custom:15},dezena:{modelo:7,custom:9}};
@@ -467,6 +473,7 @@ function swatches(el,lista,get,set){
 function render(){
   const sel=COLECAO.find(x=>x.id===cores);
   $("add").textContent=sel&&restam&&!(restam[sel.nome]>0)?"Esgotado: pedir por mensagem":"Juntar à encomenda";
+  if(!ABERTAS){$("add").textContent="Encomendas em breve";$("add").disabled=true;}
   escolhas($("optModelo"),[{id:"dezena",nome:"Dezena de bolso",desc:"Uma dezena sempre à mão"},{id:"terco",nome:"Terço",desc:"Para rezar o terço em família"}],()=>modelo,v=>modelo=v);
   escolhas($("optCores"),[...COLECAO.map(c=>({...c,preco:PRECOS[modelo].modelo}))],()=>cores,v=>cores=v);
   $("custom").hidden=cores!=="custom";
@@ -573,6 +580,10 @@ $("menuBt").onclick=()=>menu($("gaveta").hidden);
 $("veu").onclick=()=>menu(false);
 $("gaveta").querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>menu(false)));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("gaveta").hidden){menu(false);$("menuBt").focus();}});
+if(!ABERTAS){
+  const f=document.querySelector(".flutuante");f.textContent="Encomendas em breve";f.href="#aviso";
+  const fb=$("form").querySelector('button[type="submit"]');fb.disabled=true;fb.textContent="Encomendas em breve";
+}else{$("aviso").hidden=true;}
 </script>
 
 </body>
