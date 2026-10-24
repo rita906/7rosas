@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sete Rosas: a tua opinião</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Karla:wght@400;500;700&display=swap">
+<style>
+/* Mesma estética da loja: um cartão creme ao centro, rosas em vez de estrelas */
+:root{--bg:#fdf9f3;--paper:#fffdf9;--ink:#4b4038;--muted:#85786b;--line:#ece2d3;--gold:#9a7843;--rose:#b56f7f;--rose-soft:#f2b8c6;
+  --display:"IM Fell English",Georgia,serif;--body:"Karla",system-ui,sans-serif}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;padding:0 16px}
+.wrap{max-width:520px;margin:0 auto;padding:40px 0 64px;display:grid;gap:24px;text-align:center}
+h1{font-family:var(--display);font-weight:400;font-size:42px;color:var(--gold);margin:0}
+.motto{font-family:var(--display);font-style:italic;color:var(--rose);margin:0}
+p{margin:0}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:24px 20px;display:grid;gap:18px;text-align:left}
+label{display:grid;gap:6px;font-weight:700;font-size:15px}
+.hint{font-weight:400;color:var(--muted);font-size:14px}
+input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%}
+.roses{display:flex;justify-content:center;gap:10px}
+.rose{appearance:none;border:0;background:none;cursor:pointer;font-size:38px;line-height:1;color:var(--line);padding:0}
+.rose[aria-pressed="true"]{color:var(--rose)}
+.rose:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:50%}
+.btn{font:inherit;font-weight:700;border:0;border-radius:999px;padding:14px 26px;cursor:pointer;background:var(--gold);color:var(--paper);justify-self:center}
+.btn:disabled{opacity:.6}
+.erro{color:var(--rose);font-size:15px;text-align:center}
+.obrigada{font-family:var(--display);font-size:26px;color:var(--gold)}
+a{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Sete Rosas</h1>
+  <p class="motto">Ad Iesum per Mariam</p>
+
+  <div id="invalida" hidden>
+    <p>Esta ligação já não é válida. Se quiseres deixar a tua opinião, responde ao email que te enviámos.</p>
+  </div>
+
+  <form class="card" id="form" hidden>
+    <p>Olá <?= nome ?>! Como correu o teu terço? Conta-nos, para ajudar outras famílias a decidir.</p>
+    <div>
+      <p style="font-weight:700;font-size:15px;text-align:center;margin-bottom:8px">Quantas rosas nos dás?</p>
+      <div class="roses" id="roses" role="group" aria-label="De 1 a 5 rosas"></div>
+    </div>
+    <label for="texto">A tua opinião<textarea id="texto" rows="5" maxlength="1000" placeholder="Ex.: a minha filha reza a dezena todas as noites…"></textarea></label>
+    <label for="nomeMostrar">Como queres aparecer <span class="hint">(ex.: Ana, Braga)</span><input id="nomeMostrar" maxlength="60" value="<?= nome ?>"></label>
+    <p class="erro" id="erro" hidden></p>
+    <button class="btn" type="submit">Enviar a minha opinião</button>
+  </form>
+
+  <div id="feito" hidden>
+    <p class="obrigada">Obrigada!</p>
+    <p>A tua opinião chegou às Sete Rosas. Rezamos por ti e pela tua família.</p>
+    <p style="margin-top:16px"><a href="<?= loja ?>">Voltar à loja</a></p>
+  </div>
+</div>
+<script>
+const NUMERO = '<?= numero ?>', CODIGO = '<?= codigo ?>', VALIDA = '<?= valida ?>' === 'sim';
+let rosas = 5;
+const $ = id => document.getElementById(id);
+if (!VALIDA) $('invalida').hidden = false; else $('form').hidden = false;
+function desenhar(){
+  const box = $('roses'); box.innerHTML = '';
+  for (let i = 1; i <= 5; i++){
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'rose'; b.textContent = '✿';
+    b.setAttribute('aria-label', i + (i === 1 ? ' rosa' : ' rosas')); b.setAttribute('aria-pressed', i <= rosas);
+    b.onclick = () => { rosas = i; desenhar(); };
+    box.appendChild(b);
+  }
+}
+desenhar();
+$('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const texto = $('texto').value.trim(), nome = $('nomeMostrar').value.trim();
+  if (!texto){ $('erro').textContent = 'Escreve umas palavras sobre o teu terço.'; $('erro').hidden = false; return; }
+  const bt = e.target.querySelector('button[type="submit"]'); bt.disabled = true; bt.textContent = 'A enviar…';
+  google.script.run
+    .withSuccessHandler(() => { $('form').hidden = true; $('feito').hidden = false; })
+    .withFailureHandler(err => {
+      bt.disabled = false; bt.textContent = 'Enviar a minha opinião';
+      $('erro').textContent = String(err).includes('Já existe') ? 'Já recebemos a tua opinião sobre esta encomenda. Obrigada!' : 'Não conseguimos enviar. Tenta outra vez daqui a um minuto.';
+      $('erro').hidden = false;
+    })
+    .guardarOpiniao(NUMERO, CODIGO, rosas, texto, nome);
+});
+</script>
+</body>
+</html>

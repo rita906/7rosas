@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Terços coloridos, feitos à mão por sete irmãs. Benzidos, com pagela. Ad Iesum per Mariam.">
+<meta property="og:title" content="Sete Rosas">
+<meta property="og:description" content="Um terço de cada vez, até à paz no mundo.">
+<meta property="og:image" content="https://7rosas.pt/img/logo.jpg">
+<link rel="icon" href="img/logo.jpg">
+<style>body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}</style>
+<title>Sete Rosas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Karla:wght@400;500;700&display=swap">
+<style>
+/* Layout: uma coluna centrada, como um santinho; tons pastel e dourado tirados da aguarela do logotipo. Um só tema, claro, por escolha. */
+:root{
+  --bg:#fdf9f3; --paper:#fffdf9; --ink:#4b4038; --muted:#85786b; --line:#ece2d3;
+  --gold:#9a7843; --gold-soft:#d9c39b; --rose:#b56f7f; --blush:#f8e6e8; --sky:#e7eff8; --sage:#eef3e8;
+  --display:"IM Fell English", Georgia, "Times New Roman", serif;
+  --body:"Karla", system-ui, -apple-system, sans-serif;
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:640px;margin:0 auto;padding-block:32px 72px;display:grid;gap:72px;text-align:center}
+.wrap,section{grid-template-columns:minmax(0,1fr)}
+.wrap > *, section > *, .card > *{min-width:0;max-width:100%;box-sizing:border-box}
+.nw{white-space:nowrap}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;overflow-wrap:break-word}
+h2{font-size:clamp(28px,6.5vw,36px);line-height:1.15;color:var(--ink)}
+h3{font-size:24px;line-height:1.2}
+p{margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.kicker{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--rose);font-weight:700}
+.prose{display:grid;gap:16px;max-width:34em;margin:0 auto;text-wrap:pretty}
+.muted{color:var(--muted)}
+em{font-style:italic;color:var(--ink)}
+
+header{display:grid;gap:14px;justify-items:center}
+.hero{width:min(100%,440px);aspect-ratio:1}
+.motto{font-family:var(--display);font-style:italic;font-size:26px;color:var(--gold)}
+.missao{font-size:20px;font-weight:500;color:var(--ink);max-width:26em;text-wrap:balance}
+.paz{gap:6px}
+.paz-frase{font-family:var(--display);font-size:clamp(30px,7vw,42px);line-height:1.15;color:var(--gold);text-wrap:balance}
+.lead{font-size:19px;color:var(--muted);max-width:30em;text-wrap:pretty}
+.lead b{color:var(--ink);font-weight:500}
+
+section{display:grid;gap:22px;justify-items:center}
+section > .head{display:grid;gap:10px;justify-items:center}
+.ornament{color:var(--gold-soft);font-family:var(--display);font-size:22px;letter-spacing:.6em;padding-left:.6em}
+
+blockquote{margin:0 auto;max-width:30em;font-family:var(--display);font-style:italic;font-size:21px;line-height:1.4;color:var(--gold)}
+blockquote.small{font-size:18px}
+.traducao{font-style:italic;font-size:15px}
+
+/* contas */
+.beads{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;row-gap:8px;padding:6px 0}
+.bead{width:16px;height:16px;border-radius:50%;flex:none;box-shadow:inset -2px -3px 0 rgba(120,90,60,.12),inset 2px 2px 0 rgba(255,255,255,.6),0 0 0 1px rgba(120,90,60,.12)}
+.bead.pater{width:22px;height:22px}
+.cord{width:5px;height:2px;flex:none}
+.beads.big .bead{width:22px;height:22px}.beads.big .bead.pater{width:30px;height:30px}.beads.big .cord{width:6px;height:3px}
+.beads.tiny .bead{width:9px;height:9px}.beads.tiny .bead.pater{width:13px;height:13px}.beads.tiny .cord{width:2px}
+.beads.tiny .gap{width:10px}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%}
+@media (max-width:540px){.compare{grid-template-columns:1fr}}
+.tile{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px 18px;display:grid;gap:12px;align-content:start;justify-items:center}
+.tile .count{font-size:14px;color:var(--muted)}
+.tile.dezena{background:var(--blush)}
+.tile.terco{background:var(--sky)}
+
+.rosas{width:100%;max-width:560px;height:auto;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 22%,#000 78%,transparent 100%),linear-gradient(to right,transparent 0,#000 8%,#000 92%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to bottom,transparent 0,#000 22%,#000 78%,transparent 100%),linear-gradient(to right,transparent 0,#000 8%,#000 92%,transparent 100%);mask-composite:intersect}
+
+.steps{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%}
+@media (max-width:540px){.steps{grid-template-columns:1fr}}
+.steps li{display:grid;gap:10px;justify-items:center;align-content:start;padding:8px}
+.steps .n{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:24px;color:var(--gold);border:1px solid var(--gold-soft);background:var(--paper)}
+.steps b{font-weight:700}
+.steps p{font-size:15px;color:var(--muted)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin-left:calc(-1*max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--bg)}
+.topbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:18px;padding-block:8px}
+.casa{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;color:var(--gold);border:1px solid var(--gold-soft)}
+.casa:focus-visible,.topbar a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.topbar .lnk{color:var(--ink);text-decoration:none;font-weight:500}
+.topbar .btn{margin-left:auto;padding:9px 18px;font-size:15px}
+.rezar{margin:0;padding:0;list-style:none;display:grid;gap:12px;text-align:left;max-width:32em}
+.rezar li{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+.rezar .n{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:20px;color:var(--gold);border:1px solid var(--gold-soft)}
+.misterios{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%}
+@media (max-width:540px){.misterios{grid-template-columns:1fr}}
+.misterios div{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:4px}
+.misterios b{font-family:var(--display);font-weight:400;font-size:20px;color:var(--rose)}
+.misterios i{font-size:14px;color:var(--muted)}
+.misterios p{font-size:15px}
+.oracoes{display:grid;gap:8px;width:100%;text-align:left}
+.oracoes details{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.oracoes summary{cursor:pointer;font-family:var(--display);font-size:20px;color:var(--gold)}
+.oracoes details p{margin-top:8px}
+.ops{display:grid;gap:12px;width:100%}
+.op{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:8px}
+.op .r{color:var(--rose);font-size:20px;letter-spacing:2px}
+.op .quem{font-size:14px;color:var(--muted)}
+.stock{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px}
+.stock.em{background:var(--sage);color:#5b7a4e}
+.stock.enc{background:var(--blush);color:var(--rose)}
+.fim-num{font-family:var(--display);font-size:24px;color:var(--gold)}
+.steps .prazo{background:var(--sage);border-radius:12px;padding:8px 10px;color:var(--ink);font-size:14px}
+#pagela{max-width:320px}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:28px 22px;display:grid;gap:26px;width:100%;box-sizing:border-box}
+.group{display:grid;gap:12px;justify-items:center}
+.legend{font-weight:700;font-size:15px}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.opt{appearance:none;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:16px 12px;display:grid;gap:6px;justify-items:center;cursor:pointer}
+.opt[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-soft);background:var(--paper)}
+.opt:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.opt.wide{grid-column:1/-1;border-style:dashed}
+.opt:disabled{cursor:default;opacity:.75}
+.opt.wide[aria-pressed="true"]{border-style:solid}
+.opt .name{font-family:var(--display);font-size:21px}
+.opt .desc{font-size:14px;color:var(--muted)}
+.opt .price{font-weight:700;font-variant-numeric:tabular-nums;color:var(--gold)}
+.preview{background:var(--bg);border-radius:16px;padding:18px 10px;width:100%;box-sizing:border-box}
+.swatches{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.sw{appearance:none;width:36px;height:36px;border-radius:50%;border:2px solid var(--paper);outline:1px solid var(--line);cursor:pointer}
+.sw[aria-pressed="true"]{outline:3px solid var(--gold);outline-offset:2px}
+.sw:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.buy{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:18px}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:20px;cursor:pointer}
+.qty output{min-width:2ch;font-weight:700;font-variant-numeric:tabular-nums}
+
+.items{display:grid;gap:10px;text-align:left}
+.item{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px dashed var(--line);padding-bottom:10px}
+.item > div:first-child{min-width:0}
+.item small{color:var(--muted);display:block}
+.item button{background:none;border:0;color:var(--rose);cursor:pointer;font:inherit;font-size:14px}
+.total{display:flex;justify-content:space-between;font-weight:700;font-size:19px;font-variant-numeric:tabular-nums}
+form.card{text-align:left}
+.field{display:grid;gap:8px}
+.check{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--gold)}
+.field > label{font-weight:700;font-size:15px}
+.hint{font-size:14px;color:var(--muted);font-weight:400}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%;box-sizing:border-box}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:480px){.row,.choice{grid-template-columns:1fr}}
+.btn{font:inherit;font-weight:700;border:0;border-radius:999px;padding:14px 26px;cursor:pointer;background:var(--gold);color:#fffdf9;text-align:center;text-decoration:none;display:inline-block}
+.btn.ghost{background:var(--blush);color:var(--rose)}
+.btn:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.empty{color:var(--muted);font-style:italic;text-align:center}
+.pay{background:var(--sage);border-radius:16px;padding:20px;display:grid;gap:10px;text-align:center}
+.pay strong{font-variant-numeric:tabular-nums}
+.msg{white-space:pre-wrap;font-size:14px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:220px;overflow:auto;text-align:left}
+.note{font-size:13px;color:var(--muted)}
+footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:20px}
+</style>
+
+</head>
+<body>
+<nav class="topbar" aria-label="Navegação"><div class="topbar-in"><a class="casa" href="#topo" aria-label="Voltar ao início"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a><a class="lnk" href="#t-rezar">Como rezar</a><a class="btn" href="#t-escolher">Encomendar</a></div></nav>
+<div class="wrap">
+  <header id="topo">
+    <img class="hero" src="img/logo.jpg" alt="Sete meninas de joelhos, com o terço na mão, diante de Nossa Senhora de Fátima, numa coroa de rosas">
+    <h1 class="sr">Sete Rosas</h1>
+    <p class="motto">Ad Iesum per Mariam</p>
+    <p class="missao">Queremos que todas as famílias rezem o terço, pelas mãos das crianças.</p>
+    <p class="lead">As sete rosas são sete irmãs: <b>Sofia, Inês, Helena, Maria do Mar, Luzinha, Benedita e Assunção</b>, a mais nova. Fazem à mão terços coloridos, com contas resistentes e cordel forte, para aguentar as mãos mais pequenas. Cada terço vai benzido e leva uma pagela.</p>
+  </header>
+
+  <section aria-labelledby="t-fatima">
+    <div class="head">
+      <p class="kicker">Porquê o Santo Terço</p>
+      <h2 id="t-fatima">Nossa Senhora <span class="nw">pediu-o</span> a três crianças</h2>
+    </div>
+    <div class="prose">
+      <p>Em 1917, na Cova da Iria, Nossa Senhora não apareceu a sacerdotes nem a sábios. Apareceu a três pastorinhos. Logo na primeira aparição, a 13 de maio, deixou um pedido simples: <em>"Rezem o terço todos os dias, para alcançarem a paz para o mundo."</em></p>
+      <p>Antes disso, os três rezavam-no à pressa. Para terem mais tempo de brincar, diziam só "Avé Maria" em cada conta e passavam à seguinte. Depois de Fátima, o terço passou a ser a coisa mais séria do dia deles. Quando Nossa Senhora disse ao Francisco que ele iria para o Céu, acrescentou que tinha de rezar muitos terços.</p>
+      <p>Na última aparição, a 13 de outubro, disse quem era: <em>"Sou a Senhora do Rosário."</em></p>
+    </div>
+    <blockquote lang="la">Ave Maria, gratia plena, Dominus tecum.</blockquote>
+  </section>
+
+  <section class="paz" aria-label="A nossa esperança">
+    <p class="ornament">✠</p>
+    <p class="paz-frase">Um terço de cada vez,<br>até à paz no mundo.</p>
+  </section>
+
+  <section aria-labelledby="t-dezena">
+    <div class="head">
+      <p class="kicker">Dezena ou terço</p>
+      <h2 id="t-dezena">Os mais pequenos começam por uma dezena</h2>
+    </div>
+    <p class="prose">O terço tem cinco dezenas. Cada dezena é um Pai-Nosso, dez Ave-Marias e um Glória. Para uma criança pequena, o terço inteiro é comprido. Uma dezena por dia é o primeiro passo, e o terço vem com o tempo.</p>
+    <div class="compare">
+      <div class="tile dezena">
+        <h3>Dezena de bolso</h3>
+        <div class="beads" id="demoDezena" aria-hidden="true"></div>
+        <p class="count">1 Pai-Nosso e 10 Ave-Marias</p>
+        <p>Para os mais pequenos, e para levar no bolso para todo o lado.</p>
+      </div>
+      <div class="tile terco">
+        <h3>Terço</h3>
+        <div class="beads tiny" id="demoTerco" aria-hidden="true"></div>
+        <p class="count">5 dezenas, com a cruz</p>
+        <p>Para quem já reza o terço inteiro, sozinho ou em família.</p>
+      </div>
+    </div>
+    <p class="prose muted">No fim de cada dezena, reza-se a oração que Nossa Senhora ensinou aos pastorinhos em julho de 1917:</p>
+    <blockquote class="small" lang="la">O mi Iesu, dimitte nobis debita nostra, libera nos ab igne inferni, conduc in caelum omnes animas, praesertim illas quae maxime indigent misericordia tua.</blockquote>
+    <p class="prose muted traducao">(Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, principalmente as que mais precisarem.)</p>
+  </section>
+
+  <section aria-labelledby="t-rezar">
+    <div class="head">
+      <p class="kicker">Como rezar o terço</p>
+      <h2 id="t-rezar">Conta a conta, com Nossa Senhora</h2>
+    </div>
+    <ol class="rezar">
+      <li><span class="n">1</span><p><b>Na cruz:</b> o Sinal da Cruz e o Credo.</p></li>
+      <li><span class="n">2</span><p><b>Na conta grande:</b> um Pai-Nosso.</p></li>
+      <li><span class="n">3</span><p><b>Nas três contas pequenas:</b> três Ave-Marias, pela fé, pela esperança e pela caridade. Depois, o Glória.</p></li>
+      <li><span class="n">4</span><p><b>Em cada dezena:</b> anuncia-se o mistério, reza-se um Pai-Nosso, dez Ave-Marias, o Glória e a oração de Fátima.</p></li>
+      <li><span class="n">5</span><p><b>No fim das cinco dezenas:</b> a Salve-Rainha.</p></li>
+    </ol>
+    <div class="misterios">
+      <div><b>Gozosos</b><i>segunda e quinta</i><p>Anunciação · Visitação · Nascimento de Jesus · Apresentação no Templo · Encontro no Templo</p></div>
+      <div><b>Dolorosos</b><i>terça e sexta</i><p>Agonia no Horto · Flagelação · Coroação de espinhos · Jesus com a cruz às costas · Crucifixão</p></div>
+      <div><b>Gloriosos</b><i>quarta, sábado e domingo</i><p>Ressurreição · Ascensão · Vinda do Espírito Santo · Assunção · Coroação de Nossa Senhora</p></div>
+    </div>
+    <div class="oracoes">
+      <details><summary>Sinal da Cruz</summary><p>Pelo sinal da Santa Cruz, livrai-nos, Deus, Nosso Senhor, dos nossos inimigos. Em nome do Pai, e do Filho, e do Espírito Santo. Ámen.</p></details>
+      <details><summary>Credo</summary><p>Creio em Deus Pai todo-poderoso, Criador do Céu e da Terra; e em Jesus Cristo, seu único Filho, Nosso Senhor, que foi concebido pelo poder do Espírito Santo; nasceu da Virgem Maria; padeceu sob Pôncio Pilatos, foi crucificado, morto e sepultado; desceu aos infernos; ressuscitou ao terceiro dia; subiu aos Céus, está sentado à direita de Deus Pai todo-poderoso, donde há de vir a julgar os vivos e os mortos. Creio no Espírito Santo, na santa Igreja Católica, na comunhão dos Santos, na remissão dos pecados, na ressurreição da carne e na vida eterna. Ámen.</p></details>
+      <details><summary>Pai-Nosso</summary><p>Pai Nosso, que estais no Céu, santificado seja o vosso nome, venha a nós o vosso reino, seja feita a vossa vontade, assim na terra como no Céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Ámen.</p></details>
+      <details><summary>Ave-Maria</summary><p>Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós, pecadores, agora e na hora da nossa morte. Ámen.</p></details>
+      <details><summary>Glória</summary><p>Glória ao Pai, ao Filho e ao Espírito Santo. Como era no princípio, agora e sempre, e por todos os séculos dos séculos. Ámen.</p></details>
+      <details><summary>Oração de Fátima</summary><p>Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, principalmente as que mais precisarem.</p></details>
+      <details><summary>Salve-Rainha</summary><p>Salve, Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salve! A vós bradamos, os degredados filhos de Eva. A vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei. E depois deste desterro mostrai-nos Jesus, bendito fruto do vosso ventre. Ó clemente, ó piedosa, ó doce sempre Virgem Maria. Rogai por nós, Santa Mãe de Deus, para que sejamos dignos das promessas de Cristo. Ámen.</p></details>
+    </div>
+    <a class="btn ghost" href="pagela-como-rezar-o-terco.pdf" download>Descarregar a pagela para imprimir</a>
+  </section>
+
+  <section aria-labelledby="t-rosas">
+    <img class="rosas" src="img/rosas.jpg" alt="">
+    <div class="head">
+      <p class="kicker">E porquê rosas</p>
+      <h2 id="t-rosas">Uma coroa de rosas para Nossa Senhora</h2>
+    </div>
+    <p class="prose">Rosário quer dizer coroa de rosas: cada Ave-Maria é uma rosa oferecida a Nossa Senhora. E Santa Teresinha do Menino Jesus prometeu deixar cair do Céu uma chuva de rosas. A pagela dela é uma das que podes escolher para acompanhar o teu terço.</p>
+  </section>
+
+  <section aria-labelledby="t-como">
+    <div class="head">
+      <p class="ornament">✠ ✠ ✠</p>
+      <h2 id="t-como">Como funciona</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="n">1</span><b>Escolhes</b><p>A dezena ou o terço, num dos nossos quatro modelos.</p></li>
+      <li><span class="n">2</span><b>Encomendas</b><p>Encomendas aqui e recebes a confirmação por email, com a pagela de como rezar o terço. Pagas por MB WAY, com portes incluídos.</p><p class="prazo"><b>Em stock:</b> chega em 5 a 8 dias úteis.<br><b>Esgotado:</b> fazes um pedido especial e combinamos o prazo contigo.</p></li>
+      <li><span class="n">3</span><b>Rezam juntos</b><p>Chega benzido, com a pagela que escolheste, pronto para a primeira dezena em família.</p></li>
+    </ol>
+  </section>
+
+  <section id="opinioes" hidden aria-labelledby="t-op">
+    <div class="head">
+      <p class="kicker">As opiniões</p>
+      <h2 id="t-op">O que dizem as famílias</h2>
+    </div>
+    <div class="ops" id="opsList"></div>
+  </section>
+
+  <section aria-labelledby="t-escolher">
+    <div class="head">
+      <p class="kicker">A encomenda</p>
+      <h2 id="t-escolher">Escolhe o teu terço</h2>
+    </div>
+    <div class="card">
+      <div class="group">
+        <span class="legend">Modelo</span>
+        <div class="choice" id="optModelo"></div>
+      </div>
+      <div class="group">
+        <span class="legend">Modelo de cores</span>
+        <div class="choice" id="optCores"></div>
+      </div>
+      <div class="group">
+        <label class="legend" for="pagela">Pagela</label>
+        <select id="pagela">
+          <option>Santa Teresinha</option>
+          <option>Nossa Senhora de Fátima</option>
+          <option>Sagrado Coração de Jesus</option>
+          <option>São José</option>
+          <option>Anjo da Guarda</option>
+        </select>
+      </div>
+
+      <div class="preview"><div class="beads big" id="preview" aria-label="Como fica uma dezena"></div></div>
+
+      <div id="custom" class="group" hidden>
+        <div class="group">
+          <span class="legend">Cor das contas</span>
+          <div class="swatches" id="sw-contas" role="group" aria-label="Cor das contas"></div>
+        </div>
+        <div class="group">
+          <span class="legend">Cor do cordel</span>
+          <div class="swatches" id="sw-cordel" role="group" aria-label="Cor do cordel"></div>
+        </div>
+      </div>
+
+      <div class="buy">
+        <div class="qty">
+          <button type="button" id="menos" aria-label="Menos um">−</button>
+          <output id="qtd">1</output>
+          <button type="button" id="mais" aria-label="Mais um">+</button>
+        </div>
+        <button type="button" class="btn" id="add">Juntar à encomenda</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="t-encomenda">
+    <h2 id="t-encomenda">A tua encomenda</h2>
+    <div class="card">
+      <div class="items" id="items"></div>
+      <div class="field" style="text-align:left">
+        <label for="entrega">Entrega</label>
+        <select id="entrega">
+          <option value="ctt">Envio por CTT</option>
+          <option value="mao">Entrega em mão (combinamos)</option>
+        </select>
+      </div>
+      <div class="total"><span>Total</span><span id="total">0,00 €</span></div>
+      <p class="hint" style="text-align:right">Portes incluídos.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="t-dados">
+    <h2 id="t-dados">Os teus dados</h2>
+    <form class="card" id="form" novalidate>
+      <div class="row">
+        <div class="field"><label for="nome">Nome</label><input id="nome" autocomplete="name" required></div>
+        <div class="field"><label for="tel">Telemóvel</label><input id="tel" type="tel" autocomplete="tel" required></div>
+      </div>
+      <div class="field"><label for="email">Email <span class="hint">(para receberes a confirmação)</span></label><input id="email" type="email" autocomplete="email" required></div>
+      <div class="field" id="moradaBox"><label for="morada">Morada de envio</label><textarea id="morada" rows="2" autocomplete="street-address"></textarea></div>
+      <label class="check" for="querNif"><input type="checkbox" id="querNif"> Quero fatura com NIF</label>
+      <div class="row" id="nifBox" hidden>
+        <div class="field"><label for="nif">NIF</label><input id="nif" inputmode="numeric" maxlength="9" autocomplete="off"></div>
+        <div class="field"><label for="nomeFiscal">Nome para a fatura <span class="hint">(pessoa ou empresa)</span></label><input id="nomeFiscal" autocomplete="organization"></div>
+      </div>
+      <p class="hint">Todas as encomendas levam fatura. Sem NIF, a fatura sai em nome de consumidor final.</p>
+      <div class="field"><label for="obs">Alguma nota? <span class="hint">(é para oferta, para um batizado, uma primeira comunhão...)</span></label><textarea id="obs" rows="2"></textarea></div>
+      <p class="hint" id="erro" role="alert" hidden></p>
+      <div class="actions"><button class="btn" type="submit">Fazer a encomenda</button></div>
+    </form>
+  </section>
+
+  <section id="fim" hidden aria-labelledby="t-fim">
+    <h2 id="t-fim">Obrigada pela tua encomenda</h2>
+    <div class="card">
+      <p class="fim-num" id="fimNum"></p>
+      <p id="fimEmail"></p>
+      <div class="pay">
+        <p>Vamos enviar-te uma mensagem para o <strong id="fimTel"></strong> com os dados para pagares <strong id="valor"></strong> por MB WAY.</p>
+        <p class="hint" id="fimPrazo"></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>Rezai o terço todos os dias.</footer>
+</div>
+
+<script>
+const API="https://script.google.com/macros/s/AKfycbzDHMQaDLvuKFeFQKKcO9V5Hv6wFDiDo6OFAEM8Lc2cZCOvasNbtkcBbx-hNLXzr__Peg/exec";
+const MODELOS={dezena:"Dezena de bolso",terco:"Terço"};
+const PRECOS={terco:{modelo:12,custom:15},dezena:{modelo:7,custom:9}};
+const ARCO=["#f2b8c6","#f7cfa8","#f3df98","#bcd9b0","#b6cfee","#cfc0ea"];
+const PEROLA="#fbf6ec";
+const COLECAO=[
+  {id:"lisieux",nome:"Rosa de Lisieux",desc:"Rosa e branco, as rosas de Santa Teresinha",ave:["#f2b8c6"],pater:PEROLA},
+  {id:"manto",nome:"Manto de Maria",desc:"Azul e branco, as cores de Nossa Senhora",ave:["#b6cfee"],pater:PEROLA},
+  {id:"carmelo",nome:"Carmelo",desc:"Creme e castanho, o hábito das carmelitas",ave:["#efe3cc"],pater:"#b9987a"},
+  {id:"arco",nome:"Arco-íris",desc:"Uma cor pastel em cada conta",ave:ARCO,pater:PEROLA},
+];
+const CONTAS=[["Rosa","#f2b8c6"],["Pêssego","#f7cfa8"],["Amarelo","#f3df98"],["Verde","#bcd9b0"],["Azul","#b6cfee"],["Lilás","#cfc0ea"],["Branco pérola","#fbf6ec"],["Dourado","#dcc28f"]];
+const CORDEIS=[["Branco","#f4efe6"],["Rosa","#e9a9b8"],["Azul","#9fbde3"],["Dourado","#c9a668"],["Castanho","#9a7a5c"]];
+let restam=null, modelo="terco", cores="lisieux", contas=CONTAS[4], cordel=CORDEIS[0], qtd=1, cesto=[];
+const $=id=>document.getElementById(id);
+const eur=n=>n.toFixed(2).replace(".",",")+" €";
+
+function dezena(el,aves,pat,cord,limpar=true){
+  if(limpar)el.innerHTML="";
+  const span=(cls,c)=>{const d=document.createElement("span");d.className=cls;d.style.background=c;return d};
+  el.append(span("bead pater",pat),span("cord",cord));
+  for(let i=0;i<10;i++)el.append(span("bead",aves[i%aves.length]),span("cord",cord));
+  el.append(span("bead pater",pat));
+}
+function escolhas(el,opts,get,set){
+  el.innerHTML="";
+  opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt"+(o.wide?" wide":"");
+    b.setAttribute("aria-pressed",get()===o.id);
+    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.ave&&restam?(restam[o.nome]>0?`<span class="stock em">Em stock · ${restam[o.nome]} ${restam[o.nome]===1?"disponível":"disponíveis"}</span>`:'<span class="stock enc">Esgotado · pedido especial</span>'):""}${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span>`:""}`;
+    if(o.soon){b.disabled=true;b.setAttribute("aria-disabled","true");}
+    if(o.ave)dezena(b.querySelector(".beads"),o.ave,o.pater,"#e6d9c3");
+    b.onclick=()=>{set(o.id);render()};el.appendChild(b)});
+}
+function swatches(el,lista,get,set){
+  el.innerHTML="";
+  lista.forEach(c=>{const b=document.createElement("button");b.type="button";b.className="sw";b.style.background=c[1];
+    b.title=c[0];b.setAttribute("aria-label",c[0]);b.setAttribute("aria-pressed",get()===c);
+    b.onclick=()=>{set(c);render()};el.appendChild(b)});
+}
+function render(){
+  const sel=COLECAO.find(x=>x.id===cores);
+  $("add").textContent=sel&&restam&&!(restam[sel.nome]>0)?"Fazer pedido especial":"Juntar à encomenda";
+  escolhas($("optModelo"),[{id:"dezena",nome:"Dezena de bolso",desc:"Uma dezena, para começar"},{id:"terco",nome:"Terço",desc:"As cinco dezenas"}],()=>modelo,v=>modelo=v);
+  escolhas($("optCores"),[...COLECAO.map(c=>({...c,preco:PRECOS[modelo].modelo})),{id:"custom",nome:"Personalizado",desc:"Escolhes tu a cor das contas e a do cordel",wide:true,soon:true}],()=>cores,v=>cores=v);
+  $("custom").hidden=cores!=="custom";
+  $("preview").parentElement.hidden=cores!=="custom";
+  swatches($("sw-contas"),CONTAS,()=>contas,c=>contas=c);
+  swatches($("sw-cordel"),CORDEIS,()=>cordel,c=>cordel=c);
+  dezena($("preview"),[contas[1]],contas[1]===PEROLA?"#dcc28f":PEROLA,cordel[1]);
+}
+function cestoRender(){
+  const box=$("items");box.innerHTML="";
+  if(!cesto.length){box.innerHTML='<p class="empty">Ainda não escolheste nenhum terço.</p>'}
+  cesto.forEach((it,i)=>{const d=document.createElement("div");d.className="item";
+    d.innerHTML=`<div><b>${it.q} × ${it.nome}</b><small>${it.det}</small></div><div>${eur(it.q*it.preco)} <button type="button" aria-label="Tirar">tirar</button></div>`;
+    d.querySelector("button").onclick=()=>{cesto.splice(i,1);cestoRender()};box.appendChild(d)});
+  $("total").textContent=eur(total());
+  $("moradaBox").hidden=$("entrega").value!=="ctt";
+}
+function total(){return cesto.reduce((a,it)=>a+it.q*it.preco,0)}
+
+$("menos").onclick=()=>{qtd=Math.max(1,qtd-1);$("qtd").textContent=qtd};
+$("mais").onclick=()=>{qtd=Math.min(20,qtd+1);$("qtd").textContent=qtd};
+$("add").onclick=()=>{
+  const c=COLECAO.find(x=>x.id===cores);
+  const esg=c&&restam&&!(restam[c.nome]>0);
+  cesto.push(c?{modelo:c.nome,nome:MODELOS[modelo],det:c.nome+", pagela de "+$("pagela").value+(esg?" (pedido especial)":""),preco:PRECOS[modelo].modelo,q:qtd}
+    :{modelo:"Personalizado",nome:MODELOS[modelo],det:`Personalizado: contas ${contas[0].toLowerCase()}, cordel ${cordel[0].toLowerCase()}`,preco:PRECOS[modelo].custom,q:qtd});
+  qtd=1;$("qtd").textContent=1;cestoRender();
+};
+$("entrega").onchange=cestoRender;
+$("querNif").onchange=()=>{$("nifBox").hidden=!$("querNif").checked};
+// NIF português: 9 algarismos, o último é o dígito de controlo (módulo 11)
+function nifValido(n){
+  if(!/^[125689]\d{8}$/.test(n)&&!/^(45|70|71|72|74|75|77|79|90|91|98|99)\d{7}$/.test(n))return false;
+  let soma=0;for(let i=0;i<8;i++)soma+=+n[i]*(9-i);
+  const r=soma%11, d=r<2?0:11-r;return d===+n[8];
+}
+
+$("form").addEventListener("submit",async e=>{
+  e.preventDefault();const err=$("erro"), bt=e.target.querySelector('button[type="submit"]');
+  const falta=[];if(!cesto.length)falta.push("escolhe pelo menos um terço");
+  if(!$("nome").value.trim())falta.push("o nome");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("email").value.trim()))falta.push("um email válido");if(!$("tel").value.trim())falta.push("o telemóvel");
+  if($("entrega").value==="ctt"&&!$("morada").value.trim())falta.push("a morada");
+  if($("querNif").checked&&!nifValido($("nif").value.trim()))falta.push("um NIF válido, com 9 algarismos");
+  if(falta.length){err.textContent="Falta: "+falta.join(", ")+".";err.hidden=false;return}
+  err.hidden=true;bt.disabled=true;bt.textContent="A enviar a encomenda…";
+  const pedido={nome:$("nome").value.trim(),email:$("email").value.trim(),tel:$("tel").value.trim(),
+    entrega:$("entrega").value==="ctt"?"CTT":"Em mão",morada:$("entrega").value==="ctt"?$("morada").value.trim():"",
+    nif:$("querNif").checked?$("nif").value.trim():"",nomeFiscal:$("querNif").checked?$("nomeFiscal").value.trim():"",
+    obs:$("obs").value.trim(),itens:cesto.map(it=>({modelo:it.modelo,formato:it.nome,det:it.det,q:it.q,preco:it.preco}))};
+  try{
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(pedido)});
+    const j=await r.json();
+    if(!j.ok)throw new Error(j.erro||"erro");
+    $("fimNum").textContent="Encomenda n.º "+j.numero+" registada.";
+    $("fimTel").textContent=pedido.tel;$("valor").textContent=eur(j.total);
+    $("fimEmail").textContent="Enviámos a confirmação para "+pedido.email+", com a pagela de como rezar o terço.";
+    $("fimPrazo").textContent=j.especiais&&j.especiais.length
+      ?"Os modelos esgotados ficam como pedido especial: vamos falar contigo para combinar o prazo. O que está em stock chega em 5 a 8 dias úteis depois do pagamento."
+      :"Está em stock: chega em 5 a 8 dias úteis depois do pagamento.";
+    if(j.restam){restam=j.restam;render();}
+    cesto=[];cestoRender();e.target.reset();$("nifBox").hidden=true;
+    $("fim").hidden=false;$("fim").scrollIntoView({behavior:"smooth"});
+  }catch(x){
+    err.textContent="Não conseguimos registar a encomenda. Tenta outra vez daqui a um minuto.";err.hidden=false;
+  }finally{bt.disabled=false;bt.textContent="Fazer a encomenda";}
+});
+fetch(API).then(r=>r.json()).then(j=>{if(j.ok){restam=j.restam;render();opinioes(j.opinioes||[]);}}).catch(()=>{});
+function opinioes(lista){
+  if(!lista.length)return;
+  const box=$("opsList");box.innerHTML="";
+  lista.forEach(o=>{const d=document.createElement("div");d.className="op";
+    d.innerHTML='<span class="r"></span><p class="t"></p><span class="quem"></span>';
+    d.querySelector(".r").textContent="✿".repeat(o.rosas);d.querySelector(".r").setAttribute("aria-label",o.rosas+" rosas em 5");
+    d.querySelector(".t").textContent=o.texto;d.querySelector(".quem").textContent=o.nome+(o.data?" · "+o.data:"");
+    box.appendChild(d)});
+  $("opinioes").hidden=false;
+}
+
+// as duas ilustrações da secção "Dezena ou terço"
+dezena($("demoDezena"),ARCO,PEROLA,"#e6d9c3");
+const t=$("demoTerco");
+for(let i=0;i<5;i++){dezena(t,ARCO,PEROLA,"#e6d9c3",false);if(i<4){const g=document.createElement("span");g.className="gap";t.append(g)}}
+
+render();
+cestoRender();
+</script>
+
+</body>
+</html>
