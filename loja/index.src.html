@@ -447,7 +447,7 @@ function escolhas(el,opts,get,set){
   el.innerHTML="";
   opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt"+(o.wide?" wide":"");
     b.setAttribute("aria-pressed",get()===o.id);
-    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.ave&&restam?(restam[o.nome]>0?`<span class="stock em">Em stock · ${restam[o.nome]} ${restam[o.nome]===1?"disponível":"disponíveis"}</span>`:'<span class="stock enc">Esgotado · pede-nos por mensagem</span>'):""}${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span>`:""}`;
+    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.ave&&restam?(restam[o.nome+" · "+MODELOS[modelo]]>0?`<span class="stock em">Em stock · ${restam[o.nome+" · "+MODELOS[modelo]]} ${restam[o.nome+" · "+MODELOS[modelo]]===1?"disponível":"disponíveis"}</span>`:'<span class="stock enc">Esgotado · pede-nos por mensagem</span>'):""}${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span>`:""}`;
     if(o.soon){b.disabled=true;b.setAttribute("aria-disabled","true");}
     if(o.ave)dezena(b.querySelector(".beads"),o.ave,o.pater,"#e6d9c3");
     b.onclick=()=>{set(o.id);render()};el.appendChild(b)});
@@ -460,7 +460,7 @@ function swatches(el,lista,get,set){
 }
 function render(){
   const sel=COLECAO.find(x=>x.id===cores);
-  $("add").textContent=sel&&restam&&!(restam[sel.nome]>0)?"Esgotado: pedir por mensagem":"Juntar à encomenda";
+  $("add").textContent=sel&&restam&&!(restam[sel.nome+" · "+MODELOS[modelo]]>0)?"Esgotado: pedir por mensagem":"Juntar à encomenda";
   if(!ABERTAS){$("add").textContent="Encomendas em breve";$("add").disabled=true;}
   escolhas($("optModelo"),[{id:"dezena",nome:"Dezena de bolso",desc:"Uma dezena sempre à mão"},{id:"terco",nome:"Terço",desc:"Para rezar o terço em família"}],()=>modelo,v=>modelo=v);
   escolhas($("optCores"),[...COLECAO.map(c=>({...c,preco:PRECOS[modelo].modelo}))],()=>cores,v=>cores=v);
@@ -485,10 +485,10 @@ $("menos").onclick=()=>{qtd=Math.max(1,qtd-1);$("qtd").textContent=qtd};
 $("mais").onclick=()=>{qtd=Math.min(20,qtd+1);$("qtd").textContent=qtd};
 $("add").onclick=()=>{
   const c=COLECAO.find(x=>x.id===cores);
-  const esg=c&&restam&&!(restam[c.nome]>0);
+  const esg=c&&restam&&!(restam[c.nome+" · "+MODELOS[modelo]]>0);
   if(esg){$("pmsg").value="Gostava de encomendar "+qtd+" × "+MODELOS[modelo].toLowerCase()+" "+c.nome+", que está esgotado.";$("pedidos").scrollIntoView({behavior:"smooth"});return}
-  cesto.push(c?{modelo:c.nome,nome:MODELOS[modelo],det:c.nome,preco:PRECOS[modelo].modelo,q:qtd}
-    :{modelo:"Personalizado",nome:MODELOS[modelo],det:`Personalizado: contas ${contas[0].toLowerCase()}, cordel ${cordel[0].toLowerCase()}`,preco:PRECOS[modelo].custom,q:qtd});
+  cesto.push(c?{modelo:c.nome+" · "+MODELOS[modelo],nome:MODELOS[modelo],det:c.nome,preco:PRECOS[modelo].modelo,q:qtd}
+    :{modelo:"Personalizado · "+MODELOS[modelo],nome:MODELOS[modelo],det:`Personalizado: contas ${contas[0].toLowerCase()}, cordel ${cordel[0].toLowerCase()}`,preco:PRECOS[modelo].custom,q:qtd});
   qtd=1;$("qtd").textContent=1;cestoRender();
 };
 $("entrega").onchange=cestoRender;

@@ -2,8 +2,11 @@
 // A loja (seterosas.pt) lê o stock e as opiniões com GET e envia encomendas com POST.
 // Cada encomenda entra no separador Encomendas, desconta o stock, avisa a Rita e confirma ao cliente por email.
 
-const MODELOS = ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris', 'Personalizado'];
-const STOCK_INICIAL = 10;
+// Um stock por modelo e por formato: cada linha da folha Stock é "Modelo · Formato"
+const BASES = ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris', 'Personalizado'];
+const FORMATOS = ['Terço', 'Dezena de bolso'];
+const MODELOS = BASES.flatMap(b => FORMATOS.map(f => `${b} · ${f}`));
+const STOCK_INICIAL = 0;
 // O endereço público da app (o de /a/macros/ pede sessão a quem é de fora)
 const APP_URL = 'https://script.google.com/macros/s/AKfycbzDHMQaDLvuKFeFQKKcO9V5Hv6wFDiDo6OFAEM8Lc2cZCOvasNbtkcBbx-hNLXzr__Peg/exec';
 const LOJA_URL = 'https://seterosas.pt';
@@ -301,6 +304,19 @@ function fornadaNova(chave) {
 }
 
 // Quantos terços de um modelo estão prontos para enviar: acerta o stock da fornada para que restem esses
+// Passa o separador Stock para uma linha por modelo e formato, tudo a zero, sem mexer nas encomendas nem nas compras. Só no editor.
+function migrarStock() {
+  soNoEditor_();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const stock = ss.getSheetByName('Stock');
+  stock.clear();
+  stock.getRange(1, 1, 1, 4).setValues([['Modelo', 'Stock da fornada', 'Vendidos', 'Restam']]).setFontWeight('bold');
+  MODELOS.forEach((m, i) => { const r = i + 2; stock.getRange(r, 1, 1, 4).setValues([[m, 0, 0, `=B${r}-C${r}`]]); });
+  stock.setFrozenRows(1);
+  stock.autoResizeColumns(1, 4);
+  ss.getSheetByName('Painel').getRange('A15').setFormula('=Stock!A1:D' + (MODELOS.length + 1));
+}
+
 function definirProntos(chave, modelo, prontos) {
   confirmar_(chave);
   const i = MODELOS.indexOf(modelo);

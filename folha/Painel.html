@@ -70,6 +70,17 @@ section{display:grid;gap:18px}
 .resumo .big{font-family:var(--display);font-size:36px;line-height:1}
 .prontos{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;font-size:15px}
 .prontos input{width:70px;text-align:center}
+.stab{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px 8px;align-items:center}
+.stab .col{font-family:var(--display);font-size:20px;color:var(--gold);text-align:center}
+.snome{display:grid;gap:4px;font-family:var(--display);font-size:19px}
+.pontos{display:flex;gap:3px}.pontos i{width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 1px rgba(120,90,60,.15)}
+.scel{display:grid;grid-template-columns:36px auto 36px;grid-template-rows:auto auto;justify-content:center;align-items:center;gap:2px 6px;background:var(--sage);border-radius:16px;padding:8px 4px}
+.scel.zero{background:var(--blush)}
+.scel .n{font-family:var(--display);font-size:32px;line-height:1;min-width:2ch;text-align:center}
+.scel button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--paper);font-size:20px;cursor:pointer;color:var(--ink)}
+.scel small{grid-column:1/-1;text-align:center;font-size:13px;color:var(--muted)}
+.scel.zero small{color:var(--rose);font-weight:700}
+@media(max-width:520px){.stab{grid-template-columns:1fr 1fr 1fr}.snome{font-size:16px}.scel{grid-template-columns:30px auto 30px}.scel button{width:30px;height:30px}}
 .pill{font-size:13px;font-weight:700;border-radius:999px;padding:4px 12px}
 .pill.pay{background:var(--blush);color:var(--rose)}
 .pill.ship{background:var(--honey);color:var(--gold)}
@@ -140,7 +151,7 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
 
   <section data-v="inicio">
     <div class="head"><p class="kicker">O stock</p><h2>Os terços que ainda temos</h2></div>
-    <p class="lead">Cada conta é um terço pronto para enviar. Quando fizerem mais, escrevam quantos há e carreguem em Guardar.</p>
+    <p class="lead">Quantos estão prontos para enviar. Quando fizerem mais, carreguem no +; o site desconta sozinho quando alguém encomenda.</p>
     <div class="card" id="stock"><p class="loading">A contar as contas…</p></div>
   </section>
 
@@ -217,19 +228,36 @@ function desenhar(){
     $('licao').hidden = false;
   }
 
+  // stock: uma linha por modelo, uma coluna para terços e outra para dezenas, com − e + que guardam logo
   const st = $('stock'); st.innerHTML = '';
-  dados.stock.forEach(s => {
-    const m = document.createElement('div'); m.className = 'model';
-    const cores = CORES[s.modelo] || ['#dcc28f'];
-    let contas = '';
-    for (let i = 0; i < Math.max(10, s.restam); i++) contas += `<span class="bead${i >= s.restam ? ' sold' : ''}" style="background:${cores[i % cores.length]}"></span>`;
-    m.innerHTML = `<span class="name"></span><div class="beads">${contas}</div><p class="left-n">Prontos para enviar: <b>${s.restam}</b>${s.restam === 0 ? ' · esgotado' : ''}</p><div class="prontos"><label>Temos prontos <input type="number" min="0" step="1" value="${s.restam}"></label><button type="button" class="btn soft">Guardar</button></div>`;
-    const inp = m.querySelector('.prontos input'), gb = m.querySelector('.prontos button');
-    gb.onclick = async () => { gb.disabled = true; gb.textContent = 'A guardar…';
-      try { await servidor('definirProntos', s.modelo, Number(inp.value) || 0); await carregar(); } catch(e){ gb.disabled = false; gb.textContent = 'Não guardou'; } };
-    m.querySelector('.name').textContent = s.modelo;
-    st.appendChild(m);
+  const tab = document.createElement('div'); tab.className = 'stab';
+  tab.innerHTML = '<span></span><span class="col">Terços</span><span class="col">Dezenas</span>';
+  const porModelo = {};
+  dados.stock.forEach(x => { const [base, fmt] = x.modelo.split(' · '); (porModelo[base] = porModelo[base] || {})[fmt] = x; });
+  Object.keys(porModelo).forEach(base => {
+    const nome = document.createElement('div'); nome.className = 'snome';
+    const cores = CORES[base] || ['#dcc28f'];
+    nome.innerHTML = '<span class="pontos">' + cores.slice(0, 6).map(c => '<i style="background:' + c + '"></i>').join('') + '</span><span></span>';
+    nome.lastChild.textContent = base;
+    tab.appendChild(nome);
+    ['Terço', 'Dezena de bolso'].forEach(fmt => {
+      const x = porModelo[base][fmt] || { modelo: base + ' · ' + fmt, restam: 0 };
+      const cel = document.createElement('div'); cel.className = 'scel' + (x.restam > 0 ? '' : ' zero');
+      cel.innerHTML = '<button type="button" aria-label="Menos um">−</button><span class="n"></span><button type="button" aria-label="Mais um">+</button><small></small>';
+      cel.querySelector('.n').textContent = x.restam;
+      cel.querySelector('small').textContent = x.restam > 0 ? 'prontos' : 'acabou';
+      const [menos, mais] = cel.querySelectorAll('button');
+      const mudar = async d => {
+        const novo = Math.max(0, x.restam + d); if (novo === x.restam) return;
+        menos.disabled = mais.disabled = true; cel.querySelector('.n').textContent = novo;
+        try { await servidor('definirProntos', x.modelo, novo); await carregar(); }
+        catch(e){ cel.querySelector('small').textContent = 'não guardou'; menos.disabled = mais.disabled = false; }
+      };
+      menos.onclick = () => mudar(-1); mais.onclick = () => mudar(1);
+      tab.appendChild(cel);
+    });
   });
+  st.appendChild(tab);
 
   $('nPagar').textContent = dados.encomendas.filter(o => !o.pago).length;
   $('nEnviar').textContent = dados.encomendas.filter(o => o.pago && !o.enviado).length;
