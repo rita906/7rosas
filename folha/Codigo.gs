@@ -3,7 +3,8 @@
 // Cada encomenda entra no separador Encomendas, desconta o stock, avisa a Rita e confirma ao cliente por email.
 
 // Um stock por modelo e por formato: cada linha da folha Stock é "Modelo · Formato"
-const BASES = ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris', 'Personalizado'];
+// O personalizado faz-se por encomenda (pedidos personalizados), por isso não tem stock
+const BASES = ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris'];
 const FORMATOS = ['Terço', 'Dezena de bolso'];
 const MODELOS = BASES.flatMap(b => FORMATOS.map(f => `${b} · ${f}`));
 const STOCK_INICIAL = 0;
