@@ -125,6 +125,22 @@ input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--
 .buyedit .actions{grid-column:1/-1}
 @media(max-width:600px){.buyedit{grid-template-columns:1fr}}
 .note{font-size:13px;color:var(--muted);text-align:center}
+/* a pagar: quem fez escolhe-se em botões redondos; um cartão por pessoa com o que falta receber */
+.quem{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.quem button{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 14px;cursor:pointer;color:var(--ink)}
+.quem button[aria-pressed="true"]{background:var(--rose);border-color:var(--rose);color:var(--paper);font-weight:700}
+.quem input{width:140px;padding:6px 12px;border-radius:999px}
+.feitoform{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.feitoform label{display:grid;gap:4px;font-size:14px;font-weight:700}
+.feitoform select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 10px;min-width:0}
+@media(max-width:600px){.feitoform{grid-template-columns:1fr 1fr}}
+.pessoas{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.pessoa{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:6px;text-align:center}
+.pessoa.deve{background:var(--honey);border-color:var(--gold-soft)}
+.pessoa .nome{font-family:var(--display);font-size:22px}
+.pessoa .big{font-family:var(--display);font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.pessoa small{color:var(--muted);font-size:14px}
+.pessoa .btn{justify-self:center;margin-top:4px}
 .loading{text-align:center;color:var(--muted);font-style:italic}
 footer{text-align:center;font-family:var(--display);font-style:italic;color:var(--gold);font-size:20px}
 </style>
@@ -142,6 +158,7 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
     <button type="button" data-v="encomendas" aria-pressed="false">Encomendas</button>
     <button type="button" data-v="pedidos" aria-pressed="false">Pedidos</button>
     <button type="button" data-v="custos" aria-pressed="false">Custos</button>
+    <button type="button" data-v="pagar" aria-pressed="false">A pagar</button>
     <button type="button" data-v="opinioes" aria-pressed="false">Opiniões</button>
   </nav>
 
@@ -157,7 +174,7 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
     <div class="head"><p class="kicker">O dinheiro</p><h2>Quanto entrou e quanto sobrou</h2></div>
     <div class="money">
       <div class="tile in"><span class="lbl">Entrou</span><span class="big" id="entrou">…</span><span class="sub">das encomendas já pagas</span></div>
-      <div class="tile out"><span class="lbl">Gastámos</span><span class="big" id="gastos">…</span><span class="sub">em contas, fio e cruzes</span></div>
+      <div class="tile out"><span class="lbl">Gastámos</span><span class="big" id="gastos">…</span><span class="sub">em materiais e no trabalho de quem faz</span></div>
       <div class="tile left"><span class="lbl">Sobrou</span><span class="big" id="sobrou">…</span><span class="sub">o que entrou menos o que gastámos</span></div>
     </div>
     <p class="sum" id="porReceber"></p>
@@ -171,7 +188,8 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
 
   <section data-v="inicio">
     <div class="head"><p class="kicker">O stock</p><h2>Os terços que ainda temos</h2></div>
-    <p class="lead">Quantos estão prontos para enviar. Quando fizerem mais, escrevam quantos e carreguem em Juntar. O site desconta sozinho quando alguém encomenda.</p>
+    <p class="lead">Quantos estão prontos para enviar. Quando fizerem mais, escolham quem fez, escrevam quantos e carreguem em Juntar. O site desconta sozinho quando alguém encomenda.</p>
+    <div class="quem" id="quemStock" aria-label="Quem fez"></div>
     <div class="card" id="stock"><p class="loading">A contar as contas…</p></div>
   </section>
 
@@ -211,6 +229,30 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
     <div class="card"><div class="buys" id="buys"><p class="loading">…</p></div></div>
   </section>
 
+  <section data-v="pagar">
+    <div class="head"><p class="kicker">Quem faz</p><h2>Quanto falta pagar</h2></div>
+    <p class="lead">1 € por terço e 50 cêntimos por dezena. Quando pagarem, carreguem em Pagar: o pagamento entra sozinho nos custos do mês.</p>
+    <p class="sum" id="faltaTotal"></p>
+    <div class="pessoas" id="pessoas"><p class="loading">…</p></div>
+  </section>
+
+  <section data-v="pagar">
+    <div class="head"><p class="kicker">Juntar o que fizeram</p><h2>Quem fez o quê</h2></div>
+    <form class="card" id="feitoform">
+      <div class="quem" id="quemForm" aria-label="Quem fez"></div>
+      <div class="feitoform">
+        <label>Peça<select id="fFormato"><option value="Terço">Terço</option><option value="Dezena de bolso">Dezena</option></select></label>
+        <label>Modelo<select id="fModelo"><option>Rosa de Lisieux</option><option>Manto de Maria</option><option>Carmelo</option><option>Arco-íris</option><option>Personalizado</option></select></label>
+        <label>Quantas<input id="fQtd" type="number" min="1" step="1" required placeholder="1"></label>
+        <label>Quando<input id="fData" type="date"></label>
+      </div>
+      <p class="note">Os modelos da loja entram também no stock. Os personalizados só contam para pagar.</p>
+      <p class="note" id="fErro" hidden></p>
+      <div class="actions" style="justify-content:center"><button class="btn" type="submit">Juntar</button></div>
+    </form>
+    <div class="card"><div class="buys" id="feitos"><p class="loading">…</p></div></div>
+  </section>
+
   <p class="note">Os dados vêm da folha "Sete Rosas: gestão". O que se marca aqui fica lá guardado.</p>
   <footer>Rezai o terço todos os dias.</footer>
 </div>
@@ -224,6 +266,24 @@ const CORES = {
 const eur = n => (Number(n)||0).toFixed(2).replace('.', ',') + ' €';
 const $ = id => document.getElementById(id);
 let dados = null, filtro = 'pagar';
+const PESSOAS = ['Sofia', 'Inês', 'Helena', 'Maria do Mar', 'Luzinha', 'Benedita', 'Pai', 'Mãe'];
+let quemStock = '', quemForm = '';
+// Botões com os nomes e um "Outro" que abre um campo para escrever o nome
+function seletorQuem(box, escolher){
+  const outro = document.createElement('input'); outro.placeholder = 'Nome'; outro.hidden = true; outro.maxLength = 40;
+  const marcar = alvo => box.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === alvo));
+  [...PESSOAS, 'Outro'].forEach(nome => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = nome; b.setAttribute('aria-pressed', 'false');
+    b.onclick = () => {
+      marcar(b);
+      if (nome === 'Outro') { outro.hidden = false; outro.focus(); escolher(outro.value.trim()); }
+      else { outro.hidden = true; escolher(nome); }
+    };
+    box.appendChild(b);
+  });
+  outro.oninput = () => escolher(outro.value.trim());
+  box.appendChild(outro);
+}
 
 function servidor(fn, ...args){
   return new Promise((ok, falha) => google.script.run.withSuccessHandler(ok).withFailureHandler(falha)[fn](CHAVE, ...args));
@@ -270,7 +330,14 @@ function desenhar(){
         b.disabled = true; const t = b.textContent; b.textContent = 'A guardar…';
         try { await servidor('definirProntos', x.modelo, Math.max(0, novo)); await carregar(); } catch(e){ b.disabled = false; b.textContent = t; }
       };
-      jb.onclick = () => { const n = Math.floor(Number(inp.value)); if (n > 0) guardar(x.restam + n, jb); };
+      // Juntar fica registado em nome de quem fez, para a página A pagar fazer a conta
+      jb.onclick = async () => {
+        const n = Math.floor(Number(inp.value)); if (!(n > 0)) return;
+        if (!quemStock) { jb.textContent = 'Quem fez?'; $('quemStock').scrollIntoView({ block: 'center' }); return; }
+        jb.disabled = true; jb.textContent = 'A guardar…';
+        try { await servidor('registarFeitos', { quem: quemStock, formato: fmt, modelo: base, qtd: n }); await carregar(); }
+        catch(e){ jb.disabled = false; jb.textContent = 'Juntar'; }
+      };
       cb.onclick = () => {
         if (cb.dataset.ok !== '1') { cb.dataset.ok = '1'; inp.placeholder = String(x.restam); inp.value = x.restam; inp.focus(); jb.textContent = 'Guardar'; jb.onclick = () => guardar(Math.floor(Number(inp.value) || 0), jb); cb.textContent = 'Cancelar'; return; }
         desenhar();
@@ -360,6 +427,58 @@ function desenhar(){
     ops.appendChild(c);
   });
 
+  // a pagar: um cartão por pessoa que já fez alguma coisa, primeiro quem tem dinheiro a receber
+  const feitos = dados.feitos || [];
+  const nomes = [...new Set([...PESSOAS, ...feitos.map(f => f.quem)])].filter(q => feitos.some(f => f.quem === q));
+  const contas = nomes.map(q => {
+    const meus = feitos.filter(f => f.quem === q), falta = meus.filter(f => !f.pagoEm);
+    const soma = (lista, fmt) => lista.filter(f => f.formato === fmt).reduce((s, f) => s + f.qtd, 0);
+    return { quem: q, tercos: soma(falta, 'Terço'), dezenas: soma(falta, 'Dezena de bolso'),
+      falta: falta.reduce((s, f) => s + f.valor, 0), pago: meus.filter(f => f.pagoEm).reduce((s, f) => s + f.valor, 0) };
+  }).sort((a, b) => (b.falta > 0) - (a.falta > 0));
+  const faltaTotal = contas.reduce((s, c) => s + c.falta, 0);
+  $('faltaTotal').textContent = faltaTotal > 0 ? 'Falta pagar ' + eur(faltaTotal) + ' no total.' : (feitos.length ? 'Está tudo pago.' : '');
+  const pessoas = $('pessoas'); pessoas.innerHTML = '';
+  if (!contas.length) pessoas.innerHTML = '<p class="empty">Ainda ninguém juntou peças.</p>';
+  contas.forEach(c => {
+    const el = document.createElement('div'); el.className = 'pessoa' + (c.falta > 0 ? ' deve' : '');
+    el.innerHTML = '<span class="nome"></span><span class="big"></span><small class="pecas"></small><small class="ja"></small>';
+    el.querySelector('.nome').textContent = c.quem;
+    el.querySelector('.big').textContent = eur(c.falta);
+    el.querySelector('.pecas').textContent = c.falta > 0
+      ? 'por ' + [c.tercos ? c.tercos + (c.tercos === 1 ? ' terço' : ' terços') : '', c.dezenas ? c.dezenas + (c.dezenas === 1 ? ' dezena' : ' dezenas') : ''].filter(Boolean).join(' e ')
+      : 'nada por pagar';
+    el.querySelector('.ja').textContent = c.pago > 0 ? 'Já recebeu ' + eur(c.pago) : '';
+    if (c.falta > 0){
+      const b = botao('Pagar ' + eur(c.falta), async () => {
+        if (b.dataset.ok !== '1') { b.dataset.ok = '1'; b.textContent = 'Sim, paguei ' + eur(c.falta); return; }
+        b.disabled = true; b.textContent = 'A guardar…';
+        try { await servidor('pagarA', c.quem); await carregar(); } catch(e){ b.disabled = false; b.textContent = 'Não guardou. Tenta outra vez'; }
+      });
+      el.appendChild(b);
+    }
+    pessoas.appendChild(el);
+  });
+  const fl = $('feitos'); fl.innerHTML = '';
+  if (!feitos.length) fl.innerHTML = '<p class="empty">Aqui aparece cada vez que alguém junta peças.</p>';
+  feitos.slice().reverse().slice(0, 40).forEach(f => {
+    const r = document.createElement('div'); r.className = 'buy';
+    r.innerHTML = '<div><span class="q"></span><small></small></div><div class="dir"><b></b><div class="mini"></div></div>';
+    r.querySelector('.q').textContent = f.quem + ': ' + f.qtd + ' × ' + (f.formato === 'Terço' ? 'terço' : 'dezena') + ' ' + f.modelo;
+    r.querySelector('small').textContent = f.data + (f.pagoEm ? ' · pago a ' + f.pagoEm : ' · por pagar');
+    r.querySelector('b').textContent = eur(f.valor);
+    if (!f.pagoEm){
+      const ap = document.createElement('button'); ap.type = 'button'; ap.className = 'lnk apagar'; ap.textContent = 'Apagar';
+      ap.onclick = async () => {
+        if (ap.dataset.ok !== '1') { ap.dataset.ok = '1'; ap.textContent = 'Sim, apagar'; return; }
+        ap.disabled = true; ap.textContent = 'A apagar…';
+        try { await servidor('apagarFeito', f.linha); await carregar(); } catch(e){ ap.disabled = false; ap.textContent = 'Não apagou'; }
+      };
+      r.querySelector('.mini').appendChild(ap);
+    }
+    fl.appendChild(r);
+  });
+
   const buys = $('buys'); buys.innerHTML = '';
   if (!dados.compras.length) buys.innerHTML = '<p class="empty">Ainda não há compras registadas.</p>';
   dados.compras.slice().reverse().forEach(b => {
@@ -440,6 +559,23 @@ document.querySelectorAll('.resumo .r').forEach(r => r.onclick = () => {
   document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-pressed', x.dataset.f === filtro));
   if (dados) desenhar();
   vista('encomendas');
+});
+seletorQuem($('quemStock'), q => quemStock = q);
+seletorQuem($('quemForm'), q => quemForm = q);
+$('fData').value = new Date().toISOString().slice(0, 10);
+$('feitoform').addEventListener('submit', async e => {
+  e.preventDefault();
+  const qtd = Math.floor(Number($('fQtd').value)), erro = $('fErro');
+  if (!quemForm) { erro.textContent = 'Escolhe quem fez.'; erro.hidden = false; return; }
+  if (!(qtd > 0)) return;
+  const bt = e.target.querySelector('button[type="submit"]'); if (bt.disabled) return;
+  bt.disabled = true; bt.textContent = 'A guardar…'; erro.hidden = true;
+  try {
+    await servidor('registarFeitos', { quem: quemForm, formato: $('fFormato').value, modelo: $('fModelo').value, qtd, data: $('fData').value });
+    $('fQtd').value = '';
+    await carregar();
+  } catch(x) { erro.textContent = 'Não guardou. Tenta outra vez.'; erro.hidden = false; }
+  finally { bt.disabled = false; bt.textContent = 'Juntar'; }
 });
 vista('inicio');
 carregar();

@@ -231,7 +231,7 @@ function painelDados(chave) {
     dinheiro: { entrou, gastos, sobrou: entrou - gastos, vendido: entrou,
       porReceber: encomendas.filter(o => !o.pago).reduce((s, o) => s + o.total, 0) },
     pecasVendidas: pagas.reduce((s, o) => s + o.pecas, 0),
-    stock, encomendas, compras, opinioes, pedidos
+    stock, encomendas, compras, opinioes, pedidos, feitos: feitosDados_()
   };
 }
 
@@ -325,6 +325,89 @@ function definirProntos(chave, modelo, prontos) {
   const stock = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stock');
   const vendidos = Number(stock.getRange(i + 2, 3).getValue()) || 0;
   stock.getRange(i + 2, 2).setValue(vendidos + Math.max(0, Math.floor(Number(prontos) || 0)));
+}
+
+// Quem faz ganha por peça: 1 € por terço e 50 cêntimos por dezena. O separador Feitos guarda cada vez que
+// alguém junta peças; quando se paga, as linhas ficam com a data do pagamento e o total entra nas Compras.
+const PAGA_POR_PECA = { 'Terço': 1, 'Dezena de bolso': 0.5 };
+const FEITOS = { data: 1, quem: 2, formato: 3, modelo: 4, qtd: 5, valor: 6, pagoEm: 7, stock: 8 };
+
+function folhaFeitos_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let f = ss.getSheetByName('Feitos');
+  if (!f) {
+    f = ss.insertSheet('Feitos');
+    f.getRange(1, 1, 1, 8).setValues([['Data', 'Quem fez', 'Peça', 'Modelo', 'Quantas', 'A receber (€)', 'Pago em', 'Entrou no stock']])
+      .setFontWeight('bold');
+    f.setFrozenRows(1);
+  }
+  return f;
+}
+
+function feitosDados_() {
+  const f = folhaFeitos_();
+  const n = primeiraVazia_(f, FEITOS.quem) - 2;
+  const dia = d => d instanceof Date ? Utilities.formatDate(d, 'Europe/Lisbon', 'dd-MM-yyyy') : String(d || '');
+  return n > 0 ? f.getRange(2, 1, n, 8).getValues().map((r, i) => ({
+    linha: i + 2, data: dia(r[0]), quem: String(r[1]), formato: String(r[2]), modelo: String(r[3]),
+    qtd: Number(r[4]) || 0, valor: Number(r[5]) || 0, pagoEm: dia(r[6]), stock: r[7] === true
+  })).filter(x => x.quem) : [];
+}
+
+// Regista peças feitas por alguém. Se for um modelo da loja, as peças entram também no stock.
+function registarFeitos(chave, p) {
+  confirmar_(chave);
+  const quem = String(p.quem || '').trim().slice(0, 40);
+  const qtd = Math.floor(Number(p.qtd) || 0);
+  if (!quem || qtd < 1 || !(p.formato in PAGA_POR_PECA)) throw new Error('Falta quem fez, a peça ou quantas');
+  const modelo = String(p.modelo || '');
+  const i = MODELOS.indexOf(`${modelo} · ${p.formato}`);
+  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    if (i >= 0) {
+      const stock = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stock');
+      stock.getRange(i + 2, 2).setValue((Number(stock.getRange(i + 2, 2).getValue()) || 0) + qtd);
+    }
+    const f = folhaFeitos_();
+    f.getRange(primeiraVazia_(f, FEITOS.quem), 1, 1, 8).setValues([[p.data ? new Date(p.data) : new Date(), quem, p.formato,
+      modelo, qtd, qtd * PAGA_POR_PECA[p.formato], '', i >= 0]]);
+  } finally { lock.releaseLock(); }
+}
+
+// Apaga um registo enganado, se ainda não foi pago, e tira do stock o que lá tinha posto
+function apagarFeito(chave, linha) {
+  confirmar_(chave);
+  const f = folhaFeitos_();
+  const r = f.getRange(linha, 1, 1, 8).getValues()[0];
+  if (linha < 2 || !r[FEITOS.quem - 1]) throw new Error('Registo não encontrado');
+  if (r[FEITOS.pagoEm - 1] !== '') throw new Error('Já foi pago');
+  if (r[FEITOS.stock - 1] === true) {
+    const i = MODELOS.indexOf(`${r[FEITOS.modelo - 1]} · ${r[FEITOS.formato - 1]}`);
+    if (i >= 0) {
+      const stock = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stock');
+      stock.getRange(i + 2, 2).setValue(Math.max(0, (Number(stock.getRange(i + 2, 2).getValue()) || 0) - (Number(r[FEITOS.qtd - 1]) || 0)));
+    }
+  }
+  f.deleteRow(linha);
+}
+
+// Paga tudo o que falta a uma pessoa: marca as linhas com a data de hoje e junta o pagamento às Compras
+function pagarA(chave, quem) {
+  confirmar_(chave);
+  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    const f = folhaFeitos_();
+    const porPagar = feitosDados_().filter(x => x.quem === quem && !x.pagoEm);
+    if (!porPagar.length) throw new Error('Nada por pagar');
+    const hoje = new Date();
+    porPagar.forEach(x => f.getRange(x.linha, FEITOS.pagoEm).setValue(hoje));
+    const conta = fmt => porPagar.filter(x => x.formato === fmt).reduce((s, x) => s + x.qtd, 0);
+    const t = conta('Terço'), d = conta('Dezena de bolso');
+    const pecas = [t ? `${t} ${t === 1 ? 'terço' : 'terços'}` : '', d ? `${d} ${d === 1 ? 'dezena' : 'dezenas'}` : ''].filter(Boolean).join(' e ');
+    const total = porPagar.reduce((s, x) => s + x.valor, 0);
+    novaCompra(chave, { data: Utilities.formatDate(hoje, 'Europe/Lisbon', 'yyyy-MM-dd'), loja: 'Feitos à mão', oque: `Pagamento: ${quem}, ${pecas}`, valor: total });
+    return total;
+  } finally { lock.releaseLock(); }
 }
 
 // Põe o stock de todos os modelos a zero (sem terços prontos). Só no editor.
