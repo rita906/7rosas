@@ -100,6 +100,13 @@ h1.pequeno{font-size:15pt}
 .folha{width:148.5mm;height:210mm;overflow:hidden;page-break-after:always;break-after:page}
 .folha .page{transform:scale(1.41421);transform-origin:0 0;page-break-after:auto;break-after:auto}
 @media screen{.folha{box-shadow:0 8px 28px rgba(75,64,56,.18);border-radius:6mm}.folha .page{box-shadow:none}}
+/* quatro grupos de mistérios (com os Luminosos) na primeira página: tudo um pouco mais apertado */
+.grupos{margin-top:1mm !important}
+.grupo .nome{font-size:10.5pt !important;line-height:1 !important}
+.grupo .exp{font-size:6pt !important;margin-top:0.2mm !important}
+.grupo .dias{font-size:5.8pt !important;margin:0 0 0.5mm !important}
+.grupo ol{font-size:6.3pt !important;line-height:1.16 !important;gap:0 !important}
+.grupo + .grupo::before{font-size:6pt !important;margin:0 0 0.4mm !important}
 </style>
 </head>
 <body>
@@ -108,15 +115,19 @@ h1.pequeno{font-size:15pt}
   <h1>Os mistérios do terço</h1>
   <div class="grupos">
     <div class="grupo">
-      <div class="nome">Gozosos<span class="exp">Mistérios da alegria: o nascimento e a infância de Jesus</span><span class="dias">segunda e quinta</span></div>
+      <div class="nome">Gozosos<span class="exp">Mistérios da alegria: o nascimento e a infância de Jesus</span><span class="dias">segunda e sábado</span></div>
       <ol><li><span>1.º</span>A Anunciação do Anjo a Nossa Senhora</li><li><span>2.º</span>A Visitação de Nossa Senhora a Santa Isabel</li><li><span>3.º</span>O Nascimento de Jesus em Belém</li><li><span>4.º</span>A Apresentação do Menino Jesus no Templo</li><li><span>5.º</span>O Encontro do Menino Jesus no Templo</li></ol>
+    </div>
+    <div class="grupo">
+      <div class="nome">Luminosos<span class="exp">Mistérios da luz: a vida pública de Jesus</span><span class="dias">quinta</span></div>
+      <ol><li><span>1.º</span>O Batismo de Jesus no rio Jordão</li><li><span>2.º</span>Jesus nas Bodas de Caná</li><li><span>3.º</span>Jesus anuncia o Reino de Deus</li><li><span>4.º</span>A Transfiguração de Jesus no monte</li><li><span>5.º</span>Jesus dá-nos a Eucaristia</li></ol>
     </div>
     <div class="grupo">
       <div class="nome">Dolorosos<span class="exp">Mistérios da dor: a Paixão e a morte de Jesus</span><span class="dias">terça e sexta</span></div>
       <ol><li><span>1.º</span>A Agonia de Jesus no Horto</li><li><span>2.º</span>A Flagelação de Jesus</li><li><span>3.º</span>A Coroação de espinhos</li><li><span>4.º</span>Jesus a caminho do Calvário com a cruz às costas</li><li><span>5.º</span>A Crucifixão e morte de Jesus</li></ol>
     </div>
     <div class="grupo">
-      <div class="nome">Gloriosos<span class="exp">Mistérios da glória: a Ressurreição de Jesus e Nossa Senhora no Céu</span><span class="dias">quarta, sábado e domingo</span></div>
+      <div class="nome">Gloriosos<span class="exp">Mistérios da glória: a Ressurreição de Jesus e Nossa Senhora no Céu</span><span class="dias">quarta e domingo</span></div>
       <ol><li><span>1.º</span>A Ressurreição de Jesus</li><li><span>2.º</span>A Ascensão de Jesus ao Céu</li><li><span>3.º</span>A Vinda do Espírito Santo</li><li><span>4.º</span>A Assunção de Nossa Senhora ao Céu</li><li><span>5.º</span>A Coroação de Nossa Senhora</li></ol>
     </div>
   </div>
