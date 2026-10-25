@@ -16,6 +16,7 @@ A missão: que todas as famílias rezem o terço, pelas mãos das crianças.
 - Stock por modelo e formato (terço e dezena), começa a zero; as meninas juntam no painel o que fazem.
 - Os terços não são benzidos; cada um leva a pagela de como rezar o terço.
 - Encomendas fechadas ("disponíveis em breve") até se abrir no código (ABERTAS=false em loja/index.src.html).
+- Quem faz ganha 1 € por terço e 50 cêntimos por dezena (decidido a 25-10-2026). Regista-se no painel quem fez cada peça; a página A pagar faz a conta, e o pagamento entra nos custos no dia em que se paga.
 - Emails ao cliente: confirmação com a pagela; aviso de envio com o pedido de opinião. As opiniões só aparecem na loja depois de aprovadas no painel.
 
 ## Por fazer
