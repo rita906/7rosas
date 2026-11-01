@@ -8,6 +8,7 @@ A missão: que todas as famílias rezem o terço, pelas mãos das crianças.
 - Encomendas, stock, custos, pedidos e opiniões: Google Sheet "Sete Rosas: gestão", com o código em `folha/` (Apps Script). O código copia-se para o editor da folha e publica-se como app web (versão nova a cada mudança).
 - Back office: a página Painel servida pela app web, com chave. O link está em PAINEL-PRIVADO.txt, que não vai para o GitHub.
 - Pagela: `pagela-como-rezar-o-terco.pdf` (4 páginas A5: mistérios, como se reza, orações em português, orações em latim), anexada ao email de confirmação. Fonte em `loja/pagela.src.html`.
+- Oficina: `oficina/como-fazer-um-terco.pdf`, o tutorial ilustrado para as meninas (os nós, a dezena de bolso e o terço, da cruz para cima; 59 contas: 6 de Pai-Nosso e 53 de Ave-Maria). Não está ligado a partir da loja. Gera-se com `python3 oficina/construir_tutorial.py` e imprime-se para PDF com o Chrome.
 
 ## Decisões (24-10-2026)
 - Preços com portes incluídos: terço 12 €, dezena de bolso 7 €. Modelos: Rosa de Lisieux, Manto de Maria, Carmelo, Arco-íris.
