@@ -187,6 +187,14 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 .pv-barra i{display:block;height:100%;border-radius:999px;background:var(--rose);transition:width .6s ease}
 .pv-resta{font-size:15px;font-weight:700;color:var(--rose)}
 .pv-resta.fim{color:var(--muted)}
+.pv-sete{width:100%;box-sizing:border-box;border-radius:18px;padding:20px 18px;display:grid;gap:8px;justify-items:center;text-align:center;
+  background:linear-gradient(135deg,#fbf0d9,#f6e3c4);border:1px solid var(--gold-soft)}
+.pv-sete h3{margin:0;font-family:var(--display);font-weight:400;font-size:28px;color:var(--gold)}
+.pv-sete p{margin:0;max-width:30em}
+.pv-sete .pv-preco b{font-size:42px}
+.pv-sete .pv-barra{max-width:260px}
+.pv-linha{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;border-bottom:1px dashed rgba(154,120,67,.25);padding:4px 0}
+.pv-linha .pv-preco b{font-size:28px}
 .pv .prazo-pv{font-size:14px;color:var(--muted);max-width:30em;text-align:center}
 .pv-antes{font-size:13px;color:var(--muted)}
 .mao{background:var(--honey,#fbf0d9);border-radius:22px;padding:26px 22px}
@@ -224,20 +232,28 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <h2 id="t-pv">Só 20 terços e 30 dezenas</h2>
     </div>
     <p class="prose">Cada peça é feita à mão, uma a uma, por sete irmãs. Por isso fazemos poucas. Nesta primeira pré-venda há 20 terços e 30 dezenas, ao preço especial de quem chega primeiro. Quando acabarem, a pré-venda fecha.</p>
+    <div class="pv-sete">
+      <p class="kicker">Edição numerada · só 7</p>
+      <h3>Terço Sete Irmãs</h3>
+      <p>Cada dezena feita por uma irmã diferente, numerado de 1 a 7, com o nome da criança em contas de letras, numa caixinha com uma carta escrita à mão pelas sete.</p>
+      <div class="pv-preco"><b>40 €</b></div>
+      <div class="pv-barra" aria-hidden="true"><i id="barSete" style="width:100%"></i></div>
+      <p class="pv-resta" id="restaSete">Restam 7 de 7</p>
+    </div>
     <div class="pv-grid">
       <div class="pv-item t">
-        <h3>Terço</h3>
-        <div class="pv-preco"><b>12 €</b><span>na pré-venda</span></div>
-        <p class="pv-antes">Depois da pré-venda, 20 €</p>
+        <h3>Terços</h3>
+        <div class="pv-linha"><span>Terço</span><span class="pv-preco"><b>12 €</b><span>depois 20 €</span></span></div>
+        <div class="pv-linha"><span>Terço compacto</span><span class="pv-preco"><b>9 €</b><span>depois 17 €</span></span></div>
         <div class="pv-barra" aria-hidden="true"><i id="barTerco" style="width:100%"></i></div>
-        <p class="pv-resta" id="restaTerco">20 de 20 por reservar</p>
+        <p class="pv-resta" id="restaTerco">Restam 20 de 20 terços</p>
       </div>
       <div class="pv-item d">
-        <h3>Dezena de bolso</h3>
-        <div class="pv-preco"><b>7 €</b><span>na pré-venda</span></div>
-        <p class="pv-antes">Depois da pré-venda, 12 €</p>
+        <h3>Dezenas</h3>
+        <div class="pv-linha"><span>Pulseira</span><span class="pv-preco"><b>7 €</b><span>depois 12 €</span></span></div>
+        <div class="pv-linha"><span>Porta-chaves</span><span class="pv-preco"><b>7 €</b><span>depois 12 €</span></span></div>
         <div class="pv-barra" aria-hidden="true"><i id="barDezena" style="width:100%"></i></div>
-        <p class="pv-resta" id="restaDezena">30 de 30 por reservar</p>
+        <p class="pv-resta" id="restaDezena">Restam 30 de 30 dezenas</p>
       </div>
     </div>
     <p class="prazo-pv">Escolhes o modelo, com portes incluídos. Fazemos tudo à mão na semana a seguir ao fecho da pré-venda, e chega a tua casa até 7 dias depois de fechar.</p>
@@ -293,16 +309,16 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
     <p class="prose">O terço tem cinco dezenas. Cada dezena é um Pai-Nosso, dez Ave-Marias e um Glória. Para uma criança pequena, o terço inteiro é comprido. Uma dezena por dia é o primeiro passo, e o terço vem com o tempo.</p>
     <div class="compare">
       <div class="tile dezena">
-        <h3>Dezena de bolso</h3>
+        <h3>Dezena</h3>
         <div class="beads" id="demoDezena" aria-hidden="true"></div>
         <p class="count">1 Pai-Nosso e 10 Ave-Marias</p>
-        <p>Para os mais pequenos, e para levar no bolso para todo o lado.</p>
+        <p>Em pulseira, para trazer no pulso, ou em porta-chaves, com uma argola para andar com as chaves.</p>
       </div>
       <div class="tile terco">
         <h3>Terço</h3>
         <div class="beads tiny" id="demoTerco" aria-hidden="true"></div>
         <p class="count">5 dezenas, com a cruz</p>
-        <p>Para quem já reza o terço inteiro, sozinho ou em família.</p>
+        <p>Para quem já reza o terço inteiro, sozinho ou em família. Também há o compacto, mais pequeno, para o bolso ou a mala.</p>
       </div>
     </div>
     <p class="prose muted">No fim de cada dezena, reza-se a oração que Nossa Senhora ensinou aos pastorinhos em julho de 1917:</p>
@@ -351,7 +367,7 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <h2 id="t-como">Como funciona</h2>
     </div>
     <ol class="steps">
-      <li><span class="n">1</span><b>Reservas</b><p>A dezena ou o terço, num dos nossos quatro modelos, ao preço da pré-venda.</p></li>
+      <li><span class="n">1</span><b>Reservas</b><p>O terço, o terço compacto, a dezena em pulseira ou em porta-chaves, num dos nossos quatro modelos de cores, ao preço da pré-venda.</p></li>
       <li><span class="n">2</span><b>Pagas</b><p>Recebes a confirmação por email, com a pagela de como rezar o terço, e uma mensagem com os dados para pagares por MB WAY. Portes incluídos.</p><p class="prazo"><b>Pré-venda:</b> chega até 7 dias depois de a pré-venda fechar.</p></li>
       <li><span class="n">3</span><b>Rezam juntos</b><p>Chega com a pagela de como rezar o terço, pronto para a primeira dezena em família.</p></li>
     </ol>
@@ -372,13 +388,18 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
     </div>
     <div class="card">
       <div class="group">
-        <span class="legend">Modelo</span>
+        <span class="legend">O que queres</span>
         <div class="choice" id="optModelo"></div>
       </div>
       <div class="group">
         <span class="legend">Modelo de cores</span>
         <p class="hint" id="restaEscolha" style="text-align:center;margin:0"></p>
         <div class="choice" id="optCores"></div>
+      </div>
+
+      <div class="field" id="nomeBox" hidden style="text-align:left">
+        <label for="nomeCrianca">O nome da criança <span class="hint">(vai em contas de letras, até 12 letras)</span></label>
+        <input id="nomeCrianca" maxlength="12" autocomplete="off" placeholder="Ex.: Francisco">
       </div>
 
       <div class="preview"><div class="beads big" id="preview" aria-label="Como fica uma dezena"></div></div>
@@ -480,12 +501,21 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 // Enquanto for false, a loja mostra "em breve" e não aceita encomendas (os pedidos personalizados continuam abertos)
 const ABERTAS=true;
 const API="https://script.google.com/macros/s/AKfycbzDHMQaDLvuKFeFQKKcO9V5Hv6wFDiDo6OFAEM8Lc2cZCOvasNbtkcBbx-hNLXzr__Peg/exec";
-const MODELOS={dezena:"Dezena de bolso",terco:"Terço"};
+// Os cinco formatos da loja; cada um pertence a um grupo, e é o grupo que tem o limite da pré-venda
+const MODELOS={sete:"Terço Sete Irmãs",terco:"Terço",compacto:"Terço compacto",pulseira:"Dezena pulseira",chaves:"Dezena porta-chaves"};
+const GRUPO={sete:"Sete Irmãs",terco:"Terços",compacto:"Terços",pulseira:"Dezenas",chaves:"Dezenas"};
+const FORMATOS_LOJA=[
+  {id:"sete",nome:"Terço Sete Irmãs",desc:"Edição numerada de 7, com o nome da criança"},
+  {id:"terco",nome:"Terço",desc:"Para rezar o terço em família"},
+  {id:"compacto",nome:"Terço compacto",desc:"Mais pequeno, para o bolso ou a mala"},
+  {id:"pulseira",nome:"Dezena pulseira",desc:"Uma dezena sempre no pulso"},
+  {id:"chaves",nome:"Dezena porta-chaves",desc:"Com argola, para andar com as chaves"}];
 // Preços da primeira pré-venda; o servidor usa os mesmos e é ele que conta
-const PRECOS={terco:{modelo:12,custom:15},dezena:{modelo:7,custom:9}};
-const DEPOIS={terco:20,dezena:12};
-// Quantos ainda há por formato (vem da folha); antes de chegar, mostra os limites
-let pv={limite:{"Terço":20,"Dezena de bolso":30},restam:{"Terço":20,"Dezena de bolso":30}};
+const PRECOS={sete:{modelo:40},terco:{modelo:12},compacto:{modelo:9},pulseira:{modelo:7},chaves:{modelo:7}};
+const DEPOIS={sete:null,terco:20,compacto:17,pulseira:12,chaves:12};
+// Quantos ainda há em cada grupo (vem da folha); antes de chegar, mostra os limites
+let pv={limite:{"Terços":20,"Dezenas":30,"Sete Irmãs":7},restam:{"Terços":20,"Dezenas":30,"Sete Irmãs":7}};
+const PALAVRA={"Terços":["terço","terços"],"Dezenas":["dezena","dezenas"],"Sete Irmãs":["terço Sete Irmãs","terços Sete Irmãs"]};
 const ARCO=["#f2b8c6","#f7cfa8","#f3df98","#bcd9b0","#b6cfee","#cfc0ea"];
 const PEROLA="#fbf6ec";
 const COLECAO=[
@@ -511,7 +541,7 @@ function escolhas(el,opts,get,set){
   el.innerHTML="";
   opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt"+(o.wide?" wide":"");
     b.setAttribute("aria-pressed",get()===o.id);
-    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span><span class="pv-antes">depois ${eur(DEPOIS[modelo])}</span>`:""}`;
+    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span>${DEPOIS[modelo]?`<span class="pv-antes">depois ${eur(DEPOIS[modelo])}</span>`:'<span class="pv-antes">edição de 7</span>'}`:""}`;
     if(o.soon){b.disabled=true;b.setAttribute("aria-disabled","true");}
     if(o.ave)dezena(b.querySelector(".beads"),o.ave,o.pater,"#e6d9c3");
     b.onclick=()=>{set(o.id);render()};el.appendChild(b)});
@@ -523,15 +553,17 @@ function swatches(el,lista,get,set){
     b.onclick=()=>{set(c);render()};el.appendChild(b)});
 }
 // Quantos deste formato ainda se podem juntar, descontando o que já está no cesto
-function livres(m){return Math.max(0,(pv.restam[MODELOS[m]]||0)-cesto.filter(it=>it.nome===MODELOS[m]).reduce((a,it)=>a+it.q,0))}
+function livres(m){return Math.max(0,(pv.restam[GRUPO[m]]||0)-cesto.filter(it=>GRUPO[it.id]===GRUPO[m]).reduce((a,it)=>a+it.q,0))}
 function render(){
   const livre=livres(modelo);
   $("add").disabled=!ABERTAS||livre===0;
-  $("add").textContent=!ABERTAS?"Encomendas em breve":livre===0?(pv.restam[MODELOS[modelo]]===0?"Esgotado":"Já tens todos no cesto"):"Reservar";
-  $("restaEscolha").textContent=pv.restam[MODELOS[modelo]]===0?"Os "+(modelo==="terco"?"terços":"dezenas")+" da pré-venda esgotaram."
-    :"Restam "+pv.restam[MODELOS[modelo]]+" de "+pv.limite[MODELOS[modelo]]+" "+(modelo==="terco"?"terços":"dezenas")+" nesta pré-venda.";
+  const g=GRUPO[modelo],pal=PALAVRA[g];
+  $("add").textContent=!ABERTAS?"Encomendas em breve":livre===0?(pv.restam[g]===0?"Esgotado":"Já tens todos no cesto"):"Reservar";
+  $("restaEscolha").textContent=pv.restam[g]===0?"Os "+pal[1]+" da pré-venda esgotaram."
+    :pv.restam[g]===1?"Só resta 1 "+pal[0]+" nesta pré-venda.":"Restam "+pv.restam[g]+" de "+pv.limite[g]+" "+pal[1]+" nesta pré-venda.";
+  $("nomeBox").hidden=modelo!=="sete";
   qtd=Math.max(1,Math.min(qtd,livre||1));$("qtd").textContent=qtd;
-  escolhas($("optModelo"),[{id:"dezena",nome:"Dezena de bolso",desc:"Uma dezena sempre à mão"},{id:"terco",nome:"Terço",desc:"Para rezar o terço em família"}],()=>modelo,v=>modelo=v);
+  escolhas($("optModelo"),FORMATOS_LOJA,()=>modelo,v=>modelo=v);
   escolhas($("optCores"),[...COLECAO.map(c=>({...c,preco:PRECOS[modelo].modelo}))],()=>cores,v=>cores=v);
   $("custom").hidden=cores!=="custom";
   $("preview").parentElement.hidden=cores!=="custom";
@@ -543,7 +575,8 @@ function cestoRender(){
   const box=$("items");box.innerHTML="";
   if(!cesto.length){box.innerHTML='<p class="empty">Ainda não reservaste nenhum terço.</p>'}
   cesto.forEach((it,i)=>{const d=document.createElement("div");d.className="item";
-    d.innerHTML=`<div><b>${it.q} × ${it.nome}</b><small>${it.det}</small></div><div>${eur(it.q*it.preco)} <button type="button" aria-label="Tirar">tirar</button></div>`;
+    d.innerHTML=`<div><b>${it.q} × ${it.nome}</b><small></small></div><div>${eur(it.q*it.preco)} <button type="button" aria-label="Tirar">tirar</button></div>`;
+    d.querySelector("small").textContent=it.det;
     d.querySelector("button").onclick=()=>{cesto.splice(i,1);cestoRender();render()};box.appendChild(d)});
   $("total").textContent=eur(total());
   $("moradaBox").hidden=$("entrega").value!=="ctt";
@@ -555,8 +588,11 @@ $("mais").onclick=()=>{qtd=Math.min(Math.max(1,livres(modelo)),qtd+1);$("qtd").t
 $("add").onclick=()=>{
   const c=COLECAO.find(x=>x.id===cores);
   if(!c||livres(modelo)<qtd)return;
-  cesto.push(c?{modelo:c.nome+" · "+MODELOS[modelo],nome:MODELOS[modelo],det:c.nome,preco:PRECOS[modelo].modelo,q:qtd}
-    :{modelo:"Personalizado · "+MODELOS[modelo],nome:MODELOS[modelo],det:`Personalizado: contas ${contas[0].toLowerCase()}, cordel ${cordel[0].toLowerCase()}`,preco:PRECOS[modelo].custom,q:qtd});
+  const nomeC=$("nomeCrianca").value.trim();
+  if(modelo==="sete"&&!nomeC){$("nomeCrianca").focus();$("nomeCrianca").placeholder="Escreve aqui o nome";return}
+  cesto.push({id:modelo,modelo:c.nome+" · "+MODELOS[modelo],nome:MODELOS[modelo],det:c.nome+(modelo==="sete"?", com o nome "+nomeC:""),
+    nomeCrianca:modelo==="sete"?nomeC:"",preco:PRECOS[modelo].modelo,q:qtd});
+  if(modelo==="sete")$("nomeCrianca").value="";
   qtd=1;$("qtd").textContent=1;cestoRender();render();
 };
 $("entrega").onchange=cestoRender;
@@ -579,7 +615,7 @@ $("form").addEventListener("submit",async e=>{
   const pedido={nome:$("nome").value.trim(),email:$("email").value.trim(),tel:$("tel").value.trim(),
     entrega:$("entrega").value==="ctt"?"CTT":"Em mão",morada:$("entrega").value==="ctt"?$("morada").value.trim():"",
     nif:$("querNif").checked?$("nif").value.trim():"",nomeFiscal:$("querNif").checked?$("nomeFiscal").value.trim():"",
-    obs:$("obs").value.trim(),itens:cesto.map(it=>({modelo:it.modelo,formato:it.nome,det:it.det,q:it.q,preco:it.preco}))};
+    obs:$("obs").value.trim(),itens:cesto.map(it=>({modelo:it.modelo,formato:it.nome,det:it.det,q:it.q,preco:it.preco,nomeCrianca:it.nomeCrianca}))};
   try{
     const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(pedido)});
     const j=await r.json();
@@ -614,10 +650,12 @@ $("pform").addEventListener("submit",async e=>{
 fetch(API).then(r=>r.json()).then(j=>{if(j.ok){restam=j.restam;if(j.prevenda)pv=j.prevenda;contador();render();opinioes(j.opinioes||[]);}}).catch(()=>{});
 // O contador da pré-venda: o que resta de cada formato, na barra do topo, no cartão e no botão flutuante
 function contador(){
-  const rt=pv.restam["Terço"],rd=pv.restam["Dezena de bolso"],lt=pv.limite["Terço"],ld=pv.limite["Dezena de bolso"];
+  const rt=pv.restam["Terços"],rd=pv.restam["Dezenas"],lt=pv.limite["Terços"],ld=pv.limite["Dezenas"],rs=pv.restam["Sete Irmãs"],ls=pv.limite["Sete Irmãs"];
   const linha=(n,l,el,bar,um,muitos)=>{$(bar).style.width=(n/l*100)+"%";$(el).textContent=n===0?"Esgotado":(n===1?"Só resta 1 "+um:"Restam "+n+" de "+l+" "+muitos);$(el).classList.toggle("fim",n===0)};
   linha(rt,lt,"restaTerco","barTerco","terço","terços");
   linha(rd,ld,"restaDezena","barDezena","dezena","dezenas");
+  linha(rs,ls,"restaSete","barSete","terço Sete Irmãs","");
+  if(rs>1)$("restaSete").textContent="Restam "+rs+" de "+ls;
   const fim=rt===0&&rd===0;
   $("avisoResta").textContent=fim?"Esgotou. Obrigada a todas as famílias!":"Restam "+rt+" de "+lt+" terços e "+rd+" de "+ld+" dezenas.";
   const f=document.querySelector(".flutuante");

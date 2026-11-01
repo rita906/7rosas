@@ -5,18 +5,23 @@
 // Um stock por modelo e por formato: cada linha da folha Stock é "Modelo · Formato"
 // O personalizado faz-se por encomenda (pedidos personalizados), por isso não tem stock
 const BASES = ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris'];
-const FORMATOS = ['Terço', 'Dezena de bolso'];
+// O terço tem três versões (o normal, o compacto e a edição numerada das Sete Irmãs) e a dezena duas (pulseira e porta-chaves)
+const FORMATOS = ['Terço', 'Terço compacto', 'Terço Sete Irmãs', 'Dezena pulseira', 'Dezena porta-chaves'];
 const MODELOS = BASES.flatMap(b => FORMATOS.map(f => `${b} · ${f}`));
 const STOCK_INICIAL = 0;
 
-// Primeira pré-venda (decidido a 01-11-2026): 20 terços e 30 dezenas, à escolha do modelo, a preço especial.
-// Abre já e fecha quando esgotar; tudo chega até 7 dias depois de fechar. Os vendidos contam-se pela coluna
-// Vendidos do separador Stock, por isso uma pré-venda nova começa com os Vendidos a zero (ou com limites novos).
+// Primeira pré-venda (decidido a 01-11-2026): 20 terços (normais e compactos) e 30 dezenas (pulseiras e
+// porta-chaves), à escolha do modelo, a preço especial, e 7 terços Sete Irmãs a 40 €, sem desconto: é a âncora.
+// Abre já e fecha quando esgotarem os terços e as dezenas; tudo chega até 7 dias depois de fechar.
+// Os vendidos contam-se pela coluna Vendidos do separador Stock, por isso uma pré-venda nova começa com os
+// Vendidos a zero (ou com limites novos).
 const PREVENDA = {
-  limite: { 'Terço': 20, 'Dezena de bolso': 30 },
-  preco: { 'Terço': 12, 'Dezena de bolso': 7 },
-  depois: { 'Terço': 20, 'Dezena de bolso': 12 }
+  grupos: { 'Terços': ['Terço', 'Terço compacto'], 'Dezenas': ['Dezena pulseira', 'Dezena porta-chaves'], 'Sete Irmãs': ['Terço Sete Irmãs'] },
+  limite: { 'Terços': 20, 'Dezenas': 30, 'Sete Irmãs': 7 },
+  preco: { 'Terço': 12, 'Terço compacto': 9, 'Terço Sete Irmãs': 40, 'Dezena pulseira': 7, 'Dezena porta-chaves': 7 },
+  depois: { 'Terço': 20, 'Terço compacto': 17, 'Terço Sete Irmãs': 40, 'Dezena pulseira': 12, 'Dezena porta-chaves': 12 }
 };
+const grupoDe_ = f => Object.keys(PREVENDA.grupos).find(g => PREVENDA.grupos[g].includes(f));
 // O endereço público da app (o de /a/macros/ pede sessão a quem é de fora)
 const APP_URL = 'https://script.google.com/macros/s/AKfycbzDHMQaDLvuKFeFQKKcO9V5Hv6wFDiDo6OFAEM8Lc2cZCOvasNbtkcBbx-hNLXzr__Peg/exec';
 const LOJA_URL = 'https://seterosas.pt';
@@ -121,16 +126,20 @@ function lerStock_() {
   return restam;
 }
 
-// Quantos terços e dezenas ainda há na pré-venda, somando os vendidos de todos os modelos de cada formato
+// Quanto ainda há na pré-venda em cada grupo, somando os vendidos de todos os modelos e formatos do grupo
 function prevenda_() {
   const linhas = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stock').getRange(2, 1, MODELOS.length, 3).getValues();
-  const vendidos = {}, restam = {};
+  const porFormato = {}, vendidos = {}, restam = {};
   FORMATOS.forEach(f => {
-    vendidos[f] = linhas.filter(r => String(r[0]).endsWith(' · ' + f)).reduce((s, r) => s + (Number(r[2]) || 0), 0);
-    restam[f] = Math.max(0, PREVENDA.limite[f] - vendidos[f]);
+    porFormato[f] = linhas.filter(r => String(r[0]).endsWith(' · ' + f)).reduce((s, r) => s + (Number(r[2]) || 0), 0);
+  });
+  Object.keys(PREVENDA.grupos).forEach(g => {
+    vendidos[g] = PREVENDA.grupos[g].reduce((s, f) => s + porFormato[f], 0);
+    restam[g] = Math.max(0, PREVENDA.limite[g] - vendidos[g]);
   });
   const fechou = PropertiesService.getScriptProperties().getProperty('PREVENDA_FECHOU') || '';
-  return { limite: PREVENDA.limite, preco: PREVENDA.preco, depois: PREVENDA.depois, vendidos, restam, fechou };
+  return { grupos: PREVENDA.grupos, limite: PREVENDA.limite, preco: PREVENDA.preco, depois: PREVENDA.depois,
+    porFormato, vendidos, restam, fechou };
 }
 
 // Só as opiniões marcadas para mostrar, as mais recentes primeiro
@@ -350,7 +359,7 @@ function definirProntos(chave, modelo, prontos) {
 
 // Quem faz ganha por peça: 1 € por terço e 50 cêntimos por dezena. O separador Feitos guarda cada vez que
 // alguém junta peças; quando se paga, as linhas ficam com a data do pagamento e o total entra nas Compras.
-const PAGA_POR_PECA = { 'Terço': 1, 'Dezena de bolso': 0.5 };
+const PAGA_POR_PECA = { 'Terço': 1, 'Terço compacto': 1, 'Terço Sete Irmãs': 1, 'Dezena pulseira': 0.5, 'Dezena porta-chaves': 0.5 };
 const FEITOS = { data: 1, quem: 2, formato: 3, modelo: 4, qtd: 5, valor: 6, pagoEm: 7, stock: 8 };
 
 function folhaFeitos_() {
@@ -422,8 +431,8 @@ function pagarA(chave, quem) {
     if (!porPagar.length) throw new Error('Nada por pagar');
     const hoje = new Date();
     porPagar.forEach(x => f.getRange(x.linha, FEITOS.pagoEm).setValue(hoje));
-    const conta = fmt => porPagar.filter(x => x.formato === fmt).reduce((s, x) => s + x.qtd, 0);
-    const t = conta('Terço'), d = conta('Dezena de bolso');
+    const conta = ini => porPagar.filter(x => x.formato.startsWith(ini)).reduce((s, x) => s + x.qtd, 0);
+    const t = conta('Terço'), d = conta('Dezena');
     const pecas = [t ? `${t} ${t === 1 ? 'terço' : 'terços'}` : '', d ? `${d} ${d === 1 ? 'dezena' : 'dezenas'}` : ''].filter(Boolean).join(' e ');
     const total = porPagar.reduce((s, x) => s + x.valor, 0);
     novaCompra(chave, { data: Utilities.formatDate(hoje, 'Europe/Lisbon', 'yyyy-MM-dd'), loja: 'Feitos à mão', oque: `Pagamento: ${quem}, ${pecas}`, valor: total });
@@ -557,16 +566,19 @@ function doPost(e) {
     if (!itens.length || !p.nome || !p.tel) return json_({ ok: false, erro: 'dados' });
 
     // Pré-venda: cada formato tem um limite para todos os modelos juntos; o que passar do que resta é recusado
-    const pedido = {}, porFormato = {};
+    const pedido = {}, porGrupo = {};
     itens.forEach(it => {
       it.q = Math.floor(Number(it.q));
       it.formato = it.modelo.split(' · ')[1];
       it.preco = PREVENDA.preco[it.formato];
+      it.nomeCrianca = it.formato === 'Terço Sete Irmãs' ? String(it.nomeCrianca || '').trim().slice(0, 20) : '';
       pedido[it.modelo] = (pedido[it.modelo] || 0) + it.q;
-      porFormato[it.formato] = (porFormato[it.formato] || 0) + it.q;
+      const g = grupoDe_(it.formato);
+      porGrupo[g] = (porGrupo[g] || 0) + it.q;
     });
+    if (itens.some(it => it.formato === 'Terço Sete Irmãs' && !it.nomeCrianca)) return json_({ ok: false, erro: 'dados' });
     const pv = prevenda_();
-    if (FORMATOS.some(f => (porFormato[f] || 0) > pv.restam[f])) return json_({ ok: false, erro: 'esgotou', prevenda: pv });
+    if (Object.keys(porGrupo).some(g => porGrupo[g] > pv.restam[g])) return json_({ ok: false, erro: 'esgotou', prevenda: pv });
     especiais = [];
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -581,7 +593,8 @@ function doPost(e) {
     numero = primeiraVazia_(enc, C.numero) - 1;
     total = itens.reduce((s, it) => s + it.q * it.preco, 0);
     const pecas = itens.reduce((s, it) => s + Number(it.q), 0);
-    texto = itens.map(it => `${it.q} × ${it.formato}, ${it.modelo.split(' · ')[0]} (pré-venda, ${eur_(it.preco)} cada)`).join('\n');
+    texto = itens.map(it => `${it.q} × ${it.formato}, ${it.modelo.split(' · ')[0]}` +
+      (it.nomeCrianca ? `, com o nome ${it.nomeCrianca}` : '') + ` (pré-venda, ${eur_(it.preco)} cada)`).join('\n');
     const codigo = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
     enc.getRange(numero + 1, 1, 1, C.token).setValues([[numero, new Date(), p.nome, "'" + p.tel, p.entrega, p.morada || '',
       p.nif ? "'" + p.nif : '', p.nomeFiscal || '', texto, pecas, total, p.obs || '', false, false, '', '',
@@ -600,12 +613,12 @@ function doPost(e) {
 
   // Quando acaba tudo, a pré-venda fecha: guarda-se o dia e avisa-se a Rita, porque o prazo de 7 dias conta daí
   const pv = prevenda_();
-  if (!pv.fechou && FORMATOS.every(f => pv.restam[f] === 0)) {
+  if (!pv.fechou && pv.restam['Terços'] === 0 && pv.restam['Dezenas'] === 0) {
     const hoje = Utilities.formatDate(new Date(), 'Europe/Lisbon', 'dd-MM-yyyy');
     PropertiesService.getScriptProperties().setProperty('PREVENDA_FECHOU', hoje);
     pv.fechou = hoje;
     MailApp.sendEmail(Session.getEffectiveUser().getEmail(), 'Sete Rosas: a pré-venda esgotou',
-      `Venderam-se os ${PREVENDA.limite['Terço']} terços e as ${PREVENDA.limite['Dezena de bolso']} dezenas. ` +
+      `Venderam-se os ${PREVENDA.limite['Terços']} terços e as ${PREVENDA.limite['Dezenas']} dezenas. ` +
       `A pré-venda fechou hoje, ${hoje}, e tudo tem de chegar a casa das famílias até 7 dias depois.\n\n` +
       'O que há para fazer, modelo a modelo, está no painel, no Início.');
   }

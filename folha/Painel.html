@@ -253,7 +253,7 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
     <form class="card" id="feitoform">
       <div class="quem" id="quemForm" aria-label="Quem fez"></div>
       <div class="feitoform">
-        <label>Peça<select id="fFormato"><option value="Terço">Terço</option><option value="Dezena de bolso">Dezena</option></select></label>
+        <label>Peça<select id="fFormato"><option value="Terço">Terço</option><option value="Terço compacto">Terço compacto</option><option value="Terço Sete Irmãs">Terço Sete Irmãs</option><option value="Dezena pulseira">Dezena pulseira</option><option value="Dezena porta-chaves">Dezena porta-chaves</option></select></label>
         <label>Modelo<select id="fModelo"><option>Rosa de Lisieux</option><option>Manto de Maria</option><option>Carmelo</option><option>Arco-íris</option><option>Personalizado</option></select></label>
         <label>Quantas<input id="fQtd" type="number" min="1" step="1" required placeholder="1"></label>
         <label>Quando<input id="fData" type="date"></label>
@@ -323,16 +323,19 @@ function desenhar(){
   // pré-venda: quantos se reservaram de cada modelo (é o que há para fazer) e quantos ainda há
   const pv = dados.prevenda;
   if (pv){
-    const T = 'Terço', D = 'Dezena de bolso';
+    const v = pv.vendidos, l = pv.limite;
     $('pvEstado').textContent = pv.fechou
       ? 'A pré-venda fechou a ' + pv.fechou + '. Tudo tem de chegar a casa das famílias até 7 dias depois.'
-      : 'Reservados ' + pv.vendidos[T] + ' de ' + pv.limite[T] + ' terços e ' + pv.vendidos[D] + ' de ' + pv.limite[D] + ' dezenas. Fecha quando esgotar.';
+      : 'Reservados ' + v['Terços'] + ' de ' + l['Terços'] + ' terços, ' + v['Dezenas'] + ' de ' + l['Dezenas'] + ' dezenas e ' +
+        v['Sete Irmãs'] + ' de ' + l['Sete Irmãs'] + ' terços Sete Irmãs. Fecha quando esgotarem os terços e as dezenas.';
+    const COLS = [['Terço', 'Terço'], ['Terço compacto', 'Compacto'], ['Terço Sete Irmãs', 'Sete Irmãs'], ['Dezena pulseira', 'Pulseira'], ['Dezena porta-chaves', 'Porta-chaves']];
     const linhas = {};
     dados.stock.forEach(x => { const [b, f] = x.modelo.split(' · '); (linhas[b] = linhas[b] || {})[f] = x.vendidos; });
     const cel = n => '<td' + (n ? '' : ' class="zero"') + '>' + n + '</td>';
-    $('pvTabela').innerHTML = '<table class="pvt"><thead><tr><th>Modelo</th><th>Terços</th><th>Dezenas</th></tr></thead><tbody>' +
-      Object.keys(linhas).map(b => '<tr><td></td>' + cel(linhas[b][T] || 0) + cel(linhas[b][D] || 0) + '</tr>').join('') +
-      '</tbody><tfoot><tr><td>Total</td><td>' + pv.vendidos[T] + '</td><td>' + pv.vendidos[D] + '</td></tr></tfoot></table>';
+    $('pvTabela').innerHTML = '<div style="overflow-x:auto"><table class="pvt"><thead><tr><th>Modelo</th>' + COLS.map(c => '<th>' + c[1] + '</th>').join('') + '</tr></thead><tbody>' +
+      Object.keys(linhas).map(b => '<tr><td></td>' + COLS.map(c => cel(linhas[b][c[0]] || 0)).join('') + '</tr>').join('') +
+      '</tbody><tfoot><tr><td>Total</td>' + COLS.map(c => '<td>' + (pv.porFormato[c[0]] || 0) + '</td>').join('') + '</tr></tfoot></table></div>';
+    $('pvTabela').insertAdjacentHTML('beforeend', '<p class="note">Os terços Sete Irmãs levam o nome da criança: está em cada encomenda.</p>');
     $('pvTabela').querySelectorAll('tbody tr td:first-child').forEach((td, i) => td.textContent = Object.keys(linhas)[i]);
   }
 
@@ -345,7 +348,7 @@ function desenhar(){
     const m = document.createElement('div'); m.className = 'model';
     m.innerHTML = '<span class="name"></span><div class="slines"></div>'; m.querySelector('.name').textContent = base;
     const cores = CORES[base] || ['#dcc28f'];
-    [['Terço', 'Terços'], ['Dezena de bolso', 'Dezenas']].forEach(([fmt, rotulo]) => {
+    [['Terço', 'Terços'], ['Terço compacto', 'Compactos'], ['Terço Sete Irmãs', 'Sete Irmãs'], ['Dezena pulseira', 'Pulseiras'], ['Dezena porta-chaves', 'Porta-chaves']].forEach(([fmt, rotulo]) => {
       const x = porModelo[base][fmt] || { modelo: base + ' · ' + fmt, restam: 0 };
       let contas = '';
       for (let k = 0; k < Math.max(x.restam, 1) && k < 30; k++) contas += '<span class="bead' + (x.restam ? '' : ' sold') + '" style="background:' + cores[k % cores.length] + '"></span>';
@@ -460,8 +463,8 @@ function desenhar(){
   const nomes = [...new Set([...PESSOAS, ...feitos.map(f => f.quem)])].filter(q => feitos.some(f => f.quem === q));
   const contas = nomes.map(q => {
     const meus = feitos.filter(f => f.quem === q), falta = meus.filter(f => !f.pagoEm);
-    const soma = (lista, fmt) => lista.filter(f => f.formato === fmt).reduce((s, f) => s + f.qtd, 0);
-    return { quem: q, tercos: soma(falta, 'Terço'), dezenas: soma(falta, 'Dezena de bolso'),
+    const soma = (lista, ini) => lista.filter(f => f.formato.startsWith(ini)).reduce((s, f) => s + f.qtd, 0);
+    return { quem: q, tercos: soma(falta, 'Terço'), dezenas: soma(falta, 'Dezena'),
       falta: falta.reduce((s, f) => s + f.valor, 0), pago: meus.filter(f => f.pagoEm).reduce((s, f) => s + f.valor, 0) };
   }).sort((a, b) => (b.falta > 0) - (a.falta > 0));
   const faltaTotal = contas.reduce((s, c) => s + c.falta, 0);
@@ -492,7 +495,7 @@ function desenhar(){
   feitos.slice().reverse().slice(0, 40).forEach(f => {
     const r = document.createElement('div'); r.className = 'buy';
     r.innerHTML = '<div><span class="q"></span><small></small></div><div class="dir"><b></b><div class="mini"></div></div>';
-    r.querySelector('.q').textContent = f.quem + ': ' + f.qtd + ' × ' + (f.formato === 'Terço' ? 'terço' : 'dezena') + ' ' + f.modelo;
+    r.querySelector('.q').textContent = f.quem + ': ' + f.qtd + ' × ' + f.formato.toLowerCase() + ' ' + f.modelo;
     r.querySelector('small').textContent = f.data + (f.pagoEm ? ' · pago a ' + f.pagoEm : ' · por pagar');
     r.querySelector('b').textContent = eur(f.valor);
     if (!f.pagoEm){
