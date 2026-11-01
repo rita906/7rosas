@@ -8,6 +8,15 @@ const BASES = ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris'];
 const FORMATOS = ['Terço', 'Dezena de bolso'];
 const MODELOS = BASES.flatMap(b => FORMATOS.map(f => `${b} · ${f}`));
 const STOCK_INICIAL = 0;
+
+// Primeira pré-venda (decidido a 01-11-2026): 20 terços e 30 dezenas, à escolha do modelo, a preço especial.
+// Abre já e fecha quando esgotar; tudo chega até 7 dias depois de fechar. Os vendidos contam-se pela coluna
+// Vendidos do separador Stock, por isso uma pré-venda nova começa com os Vendidos a zero (ou com limites novos).
+const PREVENDA = {
+  limite: { 'Terço': 20, 'Dezena de bolso': 30 },
+  preco: { 'Terço': 12, 'Dezena de bolso': 7 },
+  depois: { 'Terço': 20, 'Dezena de bolso': 12 }
+};
 // O endereço público da app (o de /a/macros/ pede sessão a quem é de fora)
 const APP_URL = 'https://script.google.com/macros/s/AKfycbzDHMQaDLvuKFeFQKKcO9V5Hv6wFDiDo6OFAEM8Lc2cZCOvasNbtkcBbx-hNLXzr__Peg/exec';
 const LOJA_URL = 'https://seterosas.pt';
@@ -112,6 +121,18 @@ function lerStock_() {
   return restam;
 }
 
+// Quantos terços e dezenas ainda há na pré-venda, somando os vendidos de todos os modelos de cada formato
+function prevenda_() {
+  const linhas = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stock').getRange(2, 1, MODELOS.length, 3).getValues();
+  const vendidos = {}, restam = {};
+  FORMATOS.forEach(f => {
+    vendidos[f] = linhas.filter(r => String(r[0]).endsWith(' · ' + f)).reduce((s, r) => s + (Number(r[2]) || 0), 0);
+    restam[f] = Math.max(0, PREVENDA.limite[f] - vendidos[f]);
+  });
+  const fechou = PropertiesService.getScriptProperties().getProperty('PREVENDA_FECHOU') || '';
+  return { limite: PREVENDA.limite, preco: PREVENDA.preco, depois: PREVENDA.depois, vendidos, restam, fechou };
+}
+
 // Só as opiniões marcadas para mostrar, as mais recentes primeiro
 function opinioesPublicas_() {
   const op = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Opiniões');
@@ -148,7 +169,7 @@ function doGet(e) {
     return t.evaluate().setTitle('Sete Rosas: a tua opinião')
       .addMetaTag('viewport', 'width=device-width, initial-scale=1');
   }
-  return json_({ ok: true, restam: lerStock_(), opinioes: opinioesPublicas_() });
+  return json_({ ok: true, restam: lerStock_(), prevenda: prevenda_(), opinioes: opinioesPublicas_() });
 }
 
 // A chave do painel vive nas propriedades do script; cria-se na primeira vez que é pedida
@@ -231,7 +252,7 @@ function painelDados(chave) {
     dinheiro: { entrou, gastos, sobrou: entrou - gastos, vendido: entrou,
       porReceber: encomendas.filter(o => !o.pago).reduce((s, o) => s + o.total, 0) },
     pecasVendidas: pagas.reduce((s, o) => s + o.pecas, 0),
-    stock, encomendas, compras, opinioes, pedidos, feitos: feitosDados_()
+    stock, encomendas, compras, opinioes, pedidos, feitos: feitosDados_(), prevenda: prevenda_()
   };
 }
 
@@ -439,7 +460,8 @@ function escapar_(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-const PAGELA_URL = LOJA_URL + '/pagela-como-rezar-o-terco.pdf';
+// Vem do GitHub, que responde sempre, mesmo enquanto o domínio seterosas.pt não está ligado
+const PAGELA_URL = 'https://raw.githubusercontent.com/rita906/7rosas/main/pagela-como-rezar-o-terco.pdf';
 
 // A pagela vai em anexo; se o site não responder, vai o link
 function pagela_() {
@@ -452,10 +474,8 @@ function pagela_() {
 
 function confirmarEncomenda_(p, numero, texto, total, especiais) {
   if (!p.email) return;
-  const prazo = especiais.length
-    ? 'Os modelos esgotados ficam como pedido especial: vamos falar contigo para combinar o prazo. ' +
-      'O que está em stock chega em 5 a 8 dias úteis depois do pagamento.'
-    : 'Está tudo em stock, por isso chega em 5 a 8 dias úteis depois do pagamento.';
+  const prazo = 'É uma encomenda da pré-venda: fazemos tudo à mão na semana a seguir ao fecho da pré-venda, ' +
+    'e chega a tua casa até 7 dias depois de a pré-venda fechar. Avisamos-te quando seguir.';
   const anexo = pagela_();
   MailApp.sendEmail({
     to: p.email,
@@ -468,7 +488,7 @@ function confirmarEncomenda_(p, numero, texto, total, especiais) {
       escapar_(texto).replace(/\n/g, '<br>'),
       `<b>Total: ${eur_(total)}</b>, com portes incluídos.`,
       `Vamos enviar-te uma mensagem para o ${escapar_(p.tel)} com os dados para pagares por MB WAY. ` +
-        'Assim que o pagamento chegar, começamos a preparar o teu terço.',
+        'O teu lugar na pré-venda fica guardado; assim que o pagamento chegar, fica confirmado.',
       prazo,
       anexo ? 'Juntamos a pagela <b>Como rezar o terço</b>, para rezarem juntos desde o primeiro dia.'
         : `Deixamos-te a pagela <a href="${PAGELA_URL}" style="color:#9a7843">Como rezar o terço</a>, para rezarem juntos desde o primeiro dia.`,
@@ -536,11 +556,18 @@ function doPost(e) {
     const itens = (p.itens || []).filter(it => MODELOS.includes(it.modelo) && it.q > 0);
     if (!itens.length || !p.nome || !p.tel) return json_({ ok: false, erro: 'dados' });
 
-    // Sem stock não se recusa: o modelo esgotado fica como pedido especial e o prazo combina-se com a família
-    const pedido = {};
-    itens.forEach(it => { pedido[it.modelo] = (pedido[it.modelo] || 0) + Number(it.q); });
-    const restam = lerStock_();
-    especiais = Object.keys(pedido).filter(m => pedido[m] > restam[m]);
+    // Pré-venda: cada formato tem um limite para todos os modelos juntos; o que passar do que resta é recusado
+    const pedido = {}, porFormato = {};
+    itens.forEach(it => {
+      it.q = Math.floor(Number(it.q));
+      it.formato = it.modelo.split(' · ')[1];
+      it.preco = PREVENDA.preco[it.formato];
+      pedido[it.modelo] = (pedido[it.modelo] || 0) + it.q;
+      porFormato[it.formato] = (porFormato[it.formato] || 0) + it.q;
+    });
+    const pv = prevenda_();
+    if (FORMATOS.some(f => (porFormato[f] || 0) > pv.restam[f])) return json_({ ok: false, erro: 'esgotou', prevenda: pv });
+    especiais = [];
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const stock = ss.getSheetByName('Stock');
@@ -554,8 +581,7 @@ function doPost(e) {
     numero = primeiraVazia_(enc, C.numero) - 1;
     total = itens.reduce((s, it) => s + it.q * it.preco, 0);
     const pecas = itens.reduce((s, it) => s + Number(it.q), 0);
-    texto = itens.map(it => `${it.q} × ${it.formato}, ${it.det}` +
-      (especiais.includes(it.modelo) ? ' (PEDIDO ESPECIAL: esgotado, combinar prazo)' : ' (em stock: 5 a 8 dias úteis)')).join('\n');
+    texto = itens.map(it => `${it.q} × ${it.formato}, ${it.modelo.split(' · ')[0]} (pré-venda, ${eur_(it.preco)} cada)`).join('\n');
     const codigo = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
     enc.getRange(numero + 1, 1, 1, C.token).setValues([[numero, new Date(), p.nome, "'" + p.tel, p.entrega, p.morada || '',
       p.nif ? "'" + p.nif : '', p.nomeFiscal || '', texto, pecas, total, p.obs || '', false, false, '', '',
@@ -572,5 +598,16 @@ function doPost(e) {
     `\n\nFolha: ${ss.getUrl()}`);
   try { confirmarEncomenda_(p, numero, texto, total, especiais); } catch (err) { console.error(err); }
 
-  return json_({ ok: true, numero, total, especiais, restam: lerStock_() });
+  // Quando acaba tudo, a pré-venda fecha: guarda-se o dia e avisa-se a Rita, porque o prazo de 7 dias conta daí
+  const pv = prevenda_();
+  if (!pv.fechou && FORMATOS.every(f => pv.restam[f] === 0)) {
+    const hoje = Utilities.formatDate(new Date(), 'Europe/Lisbon', 'dd-MM-yyyy');
+    PropertiesService.getScriptProperties().setProperty('PREVENDA_FECHOU', hoje);
+    pv.fechou = hoje;
+    MailApp.sendEmail(Session.getEffectiveUser().getEmail(), 'Sete Rosas: a pré-venda esgotou',
+      `Venderam-se os ${PREVENDA.limite['Terço']} terços e as ${PREVENDA.limite['Dezena de bolso']} dezenas. ` +
+      `A pré-venda fechou hoje, ${hoje}, e tudo tem de chegar a casa das famílias até 7 dias depois.\n\n` +
+      'O que há para fazer, modelo a modelo, está no painel, no Início.');
+  }
+  return json_({ ok: true, numero, total, especiais, restam: lerStock_(), prevenda: pv });
 }

@@ -171,10 +171,30 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .msg{white-space:pre-wrap;font-size:14px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:220px;overflow:auto;text-align:left}
 .note{font-size:13px;color:var(--muted)}
 footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:20px}
+/* pré-venda: um cartão com os lugares que restam e o preço especial ao lado do preço de depois */
+.pv{background:var(--paper);border:1px solid var(--gold-soft);border-radius:22px;padding:26px 20px;display:grid;gap:16px;width:100%;box-sizing:border-box;justify-items:center;box-shadow:0 10px 30px rgba(154,120,67,.12)}
+.pv h2{margin:0}
+.pv .prose{margin:0}
+.pv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+@media(max-width:520px){.pv-grid{grid-template-columns:1fr}}
+.pv-item{border-radius:16px;padding:16px 14px;display:grid;gap:6px;justify-items:center}
+.pv-item.t{background:var(--sky)}.pv-item.d{background:var(--blush)}
+.pv-item h3{margin:0;font-family:var(--display);font-weight:400;font-size:22px}
+.pv-preco{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;justify-content:center}
+.pv-preco b{font-family:var(--display);font-weight:400;font-size:36px;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
+.pv-preco span{font-size:14px;color:var(--muted)}
+.pv-barra{width:100%;height:10px;border-radius:999px;background:rgba(255,255,255,.75);overflow:hidden}
+.pv-barra i{display:block;height:100%;border-radius:999px;background:var(--rose);transition:width .6s ease}
+.pv-resta{font-size:15px;font-weight:700;color:var(--rose)}
+.pv-resta.fim{color:var(--muted)}
+.pv .prazo-pv{font-size:14px;color:var(--muted);max-width:30em;text-align:center}
+.pv-antes{font-size:13px;color:var(--muted)}
+.mao{background:var(--honey,#fbf0d9);border-radius:22px;padding:26px 22px}
+@media(prefers-reduced-motion:reduce){.pv-barra i{transition:none}}
 </style>
 
 <nav class="topbar" aria-label="Navegação"><div class="topbar-in"><button type="button" class="casa menu-bt" id="menuBt" aria-label="Abrir o menu" aria-expanded="false" aria-controls="gaveta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><a class="casa" href="#topo" aria-label="Voltar ao início"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a><span class="marca">Sete Rosas</span></div></nav>
-<div class="aviso" id="aviso"><b>Encomendas disponíveis em breve.</b> Segue-nos no Instagram, <a href="https://www.instagram.com/seterosas.pt/" target="_blank" rel="noopener">Sete Rosas</a>, para saberes quando abrem.</div>
+<div class="aviso" id="aviso"><b>Primeira pré-venda aberta.</b> <span id="avisoResta">Só 20 terços e 30 dezenas.</span> <a href="#t-escolher">Reservar o meu</a></div>
 <div class="veu" id="veu" hidden></div>
 <aside class="gaveta" id="gaveta" aria-label="Menu" hidden>
   <p class="gaveta-tit">Sete Rosas</p>
@@ -182,12 +202,13 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
   <a href="#quem-somos">Quem somos</a>
   <a href="#t-fatima">Porquê o Santo Terço</a>
   <a href="#t-rezar">Como rezar o terço</a>
-  <a href="#t-escolher">Encomendar</a>
+  <a href="#prevenda">Pré-venda</a>
+  <a href="#t-escolher">Reservar</a>
   <a href="#t-pedidos">Pedidos personalizados</a>
   <a href="#opinioes" id="menuOps" hidden>O que dizem as famílias</a>
   <p class="gaveta-motto">Ad Iesum per Mariam</p>
 </aside>
-<a class="flutuante" href="#t-escolher">Quero encomendar</a>
+<a class="flutuante" href="#t-escolher">Reservar o meu</a>
 <div class="wrap">
   <header id="topo">
     <img class="hero" src="__LOGO__" alt="Sete meninas de joelhos, com o terço na mão, diante de Nossa Senhora de Fátima, numa coroa de rosas">
@@ -196,6 +217,32 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
     <p class="missao">Queremos que todas as famílias rezem o terço, pelas mãos das crianças.</p>
     <p class="lead">As sete rosas são sete irmãs: <b>Sofia, Inês, Helena, Maria do Mar, Luzinha, Benedita e Assunção</b>, a mais nova. Fazem à mão terços coloridos, com contas resistentes e cordel forte, para aguentar até as mãos mais pequenas. Cada terço leva uma pagela de como rezar o terço.</p>
   </header>
+
+  <section class="pv" id="prevenda" aria-labelledby="t-pv">
+    <div class="head">
+      <p class="kicker">Primeira pré-venda</p>
+      <h2 id="t-pv">Só 20 terços e 30 dezenas</h2>
+    </div>
+    <p class="prose">Cada peça é feita à mão, uma a uma, por sete irmãs. Por isso fazemos poucas. Nesta primeira pré-venda há 20 terços e 30 dezenas, ao preço especial de quem chega primeiro. Quando acabarem, a pré-venda fecha.</p>
+    <div class="pv-grid">
+      <div class="pv-item t">
+        <h3>Terço</h3>
+        <div class="pv-preco"><b>12 €</b><span>na pré-venda</span></div>
+        <p class="pv-antes">Depois da pré-venda, 20 €</p>
+        <div class="pv-barra" aria-hidden="true"><i id="barTerco" style="width:100%"></i></div>
+        <p class="pv-resta" id="restaTerco">20 de 20 por reservar</p>
+      </div>
+      <div class="pv-item d">
+        <h3>Dezena de bolso</h3>
+        <div class="pv-preco"><b>7 €</b><span>na pré-venda</span></div>
+        <p class="pv-antes">Depois da pré-venda, 12 €</p>
+        <div class="pv-barra" aria-hidden="true"><i id="barDezena" style="width:100%"></i></div>
+        <p class="pv-resta" id="restaDezena">30 de 30 por reservar</p>
+      </div>
+    </div>
+    <p class="prazo-pv">Escolhes o modelo, com portes incluídos. Fazemos tudo à mão na semana a seguir ao fecho da pré-venda, e chega a tua casa até 7 dias depois de fechar.</p>
+    <a class="btn" href="#t-escolher" id="pvBt">Reservar o meu</a>
+  </section>
 
   <section id="quem-somos" aria-labelledby="t-quem">
     <div class="head">
@@ -206,6 +253,17 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <p>Somos sete irmãs: a Sofia, a Inês, a Helena, a Maria do Mar, a Luzinha, a Benedita e a Assunção, a mais nova. Em nossa casa reza-se o terço todos os dias, e aos domingos vamos à Missa tradicional, em latim.</p>
       <p>Os terços que encontrávamos eram de adultos: escuros, compridos e fáceis de partir. Por isso começámos a fazer os nossos, com contas coloridas e cordel forte, à medida das mãos pequenas.</p>
       <p>Fazemos cada terço à mão, com a nossa mãe, à mesa da cozinha, e cada um leva a pagela de como rezar o terço. Em Fátima, Nossa Senhora pediu a três crianças que rezassem o terço todos os dias. É isso que queremos ajudar todas as famílias a fazer.</p>
+    </div>
+  </section>
+
+  <section class="mao" aria-labelledby="t-mao">
+    <div class="head">
+      <p class="kicker">Feito à mão, por mãos pequenas</p>
+      <h2 id="t-mao">Nenhum é perfeito. Todos são feitos com amor.</h2>
+    </div>
+    <div class="prose">
+      <p>Os nossos terços são feitos por crianças. Às vezes um nó fica mais gordo, uma conta fica mais torta, o cordel sai um bocadinho mais comprido de um lado. Não o escondemos: é a marca de quem os fez.</p>
+      <p>Cada um passa pelas mãos de uma de nós, à mesa da cozinha, com tempo e com cuidado. Nenhum sai exatamente igual a outro. Por isso fazemos poucos, e por isso cada um vale tanto para nós.</p>
     </div>
   </section>
 
@@ -293,8 +351,8 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <h2 id="t-como">Como funciona</h2>
     </div>
     <ol class="steps">
-      <li><span class="n">1</span><b>Escolhes</b><p>A dezena ou o terço, num dos nossos quatro modelos.</p></li>
-      <li><span class="n">2</span><b>Encomendas</b><p>Encomendas aqui e recebes a confirmação por email, com a pagela de como rezar o terço. Pagas por MB WAY, com portes incluídos.</p><p class="prazo"><b>Em stock:</b> chega em 5 a 8 dias úteis.</p></li>
+      <li><span class="n">1</span><b>Reservas</b><p>A dezena ou o terço, num dos nossos quatro modelos, ao preço da pré-venda.</p></li>
+      <li><span class="n">2</span><b>Pagas</b><p>Recebes a confirmação por email, com a pagela de como rezar o terço, e uma mensagem com os dados para pagares por MB WAY. Portes incluídos.</p><p class="prazo"><b>Pré-venda:</b> chega até 7 dias depois de a pré-venda fechar.</p></li>
       <li><span class="n">3</span><b>Rezam juntos</b><p>Chega com a pagela de como rezar o terço, pronto para a primeira dezena em família.</p></li>
     </ol>
   </section>
@@ -309,8 +367,8 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 
   <section aria-labelledby="t-escolher">
     <div class="head">
-      <p class="kicker">A encomenda</p>
-      <h2 id="t-escolher">Escolhe o teu terço</h2>
+      <p class="kicker">Pré-venda</p>
+      <h2 id="t-escolher">Reserva o teu terço</h2>
     </div>
     <div class="card">
       <div class="group">
@@ -319,6 +377,7 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       </div>
       <div class="group">
         <span class="legend">Modelo de cores</span>
+        <p class="hint" id="restaEscolha" style="text-align:center;margin:0"></p>
         <div class="choice" id="optCores"></div>
       </div>
 
@@ -398,12 +457,12 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <p class="hint">Todas as encomendas levam fatura. Sem NIF, a fatura sai em nome de consumidor final.</p>
       <div class="field"><label for="obs">Alguma nota? <span class="hint">(é para oferta, para um batizado, uma primeira comunhão...)</span></label><textarea id="obs" rows="2"></textarea></div>
       <p class="hint" id="erro" role="alert" hidden></p>
-      <div class="actions"><button class="btn" type="submit">Fazer a encomenda</button></div>
+      <div class="actions"><button class="btn" type="submit">Reservar na pré-venda</button></div>
     </form>
   </section>
 
   <section id="fim" hidden aria-labelledby="t-fim">
-    <h2 id="t-fim">Obrigada pela tua encomenda</h2>
+    <h2 id="t-fim">O teu lugar na pré-venda está guardado</h2>
     <div class="card">
       <p class="fim-num" id="fimNum"></p>
       <p id="fimEmail"></p>
@@ -419,10 +478,14 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 
 <script>
 // Enquanto for false, a loja mostra "em breve" e não aceita encomendas (os pedidos personalizados continuam abertos)
-const ABERTAS=false;
+const ABERTAS=true;
 const API="https://script.google.com/macros/s/AKfycbzDHMQaDLvuKFeFQKKcO9V5Hv6wFDiDo6OFAEM8Lc2cZCOvasNbtkcBbx-hNLXzr__Peg/exec";
 const MODELOS={dezena:"Dezena de bolso",terco:"Terço"};
+// Preços da primeira pré-venda; o servidor usa os mesmos e é ele que conta
 const PRECOS={terco:{modelo:12,custom:15},dezena:{modelo:7,custom:9}};
+const DEPOIS={terco:20,dezena:12};
+// Quantos ainda há por formato (vem da folha); antes de chegar, mostra os limites
+let pv={limite:{"Terço":20,"Dezena de bolso":30},restam:{"Terço":20,"Dezena de bolso":30}};
 const ARCO=["#f2b8c6","#f7cfa8","#f3df98","#bcd9b0","#b6cfee","#cfc0ea"];
 const PEROLA="#fbf6ec";
 const COLECAO=[
@@ -448,7 +511,7 @@ function escolhas(el,opts,get,set){
   el.innerHTML="";
   opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="opt"+(o.wide?" wide":"");
     b.setAttribute("aria-pressed",get()===o.id);
-    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.ave&&restam?(restam[o.nome+" · "+MODELOS[modelo]]>0?`<span class="stock em">Em stock · ${restam[o.nome+" · "+MODELOS[modelo]]} ${restam[o.nome+" · "+MODELOS[modelo]]===1?"disponível":"disponíveis"}</span>`:'<span class="stock enc">Esgotado · pede-nos por mensagem</span>'):""}${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span>`:""}`;
+    b.innerHTML=`${o.ave?'<span class="beads"></span>':""}<span class="name">${o.nome}</span><span class="desc">${o.desc}</span>${o.soon?'<span class="price">Brevemente</span>':o.preco!=null?`<span class="price">${eur(o.preco)}</span><span class="pv-antes">depois ${eur(DEPOIS[modelo])}</span>`:""}`;
     if(o.soon){b.disabled=true;b.setAttribute("aria-disabled","true");}
     if(o.ave)dezena(b.querySelector(".beads"),o.ave,o.pater,"#e6d9c3");
     b.onclick=()=>{set(o.id);render()};el.appendChild(b)});
@@ -459,10 +522,15 @@ function swatches(el,lista,get,set){
     b.title=c[0];b.setAttribute("aria-label",c[0]);b.setAttribute("aria-pressed",get()===c);
     b.onclick=()=>{set(c);render()};el.appendChild(b)});
 }
+// Quantos deste formato ainda se podem juntar, descontando o que já está no cesto
+function livres(m){return Math.max(0,(pv.restam[MODELOS[m]]||0)-cesto.filter(it=>it.nome===MODELOS[m]).reduce((a,it)=>a+it.q,0))}
 function render(){
-  const sel=COLECAO.find(x=>x.id===cores);
-  $("add").textContent=sel&&restam&&!(restam[sel.nome+" · "+MODELOS[modelo]]>0)?"Esgotado: pedir por mensagem":"Juntar à encomenda";
-  if(!ABERTAS){$("add").textContent="Encomendas em breve";$("add").disabled=true;}
+  const livre=livres(modelo);
+  $("add").disabled=!ABERTAS||livre===0;
+  $("add").textContent=!ABERTAS?"Encomendas em breve":livre===0?(pv.restam[MODELOS[modelo]]===0?"Esgotado":"Já tens todos no cesto"):"Reservar";
+  $("restaEscolha").textContent=pv.restam[MODELOS[modelo]]===0?"Os "+(modelo==="terco"?"terços":"dezenas")+" da pré-venda esgotaram."
+    :"Restam "+pv.restam[MODELOS[modelo]]+" de "+pv.limite[MODELOS[modelo]]+" "+(modelo==="terco"?"terços":"dezenas")+" nesta pré-venda.";
+  qtd=Math.max(1,Math.min(qtd,livre||1));$("qtd").textContent=qtd;
   escolhas($("optModelo"),[{id:"dezena",nome:"Dezena de bolso",desc:"Uma dezena sempre à mão"},{id:"terco",nome:"Terço",desc:"Para rezar o terço em família"}],()=>modelo,v=>modelo=v);
   escolhas($("optCores"),[...COLECAO.map(c=>({...c,preco:PRECOS[modelo].modelo}))],()=>cores,v=>cores=v);
   $("custom").hidden=cores!=="custom";
@@ -473,24 +541,23 @@ function render(){
 }
 function cestoRender(){
   const box=$("items");box.innerHTML="";
-  if(!cesto.length){box.innerHTML='<p class="empty">Ainda não escolheste nenhum terço.</p>'}
+  if(!cesto.length){box.innerHTML='<p class="empty">Ainda não reservaste nenhum terço.</p>'}
   cesto.forEach((it,i)=>{const d=document.createElement("div");d.className="item";
     d.innerHTML=`<div><b>${it.q} × ${it.nome}</b><small>${it.det}</small></div><div>${eur(it.q*it.preco)} <button type="button" aria-label="Tirar">tirar</button></div>`;
-    d.querySelector("button").onclick=()=>{cesto.splice(i,1);cestoRender()};box.appendChild(d)});
+    d.querySelector("button").onclick=()=>{cesto.splice(i,1);cestoRender();render()};box.appendChild(d)});
   $("total").textContent=eur(total());
   $("moradaBox").hidden=$("entrega").value!=="ctt";
 }
 function total(){return cesto.reduce((a,it)=>a+it.q*it.preco,0)}
 
 $("menos").onclick=()=>{qtd=Math.max(1,qtd-1);$("qtd").textContent=qtd};
-$("mais").onclick=()=>{qtd=Math.min(20,qtd+1);$("qtd").textContent=qtd};
+$("mais").onclick=()=>{qtd=Math.min(Math.max(1,livres(modelo)),qtd+1);$("qtd").textContent=qtd};
 $("add").onclick=()=>{
   const c=COLECAO.find(x=>x.id===cores);
-  const esg=c&&restam&&!(restam[c.nome+" · "+MODELOS[modelo]]>0);
-  if(esg){$("pmsg").value="Gostava de encomendar "+qtd+" × "+MODELOS[modelo].toLowerCase()+" "+c.nome+", que está esgotado.";$("pedidos").scrollIntoView({behavior:"smooth"});return}
+  if(!c||livres(modelo)<qtd)return;
   cesto.push(c?{modelo:c.nome+" · "+MODELOS[modelo],nome:MODELOS[modelo],det:c.nome,preco:PRECOS[modelo].modelo,q:qtd}
     :{modelo:"Personalizado · "+MODELOS[modelo],nome:MODELOS[modelo],det:`Personalizado: contas ${contas[0].toLowerCase()}, cordel ${cordel[0].toLowerCase()}`,preco:PRECOS[modelo].custom,q:qtd});
-  qtd=1;$("qtd").textContent=1;cestoRender();
+  qtd=1;$("qtd").textContent=1;cestoRender();render();
 };
 $("entrega").onchange=cestoRender;
 $("querNif").onchange=()=>{$("nifBox").hidden=!$("querNif").checked};
@@ -508,7 +575,7 @@ $("form").addEventListener("submit",async e=>{
   if($("entrega").value==="ctt"&&!$("morada").value.trim())falta.push("a morada");
   if($("querNif").checked&&!nifValido($("nif").value.trim()))falta.push("um NIF válido, com 9 algarismos");
   if(falta.length){err.textContent="Falta: "+falta.join(", ")+".";err.hidden=false;return}
-  err.hidden=true;bt.disabled=true;bt.textContent="A enviar a encomenda…";
+  err.hidden=true;bt.disabled=true;bt.textContent="A guardar o teu lugar…";
   const pedido={nome:$("nome").value.trim(),email:$("email").value.trim(),tel:$("tel").value.trim(),
     entrega:$("entrega").value==="ctt"?"CTT":"Em mão",morada:$("entrega").value==="ctt"?$("morada").value.trim():"",
     nif:$("querNif").checked?$("nif").value.trim():"",nomeFiscal:$("querNif").checked?$("nomeFiscal").value.trim():"",
@@ -516,19 +583,20 @@ $("form").addEventListener("submit",async e=>{
   try{
     const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(pedido)});
     const j=await r.json();
+    if(!j.ok&&j.erro==="esgotou"){pv=j.prevenda;contador();render();
+      err.textContent="Entretanto alguém reservou primeiro e já não há tantos como pediste. Vê quantos restam e ajusta o cesto.";err.hidden=false;return}
     if(!j.ok)throw new Error(j.erro||"erro");
     $("fimNum").textContent="Encomenda n.º "+j.numero+" registada.";
     $("fimTel").textContent=pedido.tel;$("valor").textContent=eur(j.total);
     $("fimEmail").textContent="Enviámos a confirmação para "+pedido.email+", com a pagela de como rezar o terço.";
-    $("fimPrazo").textContent=j.especiais&&j.especiais.length
-      ?"Os modelos esgotados ficam como pedido especial: vamos falar contigo para combinar o prazo. O que está em stock chega em 5 a 8 dias úteis depois do pagamento."
-      :"Está em stock: chega em 5 a 8 dias úteis depois do pagamento.";
-    if(j.restam){restam=j.restam;render();}
-    cesto=[];cestoRender();e.target.reset();$("nifBox").hidden=true;
+    $("fimPrazo").textContent="Fazemos tudo à mão na semana a seguir ao fecho da pré-venda: chega a tua casa até 7 dias depois de fechar.";
+    if(j.prevenda){pv=j.prevenda;contador();}
+    if(j.restam){restam=j.restam;}
+    cesto=[];cestoRender();render();e.target.reset();$("nifBox").hidden=true;
     $("fim").hidden=false;$("fim").scrollIntoView({behavior:"smooth"});
   }catch(x){
     err.textContent="Não conseguimos registar a encomenda. Tenta outra vez daqui a um minuto.";err.hidden=false;
-  }finally{bt.disabled=false;bt.textContent="Fazer a encomenda";}
+  }finally{bt.disabled=false;bt.textContent="Reservar na pré-venda";}
 });
 $("pform").addEventListener("submit",async e=>{
   e.preventDefault();const err=$("perro"),bt=e.target.querySelector('button[type="submit"]');
@@ -543,7 +611,20 @@ $("pform").addEventListener("submit",async e=>{
   }catch(x){err.textContent="Não conseguimos enviar. Tenta outra vez daqui a um minuto.";err.hidden=false}
   finally{bt.disabled=false;bt.textContent="Enviar a mensagem";}
 });
-fetch(API).then(r=>r.json()).then(j=>{if(j.ok){restam=j.restam;render();opinioes(j.opinioes||[]);}}).catch(()=>{});
+fetch(API).then(r=>r.json()).then(j=>{if(j.ok){restam=j.restam;if(j.prevenda)pv=j.prevenda;contador();render();opinioes(j.opinioes||[]);}}).catch(()=>{});
+// O contador da pré-venda: o que resta de cada formato, na barra do topo, no cartão e no botão flutuante
+function contador(){
+  const rt=pv.restam["Terço"],rd=pv.restam["Dezena de bolso"],lt=pv.limite["Terço"],ld=pv.limite["Dezena de bolso"];
+  const linha=(n,l,el,bar,um,muitos)=>{$(bar).style.width=(n/l*100)+"%";$(el).textContent=n===0?"Esgotado":(n===1?"Só resta 1 "+um:"Restam "+n+" de "+l+" "+muitos);$(el).classList.toggle("fim",n===0)};
+  linha(rt,lt,"restaTerco","barTerco","terço","terços");
+  linha(rd,ld,"restaDezena","barDezena","dezena","dezenas");
+  const fim=rt===0&&rd===0;
+  $("avisoResta").textContent=fim?"Esgotou. Obrigada a todas as famílias!":"Restam "+rt+" de "+lt+" terços e "+rd+" de "+ld+" dezenas.";
+  const f=document.querySelector(".flutuante");
+  if(fim){f.hidden=true;$("pvBt").hidden=true;$("aviso").querySelector("a").hidden=true;
+    $("prevenda").querySelector(".prose").textContent="A primeira pré-venda esgotou. Obrigada! Segue-nos no Instagram, Sete Rosas, para saberes quando abre a próxima.";}
+  else{f.textContent="Reservar · restam "+(rt+rd);}
+}
 function opinioes(lista){
   if(!lista.length)return;
   const box=$("opsList");box.innerHTML="";
@@ -572,5 +653,5 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("gaveta").hidden
 if(!ABERTAS){
   const f=document.querySelector(".flutuante");f.textContent="Encomendas em breve";f.href="#aviso";
   const fb=$("form").querySelector('button[type="submit"]');fb.disabled=true;fb.textContent="Encomendas em breve";
-}else{$("aviso").hidden=true;}
+}
 </script>

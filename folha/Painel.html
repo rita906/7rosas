@@ -125,6 +125,12 @@ input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--
 .buyedit .actions{grid-column:1/-1}
 @media(max-width:600px){.buyedit{grid-template-columns:1fr}}
 .note{font-size:13px;color:var(--muted);text-align:center}
+.pvt{width:100%;border-collapse:collapse;font-size:16px}
+.pvt th,.pvt td{padding:8px 6px;border-bottom:1px dashed var(--line);text-align:center}
+.pvt th:first-child,.pvt td:first-child{text-align:left;font-family:var(--display);font-size:19px}
+.pvt th{font-size:14px;color:var(--muted);font-weight:700}
+.pvt tfoot td{font-weight:700;border-bottom:0}
+.pvt .zero{color:var(--line)}
 /* a pagar: quem fez escolhe-se em botões redondos; um cartão por pessoa com o que falta receber */
 .quem{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
 .quem button{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 14px;cursor:pointer;color:var(--ink)}
@@ -184,6 +190,12 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
       <div class="legend"><span><i class="dot" style="background:#e9a9b8"></i><span id="lgCusto"></span></span><span><i class="dot" style="background:#dcc28f"></i><span id="lgSobra"></span></span></div>
       <p class="note">É uma média: o preço médio de cada peça vendida e o custo médio dos materiais que levou.</p>
     </div>
+  </section>
+
+  <section data-v="inicio">
+    <div class="head"><p class="kicker">A pré-venda</p><h2>O que há para fazer</h2></div>
+    <p class="lead" id="pvEstado"></p>
+    <div class="card" id="pvTabela"><p class="loading">…</p></div>
   </section>
 
   <section data-v="inicio">
@@ -306,6 +318,22 @@ function desenhar(){
     $('lgCusto').textContent = eur(custo) + ' para materiais';
     $('lgSobra').textContent = eur(preco - custo) + ' sobram';
     $('licao').hidden = false;
+  }
+
+  // pré-venda: quantos se reservaram de cada modelo (é o que há para fazer) e quantos ainda há
+  const pv = dados.prevenda;
+  if (pv){
+    const T = 'Terço', D = 'Dezena de bolso';
+    $('pvEstado').textContent = pv.fechou
+      ? 'A pré-venda fechou a ' + pv.fechou + '. Tudo tem de chegar a casa das famílias até 7 dias depois.'
+      : 'Reservados ' + pv.vendidos[T] + ' de ' + pv.limite[T] + ' terços e ' + pv.vendidos[D] + ' de ' + pv.limite[D] + ' dezenas. Fecha quando esgotar.';
+    const linhas = {};
+    dados.stock.forEach(x => { const [b, f] = x.modelo.split(' · '); (linhas[b] = linhas[b] || {})[f] = x.vendidos; });
+    const cel = n => '<td' + (n ? '' : ' class="zero"') + '>' + n + '</td>';
+    $('pvTabela').innerHTML = '<table class="pvt"><thead><tr><th>Modelo</th><th>Terços</th><th>Dezenas</th></tr></thead><tbody>' +
+      Object.keys(linhas).map(b => '<tr><td></td>' + cel(linhas[b][T] || 0) + cel(linhas[b][D] || 0) + '</tr>').join('') +
+      '</tbody><tfoot><tr><td>Total</td><td>' + pv.vendidos[T] + '</td><td>' + pv.vendidos[D] + '</td></tr></tfoot></table>';
+    $('pvTabela').querySelectorAll('tbody tr td:first-child').forEach((td, i) => td.textContent = Object.keys(linhas)[i]);
   }
 
   // stock: um cartão por modelo com as contas desenhadas, uma linha para terços e outra para dezenas;
