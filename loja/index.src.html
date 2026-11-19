@@ -198,6 +198,14 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 .pv .prazo-pv{font-size:14px;color:var(--muted);max-width:30em;text-align:center}
 .pv-antes{font-size:13px;color:var(--muted)}
 .mao{background:var(--honey,#fbf0d9);border-radius:22px;padding:26px 22px}
+.ebook{background:var(--sky);border-radius:22px;padding:26px 22px}
+.ebook-capa{width:min(260px,70vw);border-radius:6px;box-shadow:0 10px 30px rgba(75,64,56,.18)}
+.ebook-pags{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:420px;width:100%}
+.ebook-pags img{width:100%;border-radius:4px;border:1px solid var(--line);background:var(--paper)}
+.ebook-lista{margin:0 auto;padding-left:1.2em;text-align:left}
+.ebook-preco{font-family:var(--display);font-size:34px;color:var(--gold);margin:0}
+.ebook-preco small{display:block;font-family:var(--body);font-size:14px;color:var(--muted)}
+.ebook .btn[aria-disabled="true"]{opacity:.55;cursor:default}
 @media(prefers-reduced-motion:reduce){.pv-barra i{transition:none}}
 </style>
 
@@ -213,6 +221,7 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
   <a href="#prevenda">Pré-venda</a>
   <a href="#t-escolher">Reservar</a>
   <a href="#t-pedidos">Pedidos personalizados</a>
+  <a href="#ebook">E-book «Vamos Conhecer Jesus»</a>
   <a href="#opinioes" id="menuOps" hidden>O que dizem as famílias</a>
   <p class="gaveta-motto">Ad Iesum per Mariam</p>
 </aside>
@@ -359,6 +368,30 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <h2 id="t-rosas">Uma coroa de rosas para Nossa Senhora</h2>
     </div>
     <p class="prose">Rosário quer dizer coroa de rosas: cada Ave-Maria é uma rosa oferecida a Nossa Senhora. E Santa Teresinha do Menino Jesus prometeu deixar cair do Céu uma chuva de rosas.</p>
+  </section>
+
+  <section class="ebook" id="ebook" aria-labelledby="t-ebook">
+    <div class="head">
+      <p class="kicker">O nosso livro</p>
+      <h2 id="t-ebook">Vamos Conhecer Jesus</h2>
+    </div>
+    <img class="ebook-capa" src="__EBOOK_CAPA__" alt="Capa do livro Vamos Conhecer Jesus, com as Sete Rosas à volta de uma cruz e de rosas.">
+    <div class="prose">
+      <p>A nossa mãe escreveu este livro para nos ensinar em casa quem é Jesus, antes da Primeira Comunhão. Agora somos nós que levamos outras crianças pelo que aprendemos.</p>
+      <ul class="ebook-lista">
+        <li>Quem é Deus e o que conta a Bíblia</li>
+        <li>A vida de Jesus, do presépio à Ressurreição</li>
+        <li>A Igreja, os Mandamentos e os Sacramentos</li>
+        <li>As orações e como se reza o terço</li>
+      </ul>
+      <p>São 66 páginas ilustradas, em PDF, para ler em família, devagar, uma página de cada vez. Também dá para imprimir em A5.</p>
+    </div>
+    <div class="ebook-pags">
+      <img src="__EBOOK_P1__" alt="Página de amostra: Jesus nasceu em Belém." loading="lazy">
+      <img src="__EBOOK_P2__" alt="Página de amostra: o terço." loading="lazy">
+    </div>
+    <p class="ebook-preco">5,99 €<small>E-book em PDF, recebes logo no email</small></p>
+    <a class="btn" id="ebookBt" href="#ebook" aria-disabled="true">Disponível em breve</a>
   </section>
 
   <section aria-labelledby="t-como">

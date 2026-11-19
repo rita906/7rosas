@@ -12,6 +12,6 @@ html = ('<!doctype html>\n<html lang="pt-PT">\n<head>\n<meta charset="utf-8">\n'
         '<meta property="og:title" content="Sete Rosas">\n<meta property="og:description" content="Um terço de cada vez, até à paz no mundo.">\n'
         '<meta property="og:image" content="https://seterosas.pt/img/logo.jpg">\n<link rel="icon" href="img/logo.jpg">\n'
         + reset + head + '</head>\n<body>\n' + s[i:] + '\n</body>\n</html>\n')
-html = html.replace('__LOGO__', 'img/logo.jpg').replace('__ROSAS__', 'img/rosas.jpg').replace('__COMO__', 'img/como-rezar.jpg')
-assert '__LOGO__' not in html and '__ROSAS__' not in html and '__COMO__' not in html
+html = html.replace('__LOGO__', 'img/logo.jpg').replace('__ROSAS__', 'img/rosas.jpg').replace('__COMO__', 'img/como-rezar.jpg').replace('__EBOOK_CAPA__', 'img/ebook-capa.jpg').replace('__EBOOK_P1__', 'img/ebook-p1.jpg').replace('__EBOOK_P2__', 'img/ebook-p2.jpg')
+assert '__EBOOK_' not in html and '__LOGO__' not in html and '__ROSAS__' not in html and '__COMO__' not in html
 (raiz / 'index.html').write_text(html, encoding='utf-8')
