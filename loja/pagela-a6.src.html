@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<title>Como rezar o terço, cartões A6 · Sete Rosas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Karla:wght@400;500;700&display=swap">
+<style>
+/* Dois cartões A6 para plastificar, frente e verso, sem o latim (Rita, 25-11-2026). Cartão 1: mistérios / como rezar. Cartão 2: orações I / orações II.
+   Base: a pagela, com o ar da loja: creme, dourado, as rosas da aguarela e uma moldura dupla.
+   A frente tem os mistérios e os dias; o verso, como se reza, pela ordem da família. */
+@page{size:105mm 148mm;margin:0}
+:root{--ink:#4b4038;--muted:#85786b;--gold:#9a7843;--gold-soft:#d9c39b;--rose:#b56f7f;--cream:#fdf9f3;--paper:#fffdf9}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Karla",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:105mm;height:148mm;position:relative;overflow:hidden;page-break-after:always;background:var(--cream);
+  padding:8.5mm 9.5mm 8mm;display:flex;flex-direction:column;align-items:center}
+.page::before{content:"";position:absolute;inset:3.2mm;border:0.45mm solid var(--gold-soft);border-radius:4mm;pointer-events:none}
+.page::after{content:"";position:absolute;inset:4.4mm;border:0.15mm solid var(--gold-soft);border-radius:3.2mm;pointer-events:none}
+.rosas{width:72mm;height:auto;display:block;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent),linear-gradient(to bottom,#000 70%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent),linear-gradient(to bottom,#000 70%,transparent);mask-composite:intersect}
+.kicker{font-size:6.2pt;letter-spacing:.22em;text-transform:uppercase;color:var(--rose);font-weight:700;margin:1.4mm 0 0}
+h1{font-family:"IM Fell English",Georgia,serif;font-weight:400;color:var(--gold);margin:0.6mm 0 0;text-align:center;line-height:1.05;font-size:18pt}
+.motto{font-family:"IM Fell English",Georgia,serif;font-style:italic;color:var(--rose);font-size:9pt;margin:0.6mm 0 0}
+
+/* frente: os três grupos de mistérios */
+.grupos{width:100%;display:grid;gap:2.2mm;margin-top:3mm}
+.grupo{display:grid;grid-template-columns:23mm 1fr;gap:2.4mm;align-items:start;border-top:0.2mm solid var(--gold-soft);padding-top:2mm}
+.grupo .nome{font-family:"IM Fell English",Georgia,serif;color:var(--rose);font-size:11pt;line-height:1.05}
+.grupo .dias{display:block;font-family:"Karla",Arial,sans-serif;font-size:6.2pt;color:var(--muted);font-style:italic;margin-top:0.6mm;line-height:1.25}
+.grupo ol{margin:0;padding:0;list-style:none;display:grid;gap:0.5mm;font-size:7.2pt;line-height:1.28}
+.grupo li{display:grid;grid-template-columns:4.5mm 1fr}
+.grupo li span{font-family:"IM Fell English",Georgia,serif;color:var(--gold)}
+
+/* verso: os passos, com as orações curtas por extenso */
+.passos{width:100%;margin:2.6mm 0 0;padding:0;list-style:none;display:grid;gap:2.1mm}
+.passos li{display:grid;grid-template-columns:5.6mm 1fr;gap:2mm;align-items:start;font-size:7.8pt;line-height:1.32}
+.passos .n{width:5.6mm;height:5.6mm;border-radius:50%;border:0.2mm solid var(--gold);display:grid;place-items:center;
+  font-family:"IM Fell English",Georgia,serif;color:var(--gold);font-size:8pt;line-height:1;background:var(--paper)}
+.passos b{color:var(--ink)}
+.ora{display:block;margin-top:0.8mm;padding:1.2mm 1.8mm;background:var(--paper);border-left:0.5mm solid var(--gold-soft);border-radius:0 1.5mm 1.5mm 0;
+  font-family:"IM Fell English",Georgia,serif;font-style:italic;font-size:7.9pt;line-height:1.28;color:var(--ink)}
+
+.citacao{margin-top:auto;font-family:"IM Fell English",Georgia,serif;font-style:italic;color:var(--gold);font-size:7.8pt;text-align:center;line-height:1.3}
+.rodape{margin-top:auto;text-align:center;display:grid;justify-items:center;gap:0.4mm}
+.rodape .rosas{width:40mm}
+.rodape p{margin:0;font-family:"IM Fell English",Georgia,serif;font-style:italic;color:var(--gold);font-size:7.8pt}
+.rodape small{font-size:6pt;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);font-weight:700}
+.passos li{font-size:9pt !important}
+.seq{display:block;margin-top:1.2mm;padding:1.6mm 2.2mm;background:var(--paper);border-left:0.5mm solid var(--gold-soft);border-radius:0 1.5mm 1.5mm 0;
+  font-family:"IM Fell English",Georgia,serif;font-style:italic;font-size:9.4pt;line-height:1.45}
+.nota{margin:3mm 0 0;font-size:6.8pt;color:var(--muted);text-align:center;font-style:italic}
+h1.pequeno{font-size:15pt}
+.oracoes{width:100%;display:grid;gap:1.25mm;margin-top:1.6mm}
+.oracao{font-size:6.15pt;line-height:1.28;margin:0;text-align:justify;hyphens:auto}
+.oracao b{display:block;text-align:center;font-family:"IM Fell English",Georgia,serif;font-weight:400;color:var(--gold);font-size:8pt;margin-bottom:0.1mm}
+.oracao[lang="la"]{font-style:italic}
+.oracao[lang="la"] b{font-style:normal}
+.oracoes{gap:0.9mm !important}
+.oracao{font-size:5.85pt !important;line-height:1.24 !important}
+.oracao b{font-size:7.6pt !important}
+@media screen{
+  html,body{background:#efe6d6}
+  body{padding:24px 0;display:flex;flex-direction:column;align-items:center;gap:24px}
+  .page{box-shadow:0 8px 28px rgba(75,64,56,.18);border-radius:4mm}
+}
+/* decoração: cantos, grupos ao centro e espaçados, rosa entre grupos */
+.c{position:absolute;color:var(--gold-soft);font-size:10pt;line-height:1;z-index:1}
+.c.tl{top:5.4mm;left:5.8mm}
+.c.tr{top:5.4mm;right:5.8mm;transform:scaleX(-1)}
+.c.bl{bottom:5.4mm;left:5.8mm;transform:scaleY(-1)}
+.c.br{bottom:5.4mm;right:5.8mm;transform:scale(-1,-1)}
+.grupos{flex:1;display:flex !important;flex-direction:column;justify-content:space-evenly;gap:0 !important;margin-top:1mm !important}
+.grupo{display:block !important;text-align:center;border:0 !important;padding:0 !important}
+.grupo .nome{font-size:13pt !important}
+.grupo .dias{margin:0.3mm 0 1.2mm !important}
+.grupo ol{display:inline-grid !important;text-align:left;font-size:7.4pt !important}
+.grupo + .grupo::before{content:"✿";display:block;color:var(--gold-soft);font-size:8pt;margin-bottom:1.6mm}
+.rosas.baixo{width:40mm;margin-top:1mm}
+.citacao{margin-top:0.8mm !important}
+.page:first-of-type .rosas:not(.baixo){width:60mm}
+.grupos{margin-top:2.2mm !important}
+.grupo .nome{font-size:12pt !important}
+.grupo .dias{margin:0 0 0.8mm !important}
+.grupo ol{font-size:6.9pt !important;gap:0.2mm !important;line-height:1.24 !important}
+.grupo + .grupo::before{font-size:7pt;margin:0 0 1mm}
+.rosas.baixo{width:30mm;margin-top:0.6mm}
+.citacao{font-size:7.2pt !important;margin:0.4mm 0 0 !important}
+.meninas{width:78mm;height:auto;display:block;margin:auto 0;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 62%,transparent 100%)}
+.nota{margin:2mm 0 0 !important}
+.grupo .exp{display:block;font-family:"Karla",Arial,sans-serif;font-size:6.6pt;color:var(--ink);margin-top:0.4mm;line-height:1.25}
+/* tudo ao centro: passos com o número por cima e orações centradas */
+.passos{justify-items:center;text-align:center;gap:2.4mm !important;margin:3.4mm 0 3mm !important}
+.passos li{display:flex !important;flex-direction:column;align-items:center;gap:1mm !important;max-width:78mm}
+.seq{text-align:center;border-left:0 !important;border-radius:2mm !important;border:0.2mm solid var(--gold-soft) !important;padding:1.6mm 6mm !important;display:inline-block !important;margin-top:1.4mm !important}
+.oracao{text-align:center !important;hyphens:manual !important}
+.passos li > span:last-child{display:block}
+.seq{display:block !important;width:fit-content;margin:1.4mm auto 0 !important}
+.como-rezar{width:94mm;max-width:none;height:auto;display:block;margin:auto -2mm;}
+.oracoes{gap:1.4mm !important}
+.oracao{line-height:1.32 !important}
+.folha{width:148.5mm;height:210mm;overflow:hidden;page-break-after:always;break-after:page}
+.folha .page{transform:scale(1.41421);transform-origin:0 0;page-break-after:auto;break-after:auto}
+@media screen{.folha{box-shadow:0 8px 28px rgba(75,64,56,.18);border-radius:6mm}.folha .page{box-shadow:none}}
+/* quatro grupos de mistérios (com os Luminosos) na primeira página: tudo um pouco mais apertado */
+.grupos{margin-top:1mm !important}
+.grupo .nome{font-size:10.5pt !important;line-height:1 !important}
+.grupo .exp{font-size:6pt !important;margin-top:0.2mm !important}
+.grupo .dias{font-size:5.8pt !important;margin:0 0 0.5mm !important}
+.grupo ol{font-size:6.3pt !important;line-height:1.16 !important;gap:0 !important}
+.grupo + .grupo::before{font-size:6pt !important;margin:0 0 0.4mm !important}
+/* A6: letra legível para cartão na mão (nada de oração abaixo de 8 pt) */
+.page{padding:8mm 8.5mm 7.5mm !important}
+.grupos{margin-top:1.5mm !important}
+.grupo .nome{font-size:11.5pt !important}
+.grupo .exp{display:none !important}
+.grupo .dias{font-size:7pt !important;margin:0.2mm 0 0.6mm !important}
+.grupo ol{font-size:7.8pt !important;line-height:1.22 !important}
+.grupo + .grupo::before{font-size:7pt !important;margin:0 0 0.5mm !important}
+h1{font-size:16pt !important}
+h1.pequeno{font-size:15pt !important}
+.oracoes{flex:1;display:flex !important;flex-direction:column;justify-content:space-evenly;gap:0 !important;margin-top:1mm !important}
+.oracao{font-size:8.6pt !important;line-height:1.3 !important}
+.oracao b{font-size:10pt !important;margin-bottom:0.3mm !important}
+.rodape.fim{margin-top:1.5mm}
+.passos{flex:1;align-content:space-evenly;margin:2mm 0 1mm !important}
+.passos li{font-size:9.5pt !important}
+.passos .n{width:6.5mm !important;height:6.5mm !important;font-size:10pt !important}
+.seq{font-size:9.5pt !important;line-height:1.5 !important}
+@media screen{.page{margin:0}}
+</style>
+</head>
+<body>
+
+<section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+  <h1>Os mistérios do terço</h1>
+  <div class="grupos">
+    <div class="grupo">
+      <div class="nome">Gozosos<span class="exp">Mistérios da alegria: o nascimento e a infância de Jesus</span><span class="dias">segunda e sábado</span></div>
+      <ol><li><span>1.º</span>A Anunciação do Anjo a Nossa Senhora</li><li><span>2.º</span>A Visitação de Nossa Senhora a Santa Isabel</li><li><span>3.º</span>O Nascimento de Jesus em Belém</li><li><span>4.º</span>A Apresentação do Menino Jesus no Templo</li><li><span>5.º</span>O Encontro do Menino Jesus no Templo</li></ol>
+    </div>
+    <div class="grupo">
+      <div class="nome">Luminosos<span class="exp">Mistérios da luz: a vida pública de Jesus</span><span class="dias">quinta</span></div>
+      <ol><li><span>1.º</span>O Batismo de Jesus no rio Jordão</li><li><span>2.º</span>Jesus nas Bodas de Caná</li><li><span>3.º</span>Jesus anuncia o Reino de Deus</li><li><span>4.º</span>A Transfiguração de Jesus no monte</li><li><span>5.º</span>Jesus dá-nos a Eucaristia</li></ol>
+    </div>
+    <div class="grupo">
+      <div class="nome">Dolorosos<span class="exp">Mistérios da dor: a Paixão e a morte de Jesus</span><span class="dias">terça e sexta</span></div>
+      <ol><li><span>1.º</span>A Agonia de Jesus no Horto</li><li><span>2.º</span>A Flagelação de Jesus</li><li><span>3.º</span>A Coroação de espinhos</li><li><span>4.º</span>Jesus a caminho do Calvário com a cruz às costas</li><li><span>5.º</span>A Crucifixão e morte de Jesus</li></ol>
+    </div>
+    <div class="grupo">
+      <div class="nome">Gloriosos<span class="exp">Mistérios da glória: a Ressurreição de Jesus e Nossa Senhora no Céu</span><span class="dias">quarta e domingo</span></div>
+      <ol><li><span>1.º</span>A Ressurreição de Jesus</li><li><span>2.º</span>A Ascensão de Jesus ao Céu</li><li><span>3.º</span>A Vinda do Espírito Santo</li><li><span>4.º</span>A Assunção de Nossa Senhora ao Céu</li><li><span>5.º</span>A Coroação de Nossa Senhora</li></ol>
+    </div>
+  </div>
+  <p class="citacao">"Rezem o terço todos os dias."<br>Nossa Senhora em Fátima, 13 de maio de 1917</p>
+</section>
+
+<section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+  <h1>Como rezar o terço</h1>
+  <ol class="passos">
+    <li><span class="n">1</span><span><b>Começa-se pelo Credo.</b></span></li>
+    <li><span class="n">2</span><span><b>Em cada um dos cinco mistérios:</b><span class="seq">anuncia-se o mistério<br>um Pai-Nosso<br>dez Ave-Marias<br>o Glória<br>Ó Maria concebida sem pecado<br>Ó meu Jesus</span></span></li>
+    <li><span class="n">3</span><span><b>No fim dos cinco mistérios,</b> três vezes «Meu Deus, eu creio».</span></li>
+    <li><span class="n">4</span><span><b>Três Ave-Marias</b> pelas nossas intenções.</span></li>
+    <li><span class="n">5</span><span><b>Salve-Rainha.</b></span></li>
+  </ol>
+  <div class="rodape">
+    <p>Um terço de cada vez, até à paz no mundo.</p>
+    <small>seterosas.pt</small>
+  </div>
+</section>
+
+<section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+  <h1 class="pequeno">As orações do terço</h1>
+  <div class="oracoes">
+    <p class="oracao" lang="pt-PT"><b>Sinal da Cruz</b>Pelo sinal da Santa Cruz, livrai-nos, Deus, Nosso Senhor, de todo o mal. Em nome do Pai, e do Filho, e do Espírito Santo. Ámen.</p>
+    <p class="oracao" lang="pt-PT"><b>Credo</b>Creio em Deus Pai todo-poderoso, Criador do Céu e da Terra; e em Jesus Cristo, seu único Filho, Nosso Senhor, que foi concebido pelo poder do Espírito Santo; nasceu da Virgem Maria; padeceu sob Pôncio Pilatos, foi crucificado, morto e sepultado; desceu aos infernos; ressuscitou ao terceiro dia; subiu aos Céus, está sentado à direita de Deus Pai todo-poderoso, donde há de vir a julgar os vivos e os mortos. Creio no Espírito Santo, na santa Igreja Católica, na comunhão dos Santos, na remissão dos pecados, na ressurreição da carne e na vida eterna. Ámen.</p>
+    <p class="oracao" lang="pt-PT"><b>Pai-Nosso</b>Pai Nosso, que estais no Céu, santificado seja o vosso nome, venha a nós o vosso reino, seja feita a vossa vontade, assim na terra como no Céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Ámen.</p>
+    <p class="oracao" lang="pt-PT"><b>Ave-Maria</b>Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós, pecadores, agora e na hora da nossa morte. Ámen.</p>
+  </div>
+</section>
+
+<section class="page"><span class="c tl">❦</span><span class="c tr">❦</span><span class="c bl">❦</span><span class="c br">❦</span>
+  <h1 class="pequeno">As orações do terço</h1>
+  <div class="oracoes">
+    <p class="oracao" lang="pt-PT"><b>Glória</b>Glória ao Pai, ao Filho e ao Espírito Santo. Como era no princípio, agora e sempre, e por todos os séculos dos séculos. Ámen.</p>
+    <p class="oracao" lang="pt-PT"><b>Ó Maria concebida sem pecado</b>Ó Maria concebida sem pecado, rogai por nós que recorremos a vós.</p>
+    <p class="oracao" lang="pt-PT"><b>Ó meu Jesus</b>Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, principalmente as que mais precisarem.</p>
+    <p class="oracao" lang="pt-PT"><b>Meu Deus, eu creio</b>Meu Deus, eu creio, adoro, espero e amo-Vos. Peço-Vos perdão para os que não creem, não adoram, não esperam e não Vos amam.</p>
+    <p class="oracao" lang="pt-PT"><b>Salve-Rainha</b>Salve, Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salve! A vós bradamos, os degredados filhos de Eva. A vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei. E depois deste desterro mostrai-nos Jesus, bendito fruto do vosso ventre. Ó clemente, ó piedosa, ó doce sempre Virgem Maria. Rogai por nós, Santa Mãe de Deus, para que sejamos dignos das promessas de Cristo. Ámen.</p>
+  </div>
+  <div class="rodape fim">
+    <p>Um terço de cada vez, até à paz no mundo.</p>
+    <small>seterosas.pt</small>
+  </div>
+</section>
+
+
+
+</body>
+</html>
