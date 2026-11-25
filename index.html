@@ -216,6 +216,8 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
 .ebook-preco{font-family:var(--display);font-size:34px;color:var(--gold);margin:0}
 .ebook-preco small{display:block;font-family:var(--body);font-size:14px;color:var(--muted)}
 .ebook .btn[aria-disabled="true"]{opacity:.55;cursor:default}
+.galeria{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;width:100%;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+.galeria img{flex:0 0 62%;max-width:260px;aspect-ratio:3/4;object-fit:cover;border-radius:14px;scroll-snap-align:center}
 @media(prefers-reduced-motion:reduce){.pv-barra i{transition:none}}
 </style>
 
@@ -302,6 +304,16 @@ footer{font-family:var(--display);font-style:italic;color:var(--gold);font-size:
       <p>Os nossos terços são feitos por crianças. Às vezes um nó fica mais gordo, uma conta fica mais torta, o cordel sai um bocadinho mais comprido de um lado. Não o escondemos: é a marca de quem os fez.</p>
       <p>Cada um passa pelas mãos de uma de nós, à mesa da cozinha, com tempo e com cuidado. Nenhum sai exatamente igual a outro. Por isso fazemos poucos, e por isso cada um vale tanto para nós.</p>
     </div>
+    <div class="galeria" role="list" aria-label="Fotografias dos nossos terços">
+      <img role="listitem" src="img/fotos/terco-6088.jpg" alt="Terço arco-íris, com contas de várias cores e cruz de madeira" loading="lazy" width="720" height="960">
+      <img role="listitem" src="img/fotos/terco-6089.jpg" alt="Terço azul e branco em forma de coração" loading="lazy" width="720" height="960">
+      <img role="listitem" src="img/fotos/terco-6090.jpg" alt="Terço rosa e branco com cruz de madeira" loading="lazy" width="720" height="960">
+      <img role="listitem" src="img/fotos/terco-6087.jpg" alt="Terço em tons de laranja e castanho" loading="lazy" width="720" height="960">
+      <img role="listitem" src="img/fotos/terco-6001.jpg" alt="Mãos de criança a enfiar as contas no cordel" loading="lazy" width="720" height="960">
+      <img role="listitem" src="img/fotos/terco-5999.jpg" alt="Caixa com as contas coloridas que usamos" loading="lazy" width="720" height="960">
+      <img role="listitem" src="img/fotos/terco-6091.jpg" alt="Terços e dezenas dentro de saquinhos de organza" loading="lazy" width="720" height="960">
+    </div>
+    <p class="hint">Desliza para ver mais.</p>
   </section>
 
   <section aria-labelledby="t-fatima">
