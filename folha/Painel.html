@@ -87,8 +87,11 @@ section{display:grid;gap:18px}
 /* fiz um terço: botões grandes, um passo por linha */
 .feito .passo{margin:10px 0 6px;font-weight:600;text-align:center}
 .feito .quem{justify-content:center}
-.feito .qtd{display:flex;align-items:center;gap:8px}
-.feito .qtd input{width:64px;padding:8px;text-align:center}
+.feito .contador{display:flex;align-items:center;justify-content:center;gap:18px;margin:4px 0 6px}
+.feito .contador button{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:var(--paper);font-size:30px;line-height:1;cursor:pointer;color:inherit}
+.feito .contador button:disabled{opacity:.35;cursor:default}
+.feito #qtdStock{font-family:var(--display);font-size:44px;min-width:60px;text-align:center}
+#btFeito{font-size:18px;padding:12px 40px}
 #msgFeito{text-align:center;font-weight:600}
 table.st{width:100%;border-collapse:collapse;font-size:15px}
 table.st th,table.st td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line)}
@@ -214,8 +217,13 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
       <p class="passo">Quem fez <span style="font-weight:400">(se quiseres)</span></p><div class="quem" id="quemStock" aria-label="Quem fez"></div>
       <p class="passo">A peça</p><div class="quem" id="pecaStock" aria-label="A peça"></div>
       <p class="passo">O modelo</p><div class="quem" id="modeloStock" aria-label="O modelo"></div>
-      <div class="actions" style="justify-content:center;align-items:center">
-        <label class="qtd">Quantas <input id="qtdStock" type="number" min="1" step="1" value="1"></label>
+      <p class="passo">Quantas</p>
+      <div class="contador">
+        <button type="button" id="menosStock" aria-label="Menos uma">−</button>
+        <span id="qtdStock" aria-live="polite">1</span>
+        <button type="button" id="maisStock" aria-label="Mais uma">+</button>
+      </div>
+      <div class="actions" style="justify-content:center">
         <button type="button" class="btn" id="btFeito">Feito</button>
       </div>
       <p class="note" id="msgFeito" hidden></p>
@@ -591,8 +599,13 @@ let pecaStock = '', modeloStock = '';
 const PECAS = { 'Terço': 'Terço', 'Compacto': 'Terço compacto', 'Sete Irmãs': 'Terço Sete Irmãs', 'Pulseira': 'Dezena pulseira', 'Porta-chaves': 'Dezena porta-chaves' };
 const limparPeca = seletorQuem($('pecaStock'), q => pecaStock = PECAS[q] || '', Object.keys(PECAS));
 const limparModelo = seletorQuem($('modeloStock'), q => modeloStock = q, ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris']);
+let qtdStock = 1;
+const mostrarQtd = () => { $('qtdStock').textContent = qtdStock; $('menosStock').disabled = qtdStock <= 1; };
+$('menosStock').onclick = () => { if (qtdStock > 1) qtdStock--; mostrarQtd(); };
+$('maisStock').onclick = () => { qtdStock++; mostrarQtd(); };
+mostrarQtd();
 $('btFeito').onclick = async () => {
-  const msg = $('msgFeito'), bt = $('btFeito'), qtd = Math.floor(Number($('qtdStock').value));
+  const msg = $('msgFeito'), bt = $('btFeito'), qtd = qtdStock;
   const falta = !pecaStock ? 'a peça' : !modeloStock ? 'o modelo' : !(qtd > 0) ? 'quantas' : '';
   if (falta) { msg.textContent = 'Falta escolher ' + falta + '.'; msg.hidden = false; return; }
   if (bt.disabled) return;
@@ -609,7 +622,7 @@ $('btFeito').onclick = async () => {
       await servidor('definirProntos', modeloStock + ' · ' + pecaStock, (x ? x.restam : 0) + qtd);
       msg.textContent = 'Guardado no stock: ' + oque + '. Sem nome, não conta para pagar.';
     }
-    msg.hidden = false; $('qtdStock').value = 1;
+    msg.hidden = false; qtdStock = 1; mostrarQtd();
     // fica tudo limpo para juntar a peça seguinte
     limparQuem(); limparPeca(); limparModelo();
     await carregar();
