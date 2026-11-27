@@ -95,8 +95,7 @@ table.st th,table.st td{padding:8px 6px;text-align:center;border-bottom:1px soli
 table.st td:first-child,table.st th:first-child{text-align:left}
 table.st td.zero{opacity:.35}
 /* stock compacto: modelos em grelha, terços e dezenas lado a lado */
-#stock{display:grid !important;grid-template-columns:1fr 1fr;gap:12px !important;background:none !important;border:0 !important;padding:0 !important}
-@media(max-width:620px){#stock{grid-template-columns:1fr}}
+#stock{display:block !important}
 #stock .model{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 10px;gap:6px}
 #stock .model + .model{border-top:1px solid var(--line);padding-top:12px}
 #stock .model .name{font-size:19px}
@@ -210,9 +209,9 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
 
   <section data-v="inicio">
     <div class="head"><p class="kicker">O stock</p><h2>Fiz um terço</h2></div>
-    <p class="lead">Escolhe quem fez, a peça e o modelo, e carrega em Feito. Entra no stock e no que essa pessoa tem a receber.</p>
+    <p class="lead">Escolhe a peça e o modelo, e carrega em Feito. Se escolheres quem fez, conta também para o que essa pessoa tem a receber; sem nome, entra só no stock.</p>
     <div class="card feito">
-      <p class="passo">Quem fez</p><div class="quem" id="quemStock" aria-label="Quem fez"></div>
+      <p class="passo">Quem fez <span style="font-weight:400">(se quiseres)</span></p><div class="quem" id="quemStock" aria-label="Quem fez"></div>
       <p class="passo">A peça</p><div class="quem" id="pecaStock" aria-label="A peça"></div>
       <p class="passo">O modelo</p><div class="quem" id="modeloStock" aria-label="O modelo"></div>
       <div class="actions" style="justify-content:center;align-items:center">
@@ -315,6 +314,8 @@ function seletorQuem(box, escolher, opcoes = PESSOAS){
   });
   outro.oninput = () => escolher(outro.value.trim());
   box.appendChild(outro);
+  // devolve uma função que limpa a escolha
+  return () => { marcar(null); escolher(''); };
 }
 
 function servidor(fn, ...args){
@@ -585,22 +586,32 @@ document.querySelectorAll('.resumo .r').forEach(r => r.onclick = () => {
   if (dados) desenhar();
   vista('encomendas');
 });
-seletorQuem($('quemStock'), q => quemStock = q);
+const limparQuem = seletorQuem($('quemStock'), q => quemStock = q);
 let pecaStock = '', modeloStock = '';
 const PECAS = { 'Terço': 'Terço', 'Compacto': 'Terço compacto', 'Sete Irmãs': 'Terço Sete Irmãs', 'Pulseira': 'Dezena pulseira', 'Porta-chaves': 'Dezena porta-chaves' };
-seletorQuem($('pecaStock'), q => pecaStock = PECAS[q], Object.keys(PECAS));
-seletorQuem($('modeloStock'), q => modeloStock = q, ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris']);
+const limparPeca = seletorQuem($('pecaStock'), q => pecaStock = PECAS[q] || '', Object.keys(PECAS));
+const limparModelo = seletorQuem($('modeloStock'), q => modeloStock = q, ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris']);
 $('btFeito').onclick = async () => {
   const msg = $('msgFeito'), bt = $('btFeito'), qtd = Math.floor(Number($('qtdStock').value));
-  const falta = !quemStock ? 'quem fez' : !pecaStock ? 'a peça' : !modeloStock ? 'o modelo' : !(qtd > 0) ? 'quantas' : '';
+  const falta = !pecaStock ? 'a peça' : !modeloStock ? 'o modelo' : !(qtd > 0) ? 'quantas' : '';
   if (falta) { msg.textContent = 'Falta escolher ' + falta + '.'; msg.hidden = false; return; }
   if (bt.disabled) return;
   bt.disabled = true; bt.textContent = 'A guardar…'; msg.hidden = true;
   try {
-    await servidor('registarFeitos', { quem: quemStock, formato: pecaStock, modelo: modeloStock, qtd });
-    const ganha = qtd * (pecaStock.startsWith('Dezena') ? 0.5 : 1);
-    msg.textContent = 'Guardado: ' + qtd + ' × ' + pecaStock.toLowerCase() + ' ' + modeloStock + '. ' + quemStock + ' tem mais ' + eur(ganha) + ' a receber.';
+    const oque = qtd + ' × ' + pecaStock.toLowerCase() + ' ' + modeloStock;
+    if (quemStock) {
+      await servidor('registarFeitos', { quem: quemStock, formato: pecaStock, modelo: modeloStock, qtd });
+      const ganha = qtd * (pecaStock.startsWith('Dezena') ? 0.5 : 1);
+      msg.textContent = 'Guardado: ' + oque + '. ' + quemStock + ' tem mais ' + eur(ganha) + ' a receber.';
+    } else {
+      // sem nome: entra só no stock, não conta para pagar
+      const x = dados.stock.find(y => y.modelo === modeloStock + ' · ' + pecaStock);
+      await servidor('definirProntos', modeloStock + ' · ' + pecaStock, (x ? x.restam : 0) + qtd);
+      msg.textContent = 'Guardado no stock: ' + oque + '. Sem nome, não conta para pagar.';
+    }
     msg.hidden = false; $('qtdStock').value = 1;
+    // fica tudo limpo para juntar a peça seguinte
+    limparQuem(); limparPeca(); limparModelo();
     await carregar();
   } catch(e) { msg.textContent = 'Não guardou. Tenta outra vez.'; msg.hidden = false; }
   finally { bt.disabled = false; bt.textContent = 'Feito'; }
