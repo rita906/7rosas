@@ -93,6 +93,16 @@ section{display:grid;gap:18px}
 .feito #qtdStock{font-family:var(--display);font-size:44px;min-width:60px;text-align:center}
 #btFeito{font-size:18px;padding:12px 40px}
 #msgFeito{text-align:center;font-weight:600}
+.st-total{display:grid;justify-items:center;gap:2px;padding:6px 0 14px;text-align:center}
+.st-total .n{font-family:var(--display);font-size:56px;line-height:1}
+.st-total .t{font-weight:600}
+.st-total .det{font-size:14px;opacity:.75}
+.st-grelha{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.st-modelo{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--paper)}
+.st-modelo .nome{display:flex;align-items:center;gap:8px;font-weight:600;margin:0 0 6px}
+.st-modelo .dot{width:14px;height:14px;border-radius:50%;display:inline-block}
+.st-modelo ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.st-modelo li b{font-family:var(--display);font-size:22px}
 table.st{width:100%;border-collapse:collapse;font-size:15px}
 table.st th,table.st td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line)}
 table.st td:first-child,table.st th:first-child{text-align:left}
@@ -368,18 +378,39 @@ function desenhar(){
     $('pvTabela').querySelectorAll('tbody tr td:first-child').forEach((td, i) => td.textContent = Object.keys(linhas)[i]);
   }
 
-  // stock: uma tabela simples, quantos restam de cada modelo e peça
-  const ST_COLS = [['Terço', 'Terço'], ['Terço compacto', 'Compacto'], ['Terço Sete Irmãs', 'Sete Irmãs'], ['Dezena pulseira', 'Pulseira'], ['Dezena porta-chaves', 'Porta-chaves']];
+  // stock: o total grande em cima e um cartão por modelo, só com as peças que há
+  const ST_PECAS = [['Terço', 'terço', 'terços'], ['Terço compacto', 'compacto', 'compactos'], ['Terço Sete Irmãs', 'Sete Irmãs', 'Sete Irmãs'], ['Dezena pulseira', 'pulseira', 'pulseiras'], ['Dezena porta-chaves', 'porta-chaves', 'porta-chaves']];
   const porModelo = {};
   dados.stock.forEach(x => { const [base, fmt] = x.modelo.split(' · '); (porModelo[base] = porModelo[base] || {})[fmt] = x.restam; });
-  const stT = document.createElement('table'); stT.className = 'st';
-  stT.innerHTML = '<thead><tr><th>Modelo</th>' + ST_COLS.map(c => '<th>' + c[1] + '</th>').join('') + '</tr></thead><tbody></tbody>';
-  Object.keys(porModelo).forEach(base => {
-    const tr = document.createElement('tr'); const td0 = document.createElement('td'); td0.textContent = base; tr.appendChild(td0);
-    ST_COLS.forEach(c => { const n = porModelo[base][c[0]] || 0; const td = document.createElement('td'); td.textContent = n; if (!n) td.className = 'zero'; tr.appendChild(td); });
-    stT.tBodies[0].appendChild(tr);
-  });
-  const st = $('stock'); st.innerHTML = '<div style="overflow-x:auto"></div>'; st.firstChild.appendChild(stT);
+  const totalPeca = f => Object.values(porModelo).reduce((t, m) => t + (m[f] || 0), 0);
+  const total = ST_PECAS.reduce((t, p) => t + totalPeca(p[0]), 0);
+  const st = $('stock'); st.innerHTML = '';
+  const topo = document.createElement('div'); topo.className = 'st-total';
+  topo.innerHTML = '<span class="n"></span><span class="t"></span><span class="det"></span>';
+  topo.querySelector('.n').textContent = total;
+  topo.querySelector('.t').textContent = total === 1 ? 'peça pronta a enviar' : 'peças prontas a enviar';
+  topo.querySelector('.det').textContent = ST_PECAS.filter(p => totalPeca(p[0])).map(p => { const n = totalPeca(p[0]); return n + ' ' + (n === 1 ? p[1] : p[2]); }).join(' · ');
+  st.appendChild(topo);
+  if (!total) { st.insertAdjacentHTML('beforeend', '<p class="empty">Ainda não há nada pronto. Juntem aqui em cima o que já fizeram.</p>'); }
+  else {
+    const grelha = document.createElement('div'); grelha.className = 'st-grelha';
+    Object.keys(porModelo).forEach(base => {
+      const pecas = ST_PECAS.filter(p => porModelo[base][p[0]]);
+      if (!pecas.length) return;
+      const c = document.createElement('div'); c.className = 'st-modelo';
+      const cores = CORES[base] || ['#dcc28f'];
+      c.innerHTML = '<p class="nome"><i class="dot" style="background:' + (cores.length > 1 ? 'conic-gradient(' + cores.join(',') + ')' : cores[0]) + '"></i><span></span></p><ul></ul>';
+      c.querySelector('.nome span').textContent = base;
+      pecas.forEach(p => {
+        const n = porModelo[base][p[0]];
+        const li = document.createElement('li'); li.innerHTML = '<b></b> <span></span>';
+        li.querySelector('b').textContent = n; li.querySelector('span').textContent = n === 1 ? p[1] : p[2];
+        c.querySelector('ul').appendChild(li);
+      });
+      grelha.appendChild(c);
+    });
+    st.appendChild(grelha);
+  }
 
   $('nPagar').textContent = dados.encomendas.filter(o => !o.pago).length;
   $('nEnviar').textContent = dados.encomendas.filter(o => o.pago && !o.enviado).length;
