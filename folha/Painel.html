@@ -84,6 +84,16 @@ section{display:grid;gap:18px}
 .scel small{grid-column:1/-1;text-align:center;font-size:13px;color:var(--muted)}
 .scel.zero small{color:var(--rose);font-weight:700}
 @media(max-width:520px){.stab{grid-template-columns:1fr 1fr 1fr}.snome{font-size:16px}.scel{grid-template-columns:30px auto 30px}.scel button{width:30px;height:30px}}
+/* fiz um terço: botões grandes, um passo por linha */
+.feito .passo{margin:10px 0 6px;font-weight:600;text-align:center}
+.feito .quem{justify-content:center}
+.feito .qtd{display:flex;align-items:center;gap:8px}
+.feito .qtd input{width:64px;padding:8px;text-align:center}
+#msgFeito{text-align:center;font-weight:600}
+table.st{width:100%;border-collapse:collapse;font-size:15px}
+table.st th,table.st td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line)}
+table.st td:first-child,table.st th:first-child{text-align:left}
+table.st td.zero{opacity:.35}
 /* stock compacto: modelos em grelha, terços e dezenas lado a lado */
 #stock{display:grid !important;grid-template-columns:1fr 1fr;gap:12px !important;background:none !important;border:0 !important;padding:0 !important}
 @media(max-width:620px){#stock{grid-template-columns:1fr}}
@@ -199,9 +209,19 @@ footer{text-align:center;font-family:var(--display);font-style:italic;color:var(
   </section>
 
   <section data-v="inicio">
-    <div class="head"><p class="kicker">O stock</p><h2>Os terços que ainda temos</h2></div>
-    <p class="lead">Quantos estão prontos para enviar. Quando fizerem mais, escolham quem fez, escrevam quantos e carreguem em Juntar. O site desconta sozinho quando alguém encomenda.</p>
-    <div class="quem" id="quemStock" aria-label="Quem fez"></div>
+    <div class="head"><p class="kicker">O stock</p><h2>Fiz um terço</h2></div>
+    <p class="lead">Escolhe quem fez, a peça e o modelo, e carrega em Feito. Entra no stock e no que essa pessoa tem a receber.</p>
+    <div class="card feito">
+      <p class="passo">Quem fez</p><div class="quem" id="quemStock" aria-label="Quem fez"></div>
+      <p class="passo">A peça</p><div class="quem" id="pecaStock" aria-label="A peça"></div>
+      <p class="passo">O modelo</p><div class="quem" id="modeloStock" aria-label="O modelo"></div>
+      <div class="actions" style="justify-content:center;align-items:center">
+        <label class="qtd">Quantas <input id="qtdStock" type="number" min="1" step="1" value="1"></label>
+        <button type="button" class="btn" id="btFeito">Feito</button>
+      </div>
+      <p class="note" id="msgFeito" hidden></p>
+    </div>
+    <div class="head"><p class="kicker">Prontos para enviar</p><h2>O que temos</h2></div>
     <div class="card" id="stock"><p class="loading">A contar as contas…</p></div>
   </section>
 
@@ -278,13 +298,13 @@ const CORES = {
 const eur = n => (Number(n)||0).toFixed(2).replace('.', ',') + ' €';
 const $ = id => document.getElementById(id);
 let dados = null, filtro = 'pagar';
-const PESSOAS = ['Sofia', 'Inês', 'Helena', 'Maria do Mar', 'Luzinha', 'Benedita', 'Pai', 'Mãe'];
+const PESSOAS = ['Sofia', 'Inês', 'Helena', 'Maria do Mar', 'Luzinha', 'Benedita', 'Mãe'];
 let quemStock = '', quemForm = '';
-// Botões com os nomes e um "Outro" que abre um campo para escrever o nome
-function seletorQuem(box, escolher){
+// Botões para escolher uma opção (por defeito, os nomes de quem faz)
+function seletorQuem(box, escolher, opcoes = PESSOAS){
   const outro = document.createElement('input'); outro.placeholder = 'Nome'; outro.hidden = true; outro.maxLength = 40;
   const marcar = alvo => box.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === alvo));
-  [...PESSOAS, 'Outro'].forEach(nome => {
+  opcoes.forEach(nome => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = nome; b.setAttribute('aria-pressed', 'false');
     b.onclick = () => {
       marcar(b);
@@ -339,44 +359,18 @@ function desenhar(){
     $('pvTabela').querySelectorAll('tbody tr td:first-child').forEach((td, i) => td.textContent = Object.keys(linhas)[i]);
   }
 
-  // stock: um cartão por modelo com as contas desenhadas, uma linha para terços e outra para dezenas;
-  // escreve-se quantos se fizeram e carrega-se em Juntar (ou Corrigir, para pôr o número certo)
-  const st = $('stock'); st.innerHTML = '';
+  // stock: uma tabela simples, quantos restam de cada modelo e peça
+  const ST_COLS = [['Terço', 'Terço'], ['Terço compacto', 'Compacto'], ['Terço Sete Irmãs', 'Sete Irmãs'], ['Dezena pulseira', 'Pulseira'], ['Dezena porta-chaves', 'Porta-chaves']];
   const porModelo = {};
-  dados.stock.forEach(x => { const [base, fmt] = x.modelo.split(' · '); (porModelo[base] = porModelo[base] || {})[fmt] = x; });
+  dados.stock.forEach(x => { const [base, fmt] = x.modelo.split(' · '); (porModelo[base] = porModelo[base] || {})[fmt] = x.restam; });
+  const stT = document.createElement('table'); stT.className = 'st';
+  stT.innerHTML = '<thead><tr><th>Modelo</th>' + ST_COLS.map(c => '<th>' + c[1] + '</th>').join('') + '</tr></thead><tbody></tbody>';
   Object.keys(porModelo).forEach(base => {
-    const m = document.createElement('div'); m.className = 'model';
-    m.innerHTML = '<span class="name"></span><div class="slines"></div>'; m.querySelector('.name').textContent = base;
-    const cores = CORES[base] || ['#dcc28f'];
-    [['Terço', 'Terços'], ['Terço compacto', 'Compactos'], ['Terço Sete Irmãs', 'Sete Irmãs'], ['Dezena pulseira', 'Pulseiras'], ['Dezena porta-chaves', 'Porta-chaves']].forEach(([fmt, rotulo]) => {
-      const x = porModelo[base][fmt] || { modelo: base + ' · ' + fmt, restam: 0 };
-      let contas = '';
-      for (let k = 0; k < Math.max(x.restam, 1) && k < 30; k++) contas += '<span class="bead' + (x.restam ? '' : ' sold') + '" style="background:' + cores[k % cores.length] + '"></span>';
-      const linha = document.createElement('div'); linha.className = 'sline';
-      linha.innerHTML = '<p class="left-n"><b class="fmt"></b> <b class="qt"></b>' + (x.restam ? '' : ' · acabou') + '</p><div class="beads">' + contas + '</div>' +
-        '<div class="prontos"><input type="number" min="1" step="1" placeholder="+" aria-label="Quantos acrescentar"><button type="button" class="btn">Juntar</button><button type="button" class="lnk">Corrigir</button></div>';
-      linha.querySelector('.fmt').textContent = rotulo; linha.querySelector('.qt').textContent = x.restam;
-      const inp = linha.querySelector('input'), [jb, cb] = linha.querySelectorAll('button');
-      const guardar = async (novo, b) => {
-        b.disabled = true; const t = b.textContent; b.textContent = 'A guardar…';
-        try { await servidor('definirProntos', x.modelo, Math.max(0, novo)); await carregar(); } catch(e){ b.disabled = false; b.textContent = t; }
-      };
-      // Juntar fica registado em nome de quem fez, para a página A pagar fazer a conta
-      jb.onclick = async () => {
-        const n = Math.floor(Number(inp.value)); if (!(n > 0)) return;
-        if (!quemStock) { jb.textContent = 'Quem fez?'; $('quemStock').scrollIntoView({ block: 'center' }); return; }
-        jb.disabled = true; jb.textContent = 'A guardar…';
-        try { await servidor('registarFeitos', { quem: quemStock, formato: fmt, modelo: base, qtd: n }); await carregar(); }
-        catch(e){ jb.disabled = false; jb.textContent = 'Juntar'; }
-      };
-      cb.onclick = () => {
-        if (cb.dataset.ok !== '1') { cb.dataset.ok = '1'; inp.placeholder = String(x.restam); inp.value = x.restam; inp.focus(); jb.textContent = 'Guardar'; jb.onclick = () => guardar(Math.floor(Number(inp.value) || 0), jb); cb.textContent = 'Cancelar'; return; }
-        desenhar();
-      };
-      m.querySelector('.slines').appendChild(linha);
-    });
-    st.appendChild(m);
+    const tr = document.createElement('tr'); const td0 = document.createElement('td'); td0.textContent = base; tr.appendChild(td0);
+    ST_COLS.forEach(c => { const n = porModelo[base][c[0]] || 0; const td = document.createElement('td'); td.textContent = n; if (!n) td.className = 'zero'; tr.appendChild(td); });
+    stT.tBodies[0].appendChild(tr);
   });
+  const st = $('stock'); st.innerHTML = '<div style="overflow-x:auto"></div>'; st.firstChild.appendChild(stT);
 
   $('nPagar').textContent = dados.encomendas.filter(o => !o.pago).length;
   $('nEnviar').textContent = dados.encomendas.filter(o => o.pago && !o.enviado).length;
@@ -592,6 +586,25 @@ document.querySelectorAll('.resumo .r').forEach(r => r.onclick = () => {
   vista('encomendas');
 });
 seletorQuem($('quemStock'), q => quemStock = q);
+let pecaStock = '', modeloStock = '';
+const PECAS = { 'Terço': 'Terço', 'Compacto': 'Terço compacto', 'Sete Irmãs': 'Terço Sete Irmãs', 'Pulseira': 'Dezena pulseira', 'Porta-chaves': 'Dezena porta-chaves' };
+seletorQuem($('pecaStock'), q => pecaStock = PECAS[q], Object.keys(PECAS));
+seletorQuem($('modeloStock'), q => modeloStock = q, ['Rosa de Lisieux', 'Manto de Maria', 'Carmelo', 'Arco-íris']);
+$('btFeito').onclick = async () => {
+  const msg = $('msgFeito'), bt = $('btFeito'), qtd = Math.floor(Number($('qtdStock').value));
+  const falta = !quemStock ? 'quem fez' : !pecaStock ? 'a peça' : !modeloStock ? 'o modelo' : !(qtd > 0) ? 'quantas' : '';
+  if (falta) { msg.textContent = 'Falta escolher ' + falta + '.'; msg.hidden = false; return; }
+  if (bt.disabled) return;
+  bt.disabled = true; bt.textContent = 'A guardar…'; msg.hidden = true;
+  try {
+    await servidor('registarFeitos', { quem: quemStock, formato: pecaStock, modelo: modeloStock, qtd });
+    const ganha = qtd * (pecaStock.startsWith('Dezena') ? 0.5 : 1);
+    msg.textContent = 'Guardado: ' + qtd + ' × ' + pecaStock.toLowerCase() + ' ' + modeloStock + '. ' + quemStock + ' tem mais ' + eur(ganha) + ' a receber.';
+    msg.hidden = false; $('qtdStock').value = 1;
+    await carregar();
+  } catch(e) { msg.textContent = 'Não guardou. Tenta outra vez.'; msg.hidden = false; }
+  finally { bt.disabled = false; bt.textContent = 'Feito'; }
+};
 seletorQuem($('quemForm'), q => quemForm = q);
 $('fData').value = new Date().toISOString().slice(0, 10);
 $('feitoform').addEventListener('submit', async e => {
